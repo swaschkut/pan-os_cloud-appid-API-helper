@@ -1,0 +1,52 @@
+<response status="success"><result><entry id="10015999" name="miosalon-delete" minver="10.1.0" ori_country="USA" ori_language="English">
+    <category>general-internet</category>
+    <new-category>business-systems</new-category>
+    <subcategory>vertical-industry</subcategory>
+    <technology>browser-based</technology>
+    <description>MioSalon software is a Free Salon Software and Spa management software with various features for efficient salon business management and makes you stand out in your business. MioSalon Spa &amp; Salon Software is absolutely free and makes your daily business operation easy &amp; Maximizes profits. Appointment Scheduling, Billing, Online booking, and Client Management. MioSalon is a Free salon and spa software that offers 125+ features like marketing, point-of-sale billing, and customer management features! Signup for Free and know more! Welcome to MioSalon.com, the ultimate Salon and Spa and Salon Management App for your business. Our free salon software is easy to use and brings new clientele through our online booking system. This App-ID covers the traffic for miosalon-delete application.</description>
+    <appident>yes</appident>
+    <vulnerability-ident>yes</vulnerability-ident>
+    <evasive-behavior>no</evasive-behavior>
+    <consume-big-bandwidth>no</consume-big-bandwidth>
+    <used-by-malware>no</used-by-malware>
+    <able-to-transfer-file>no</able-to-transfer-file>
+    <has-known-vulnerability>yes</has-known-vulnerability>
+    <tunnel-other-application>no</tunnel-other-application>
+    <prone-to-misuse>no</prone-to-misuse>
+    <pervasive-use>no</pervasive-use>
+    <per-direction-regex>no</per-direction-regex>
+    <deny-action>drop-reset</deny-action>
+    <cachable>no</cachable>
+    <parent-app>miosalon-base</parent-app>
+    <source-type>saas</source-type>
+    <cloud-move-to-predefined>no</cloud-move-to-predefined>
+    <is-saas>yes</is-saas>
+    <saas minver="8.1.0">
+        <is-data-breaches>no</is-data-breaches>
+        <is-ip-based-restrictions>no</is-ip-based-restrictions>
+        <is-poor-financial-viability>no</is-poor-financial-viability>
+        <is-poor-terms-of-service>no</is-poor-terms-of-service>
+    </saas>
+    <tag minver="9.1.0">
+        <member>[App-ID Cloud Engine]</member>
+        <member>[Deleting]</member>
+        <member>[Web App]</member>
+    </tag>
+    <references>
+        <entry name="miosalon">
+            <link>https://www.miosalon.com/</link>
+        </entry>
+    </references>
+    <default>
+        <port>
+            <member>tcp/80,443</member>
+        </port>
+    </default>
+    <use-applications>
+        <member>miosalon-base</member>
+    </use-applications>
+    <risk>4</risk>
+    <create-date>2021-06-19</create-date>
+    <last-update-date>2025-03-26</last-update-date>
+    <application-container>miosalon</application-container>
+</entry></result></response>

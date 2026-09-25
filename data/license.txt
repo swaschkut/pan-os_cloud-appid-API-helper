@@ -1,0 +1,4 @@
+All cloud appid XML files are actually copies of the official product files and owned by Palo Alto Networks.
+This project is just making fair use of them.
+
+https://[MGMT-IP]/api/?type=op&cmd=<show><cloud-appid><application>APP-NAME</application></cloud-appid></show>

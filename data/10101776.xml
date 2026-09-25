@@ -1,0 +1,58 @@
+<response status="success"><result><entry id="10101776" name="flowjo-base" minver="10.1.0" ori_country="USA" ori_language="English">
+    <ottawa-name>flowjo</ottawa-name>
+    <category>general-internet</category>
+    <new-category>business-systems</new-category>
+    <subcategory>medical</subcategory>
+    <technology>browser-based</technology>
+    <description>FlowJo is a software application designed for flow cytometry data analysis, developed to assist researchers in phenotyping and immunology studies. The software provides tools to streamline routine analysis tasks and enhance research efficiency. It features an immersive interface in its latest versions, making data analysis accessible and effective for users.</description>
+    <appident>yes</appident>
+    <vulnerability-ident>yes</vulnerability-ident>
+    <evasive-behavior>no</evasive-behavior>
+    <consume-big-bandwidth>no</consume-big-bandwidth>
+    <used-by-malware>no</used-by-malware>
+    <able-to-transfer-file>no</able-to-transfer-file>
+    <has-known-vulnerability>yes</has-known-vulnerability>
+    <tunnel-other-application>no</tunnel-other-application>
+    <prone-to-misuse>no</prone-to-misuse>
+    <pervasive-use>no</pervasive-use>
+    <per-direction-regex>no</per-direction-regex>
+    <deny-action>drop-reset</deny-action>
+    <cachable>no</cachable>
+    <source-type>se-saas</source-type>
+    <cloud-move-to-predefined>no</cloud-move-to-predefined>
+    <is-saas>yes</is-saas>
+    <saas minver="8.1.0">
+        <certifications>
+            <is-hipaa>yes</is-hipaa>
+        </certifications>
+        <is-data-breaches>no</is-data-breaches>
+        <is-ip-based-restrictions>no</is-ip-based-restrictions>
+        <is-poor-financial-viability>no</is-poor-financial-viability>
+        <is-poor-terms-of-service>no</is-poor-terms-of-service>
+    </saas>
+    <tag minver="9.1.0">
+        <member>[App-ID Cloud Engine]</member>
+        <member>[Web App]</member>
+    </tag>
+    <references>
+        <entry name="HomePage">
+            <link>https://www.flowjo.com</link>
+        </entry>
+    </references>
+    <default>
+        <port>
+            <member>tcp/80,443</member>
+        </port>
+    </default>
+    <use-applications>
+        <member>ssl</member>
+        <member>web-browsing</member>
+    </use-applications>
+    <tunnel-applications>
+        <member>flowjo-download</member>
+    </tunnel-applications>
+    <risk>3</risk>
+    <create-date>2026-04-26</create-date>
+    <last-update-date>2026-04-27</last-update-date>
+    <application-container>flowjo</application-container>
+</entry></result></response>
