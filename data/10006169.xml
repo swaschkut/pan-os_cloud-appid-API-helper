@@ -1,0 +1,50 @@
+<response status="success"><result><entry id="10006169" name="nuange-networks-virt" minver="10.1.0" ori_country="USA" ori_language="English">
+    <category>general-internet</category>
+    <new-category>networking</new-category>
+    <subcategory>it-infrastructure</subcategory>
+    <technology>browser-based</technology>
+    <description>The Nuage Networks Virtualized Services Platform (VSP) is the industry leading network automation platform enabling a complete range of SDN, SD-WAN, and cloud solutions. VSP provides advanced network automation across networks and clouds of all sizes and architectures, from datacenter private clouds to large enterprise wide area networks (WANs) and some of the largest public clouds in the world. VSP enables both Virtualized Network Services (VNS) for SD-WAN and Virtualized Cloud Services (VCS) for SDN.</description>
+    <appident>yes</appident>
+    <vulnerability-ident>yes</vulnerability-ident>
+    <evasive-behavior>no</evasive-behavior>
+    <consume-big-bandwidth>no</consume-big-bandwidth>
+    <used-by-malware>no</used-by-malware>
+    <able-to-transfer-file>no</able-to-transfer-file>
+    <has-known-vulnerability>yes</has-known-vulnerability>
+    <tunnel-other-application>no</tunnel-other-application>
+    <prone-to-misuse>no</prone-to-misuse>
+    <pervasive-use>no</pervasive-use>
+    <per-direction-regex>no</per-direction-regex>
+    <deny-action>drop-reset</deny-action>
+    <cachable>no</cachable>
+    <source-type>saas</source-type>
+    <cloud-move-to-predefined>no</cloud-move-to-predefined>
+    <is-saas>yes</is-saas>
+    <saas minver="8.1.0">
+        <is-data-breaches>no</is-data-breaches>
+        <is-ip-based-restrictions>no</is-ip-based-restrictions>
+        <is-poor-financial-viability>no</is-poor-financial-viability>
+        <is-poor-terms-of-service>no</is-poor-terms-of-service>
+    </saas>
+    <tag minver="9.1.0">
+        <member>[App-ID Cloud Engine]</member>
+        <member>[Web App]</member>
+    </tag>
+    <references>
+        <entry name="nuange-networks-virt">
+            <link>https://www.nuagenetworks.net/products/virtualized-services-platform/</link>
+        </entry>
+    </references>
+    <default>
+        <port>
+            <member>tcp/80,443</member>
+        </port>
+    </default>
+    <use-applications>
+        <member>ssl</member>
+        <member>web-browsing</member>
+    </use-applications>
+    <risk>3</risk>
+    <create-date>2021-04-03</create-date>
+    <last-update-date>2024-09-11</last-update-date>
+</entry></result></response>

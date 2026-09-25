@@ -1,0 +1,55 @@
+<response status="success"><result><entry id="10106774" name="deep-sky-base" minver="10.1.0" ori_country="USA" ori_language="English">
+    <ottawa-name>deep-sky</ottawa-name>
+    <category>general-internet</category>
+    <new-category>business-systems</new-category>
+    <subcategory>vertical-industry</subcategory>
+    <technology>browser-based</technology>
+    <description>Deep Sky is an organization focused on addressing climate change by developing and operating infrastructure for carbon removal. Based in Canada, the company specializes in technology-based projects aimed at removing emissions and providing high-quality carbon removal credits. Their initiatives are designed to scale effectively, contributing to global efforts in reversing climate change.</description>
+    <appident>yes</appident>
+    <vulnerability-ident>yes</vulnerability-ident>
+    <evasive-behavior>no</evasive-behavior>
+    <consume-big-bandwidth>no</consume-big-bandwidth>
+    <used-by-malware>no</used-by-malware>
+    <able-to-transfer-file>no</able-to-transfer-file>
+    <has-known-vulnerability>yes</has-known-vulnerability>
+    <tunnel-other-application>no</tunnel-other-application>
+    <prone-to-misuse>no</prone-to-misuse>
+    <pervasive-use>no</pervasive-use>
+    <per-direction-regex>no</per-direction-regex>
+    <deny-action>drop-reset</deny-action>
+    <cachable>no</cachable>
+    <source-type>se-saas</source-type>
+    <cloud-move-to-predefined>no</cloud-move-to-predefined>
+    <is-saas>yes</is-saas>
+    <saas minver="8.1.0">
+        <is-data-breaches>no</is-data-breaches>
+        <is-ip-based-restrictions>no</is-ip-based-restrictions>
+        <is-poor-financial-viability>no</is-poor-financial-viability>
+        <is-poor-terms-of-service>no</is-poor-terms-of-service>
+    </saas>
+    <tag minver="9.1.0">
+        <member>[App-ID Cloud Engine]</member>
+        <member>[Web App]</member>
+    </tag>
+    <references>
+        <entry name="HomePage">
+            <link>https://www.deepskyclimate.com</link>
+        </entry>
+    </references>
+    <default>
+        <port>
+            <member>tcp/80,443</member>
+        </port>
+    </default>
+    <use-applications>
+        <member>ssl</member>
+        <member>web-browsing</member>
+    </use-applications>
+    <tunnel-applications>
+        <member>deep-sky-download</member>
+    </tunnel-applications>
+    <risk>3</risk>
+    <create-date>2026-06-09</create-date>
+    <last-update-date>2026-06-09</last-update-date>
+    <application-container>deep-sky</application-container>
+</entry></result></response>

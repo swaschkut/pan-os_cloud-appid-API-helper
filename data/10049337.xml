@@ -1,0 +1,52 @@
+<response status="success"><result><entry id="10049337" name="riadatabase" minver="10.1.0" ori_country="USA" ori_language="English">
+    <category>saas</category>
+    <new-category>business-systems</new-category>
+    <subcategory>database</subcategory>
+    <technology>browser-based</technology>
+    <description>RIA Database provides comprehensive data, software, analytics and marketing services to the financial services industry. We maintain profiles on a broad universe of financial advisors: RIAs, registered reps, independent reps, family offices, institutional investors, bank/trust advisors and consultants. More than 600 firms rely on RIA Database data and RIA Channel marketing solutions to raise assets and distribute their research and product insights.</description>
+    <appident>yes</appident>
+    <vulnerability-ident>yes</vulnerability-ident>
+    <evasive-behavior>no</evasive-behavior>
+    <consume-big-bandwidth>no</consume-big-bandwidth>
+    <used-by-malware>no</used-by-malware>
+    <able-to-transfer-file>no</able-to-transfer-file>
+    <has-known-vulnerability>yes</has-known-vulnerability>
+    <tunnel-other-application>no</tunnel-other-application>
+    <prone-to-misuse>no</prone-to-misuse>
+    <pervasive-use>no</pervasive-use>
+    <per-direction-regex>no</per-direction-regex>
+    <deny-action>drop-reset</deny-action>
+    <cachable>no</cachable>
+    <source-type>se-saas</source-type>
+    <cloud-move-to-predefined>no</cloud-move-to-predefined>
+    <is-saas>yes</is-saas>
+    <saas minver="8.1.0">
+        <certifications>
+            <is-finra>yes</is-finra>
+        </certifications>
+        <is-data-breaches>no</is-data-breaches>
+        <is-ip-based-restrictions>no</is-ip-based-restrictions>
+        <is-poor-financial-viability>no</is-poor-financial-viability>
+        <is-poor-terms-of-service>no</is-poor-terms-of-service>
+    </saas>
+    <tag minver="9.1.0">
+        <member>[App-ID Cloud Engine]</member>
+        <member>[Web App]</member>
+    </tag>
+    <references>
+        <entry name="riadatabase">
+            <link>https://www.riadatabase.com/</link>
+        </entry>
+    </references>
+    <default>
+        <port>
+            <member>tcp/443</member>
+        </port>
+    </default>
+    <use-applications>
+        <member>ssl</member>
+    </use-applications>
+    <risk>4</risk>
+    <create-date>2022-07-21</create-date>
+    <last-update-date>2025-07-09</last-update-date>
+</entry></result></response>

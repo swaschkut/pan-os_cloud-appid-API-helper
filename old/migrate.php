@@ -1,13 +1,13 @@
 <?php
-$dbFile = __DIR__ . '/cloud_appid.db';
-$txtFile = __DIR__ . '/cloud-appid.txt';
-$dataDir = __DIR__ . '/data';
+$dbFile = __DIR__ . '/../cloud_appid.db';
+$txtFile = __DIR__ . '/../cloud-appid.txt';
+$dataDir = __DIR__ . '/../data';
 
 $db = new PDO('sqlite:' . $dbFile);
 $db->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
 
 // 1. Schema initialisieren
-$db->exec(file_get_contents(__DIR__ . '/schema.sql'));
+$db->exec(file_get_contents(__DIR__ . '/../schema.sql'));
 
 // 2. cloud-appid.txt parsen für Index-Zuordnung (Name, Time, Task, Hash)
 echo "Lese cloud-appid.txt ein...\n";
