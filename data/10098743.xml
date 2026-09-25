@@ -1,0 +1,53 @@
+<response status="success"><result><entry id="10098743" name="korn-ferry-app-center-base" minver="10.1.0" ori_country="USA" ori_language="English">
+    <ottawa-name>korn-ferry-app-center</ottawa-name>
+    <category>general-internet</category>
+    <new-category>business-systems</new-category>
+    <subcategory>general-business</subcategory>
+    <technology>browser-based</technology>
+    <description>Korn Ferry provides an online application platform for users to manage their career opportunities and applications. Users can log in using their registered email address to access features such as job searches, application submissions, and event registrations. Korn Ferry specializes in consulting and career services, offering tools for professional development and organizational design.</description>
+    <appident>yes</appident>
+    <vulnerability-ident>yes</vulnerability-ident>
+    <evasive-behavior>no</evasive-behavior>
+    <consume-big-bandwidth>no</consume-big-bandwidth>
+    <used-by-malware>no</used-by-malware>
+    <able-to-transfer-file>no</able-to-transfer-file>
+    <has-known-vulnerability>yes</has-known-vulnerability>
+    <tunnel-other-application>no</tunnel-other-application>
+    <prone-to-misuse>no</prone-to-misuse>
+    <pervasive-use>no</pervasive-use>
+    <per-direction-regex>no</per-direction-regex>
+    <deny-action>drop-reset</deny-action>
+    <cachable>no</cachable>
+    <source-type>se-saas</source-type>
+    <cloud-move-to-predefined>no</cloud-move-to-predefined>
+    <is-saas>yes</is-saas>
+    <saas minver="8.1.0">
+        <is-data-breaches>no</is-data-breaches>
+        <is-ip-based-restrictions>no</is-ip-based-restrictions>
+        <is-poor-financial-viability>no</is-poor-financial-viability>
+        <is-poor-terms-of-service>no</is-poor-terms-of-service>
+    </saas>
+    <tag minver="9.1.0">
+        <member>[App-ID Cloud Engine]</member>
+        <member>[Web App]</member>
+    </tag>
+    <references>
+        <entry name="HomePage">
+            <link>https://kornferry.tal.net</link>
+        </entry>
+    </references>
+    <default>
+        <port>
+            <member>tcp/80,443</member>
+        </port>
+    </default>
+    <use-applications>
+        <member>ssl</member>
+        <member>web-browsing</member>
+    </use-applications>
+    <tunnel-applications/>
+    <risk>3</risk>
+    <create-date>2026-02-03</create-date>
+    <last-update-date>2026-02-03</last-update-date>
+    <application-container>korn-ferry-app-center</application-container>
+</entry></result></response>

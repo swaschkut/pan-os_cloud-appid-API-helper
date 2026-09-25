@@ -1,0 +1,43 @@
+<response status="success"><result><entry id="10019985" name="parsely" minver="10.1.0" ori_country="USA" ori_language="English">
+    <category>general-internet</category>
+    <new-category>general-internet</new-category>
+    <subcategory>internet-utility</subcategory>
+    <technology>browser-based</technology>
+    <description>[Obsolete] Parse.ly gives creators, marketers and developers the tools to understand content performance, prove content value, and deliver tailored content experiences that drive meaningful results.</description>
+    <appident>yes</appident>
+    <vulnerability-ident>yes</vulnerability-ident>
+    <evasive-behavior>no</evasive-behavior>
+    <consume-big-bandwidth>no</consume-big-bandwidth>
+    <used-by-malware>no</used-by-malware>
+    <able-to-transfer-file>no</able-to-transfer-file>
+    <has-known-vulnerability>yes</has-known-vulnerability>
+    <tunnel-other-application>no</tunnel-other-application>
+    <prone-to-misuse>no</prone-to-misuse>
+    <pervasive-use>no</pervasive-use>
+    <per-direction-regex>no</per-direction-regex>
+    <deny-action>drop-reset</deny-action>
+    <cachable>no</cachable>
+    <obsolete>yes</obsolete>
+    <source-type>se</source-type>
+    <cloud-move-to-predefined>no</cloud-move-to-predefined>
+    <tag minver="9.1.0">
+        <member>[App-ID Cloud Engine]</member>
+        <member>[Web App]</member>
+    </tag>
+    <references>
+        <entry name="parsely">
+            <link>https://www.parse.ly/</link>
+        </entry>
+    </references>
+    <default>
+        <port>
+            <member>tcp/443</member>
+        </port>
+    </default>
+    <use-applications>
+        <member>ssl</member>
+    </use-applications>
+    <risk>1</risk>
+    <create-date>2021-09-16</create-date>
+    <last-update-date>2025-04-01</last-update-date>
+</entry></result></response>

@@ -1,0 +1,62 @@
+<response status="success"><result><entry id="10108593" name="chambers-and-partners-base" minver="10.1.0" ori_country="USA" ori_language="English">
+    <ottawa-name>chambers-and-partners</ottawa-name>
+    <category>general-internet</category>
+    <new-category>business-systems</new-category>
+    <subcategory>vertical-industry</subcategory>
+    <technology>browser-based</technology>
+    <description>Chambers is a platform that ranks global law firms and lawyers through research and analysis. It provides resources such as the Chambers Global Practice Guides, offering legal commentary for in-house counsel on key practice areas across various jurisdictions. Additionally, publications like the Chambers USA Guide provide directories and evaluation data for individuals and organizations selecting legal professionals and firms.</description>
+    <appident>yes</appident>
+    <vulnerability-ident>yes</vulnerability-ident>
+    <evasive-behavior>no</evasive-behavior>
+    <consume-big-bandwidth>no</consume-big-bandwidth>
+    <used-by-malware>no</used-by-malware>
+    <able-to-transfer-file>no</able-to-transfer-file>
+    <has-known-vulnerability>yes</has-known-vulnerability>
+    <tunnel-other-application>no</tunnel-other-application>
+    <prone-to-misuse>no</prone-to-misuse>
+    <pervasive-use>no</pervasive-use>
+    <per-direction-regex>no</per-direction-regex>
+    <deny-action>drop-reset</deny-action>
+    <cachable>no</cachable>
+    <source-type>se-saas</source-type>
+    <cloud-move-to-predefined>no</cloud-move-to-predefined>
+    <is-saas>yes</is-saas>
+    <saas minver="8.1.0">
+        <certifications>
+            <is-finra>yes</is-finra>
+            <is-hipaa>yes</is-hipaa>
+            <is-pci>yes</is-pci>
+            <is-soc2>yes</is-soc2>
+        </certifications>
+        <is-data-breaches>no</is-data-breaches>
+        <is-ip-based-restrictions>no</is-ip-based-restrictions>
+        <is-poor-financial-viability>no</is-poor-financial-viability>
+        <is-poor-terms-of-service>no</is-poor-terms-of-service>
+    </saas>
+    <tag minver="9.1.0">
+        <member>[App-ID Cloud Engine]</member>
+        <member>[Web App]</member>
+    </tag>
+    <references>
+        <entry name="HomePage">
+            <link>https://chambers.com</link>
+        </entry>
+    </references>
+    <default>
+        <port>
+            <member>tcp/80,443</member>
+        </port>
+    </default>
+    <use-applications>
+        <member>ssl</member>
+        <member>web-browsing</member>
+    </use-applications>
+    <tunnel-applications>
+        <member>chambers-and-partners-download</member>
+        <member>chambers-and-partners-logout</member>
+    </tunnel-applications>
+    <risk>2</risk>
+    <create-date>2026-07-02</create-date>
+    <last-update-date>2026-07-02</last-update-date>
+    <application-container>chambers-and-partners</application-container>
+</entry></result></response>

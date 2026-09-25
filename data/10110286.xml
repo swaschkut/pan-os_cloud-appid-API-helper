@@ -1,0 +1,52 @@
+<response status="success"><result><entry id="10110286" name="fit2cloud-jumpserver-download" minver="10.1.0" ori_country="USA" ori_language="English">
+    <category>general-internet</category>
+    <new-category>business-systems</new-category>
+    <subcategory>security</subcategory>
+    <technology>browser-based</technology>
+    <description>JumpServer is an open-source Privileged Access Management (PAM) platform designed to assist DevOps and IT teams in securely managing access to various assets. It supports secure connections to SSH, RDP, Kubernetes, and databases, ensuring controlled and safe asset management. With over 500,000 deployments, JumpServer provides a reliable solution for privileged access needs.</description>
+    <appident>yes</appident>
+    <vulnerability-ident>yes</vulnerability-ident>
+    <evasive-behavior>no</evasive-behavior>
+    <consume-big-bandwidth>no</consume-big-bandwidth>
+    <used-by-malware>no</used-by-malware>
+    <able-to-transfer-file>no</able-to-transfer-file>
+    <has-known-vulnerability>yes</has-known-vulnerability>
+    <tunnel-other-application>no</tunnel-other-application>
+    <prone-to-misuse>no</prone-to-misuse>
+    <pervasive-use>no</pervasive-use>
+    <per-direction-regex>no</per-direction-regex>
+    <deny-action>drop-reset</deny-action>
+    <cachable>no</cachable>
+    <parent-app>fit2cloud-jumpserver-base</parent-app>
+    <source-type>se-saas</source-type>
+    <cloud-move-to-predefined>no</cloud-move-to-predefined>
+    <is-saas>yes</is-saas>
+    <saas minver="8.1.0">
+        <is-data-breaches>no</is-data-breaches>
+        <is-ip-based-restrictions>no</is-ip-based-restrictions>
+        <is-poor-financial-viability>no</is-poor-financial-viability>
+        <is-poor-terms-of-service>no</is-poor-terms-of-service>
+    </saas>
+    <tag minver="9.1.0">
+        <member>[App-ID Cloud Engine]</member>
+        <member>[Downloading]</member>
+        <member>[Web App]</member>
+    </tag>
+    <references>
+        <entry name="HomePage">
+            <link>https://www.jumpserver.org</link>
+        </entry>
+    </references>
+    <default>
+        <port>
+            <member>tcp/80,443</member>
+        </port>
+    </default>
+    <use-applications>
+        <member>fit2cloud-jumpserver-base</member>
+    </use-applications>
+    <risk>3</risk>
+    <create-date>2026-08-04</create-date>
+    <last-update-date>2026-08-04</last-update-date>
+    <application-container>fit2cloud-jumpserver</application-container>
+</entry></result></response>

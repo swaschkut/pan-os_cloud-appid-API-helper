@@ -1,0 +1,51 @@
+<response status="success"><result><entry id="10010465" name="x-series-formerly-v" minver="10.1.0" ori_country="USA" ori_language="English">
+    <category>general-internet</category>
+    <new-category>saas</new-category>
+    <subcategory>collaboration-productivity</subcategory>
+    <technology>browser-based</technology>
+    <description>[Obsolete] X Series offers plans which you can mix and match to address your diverse needs in the most cost-efficient manner.</description>
+    <appident>yes</appident>
+    <vulnerability-ident>yes</vulnerability-ident>
+    <evasive-behavior>no</evasive-behavior>
+    <consume-big-bandwidth>no</consume-big-bandwidth>
+    <used-by-malware>no</used-by-malware>
+    <able-to-transfer-file>no</able-to-transfer-file>
+    <has-known-vulnerability>yes</has-known-vulnerability>
+    <tunnel-other-application>no</tunnel-other-application>
+    <prone-to-misuse>no</prone-to-misuse>
+    <pervasive-use>no</pervasive-use>
+    <per-direction-regex>no</per-direction-regex>
+    <deny-action>drop-reset</deny-action>
+    <cachable>no</cachable>
+    <obsolete>yes</obsolete>
+    <source-type>saas</source-type>
+    <cloud-move-to-predefined>no</cloud-move-to-predefined>
+    <is-saas>yes</is-saas>
+    <saas minver="8.1.0">
+        <is-data-breaches>no</is-data-breaches>
+        <is-ip-based-restrictions>no</is-ip-based-restrictions>
+        <is-poor-financial-viability>no</is-poor-financial-viability>
+        <is-poor-terms-of-service>no</is-poor-terms-of-service>
+    </saas>
+    <tag minver="9.1.0">
+        <member>[App-ID Cloud Engine]</member>
+        <member>[Web App]</member>
+    </tag>
+    <references>
+        <entry name="x-series-formerly-v">
+            <link>https://www.8x8.com/x-series?utm_medium=search-paid-sem&amp;utm_source=google&amp;utm_campaign=elite&amp;_bk=8x8%20x%20series&amp;_bt=293404387581&amp;_bm={bidmatchtype}&amp;_bn=g&amp;type=US-SEM-Brand_XSeries&amp;gclid=EAIaIQobChMI</link>
+        </entry>
+    </references>
+    <default>
+        <port>
+            <member>tcp/80,443</member>
+        </port>
+    </default>
+    <use-applications>
+        <member>ssl</member>
+        <member>web-browsing</member>
+    </use-applications>
+    <risk>3</risk>
+    <create-date>2021-04-03</create-date>
+    <last-update-date>2025-07-24</last-update-date>
+</entry></result></response>

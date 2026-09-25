@@ -1,0 +1,56 @@
+<response status="success"><result><entry id="10108194" name="utopia-advisor-base" minver="10.1.0" ori_country="USA" ori_language="English">
+    <ottawa-name>utopia-advisor</ottawa-name>
+    <category>general-internet</category>
+    <new-category>business-systems</new-category>
+    <subcategory>management</subcategory>
+    <technology>browser-based</technology>
+    <description>UtopiaAdvisor, developed by Fluent Technologies, is a platform offering technology and services for plan health management. It is designed to assist organizations in optimizing their operational strategies and technology implementations. Additionally, 2024Sight provides consultancy services focusing on technology and business strategy, including interim CIO/CTO roles, leveraging extensive expertise in executive IT leadership.</description>
+    <appident>yes</appident>
+    <vulnerability-ident>yes</vulnerability-ident>
+    <evasive-behavior>no</evasive-behavior>
+    <consume-big-bandwidth>no</consume-big-bandwidth>
+    <used-by-malware>no</used-by-malware>
+    <able-to-transfer-file>no</able-to-transfer-file>
+    <has-known-vulnerability>yes</has-known-vulnerability>
+    <tunnel-other-application>no</tunnel-other-application>
+    <prone-to-misuse>no</prone-to-misuse>
+    <pervasive-use>no</pervasive-use>
+    <per-direction-regex>no</per-direction-regex>
+    <deny-action>drop-reset</deny-action>
+    <cachable>no</cachable>
+    <source-type>se-saas</source-type>
+    <cloud-move-to-predefined>no</cloud-move-to-predefined>
+    <is-saas>yes</is-saas>
+    <saas minver="8.1.0">
+        <is-data-breaches>no</is-data-breaches>
+        <is-ip-based-restrictions>no</is-ip-based-restrictions>
+        <is-poor-financial-viability>no</is-poor-financial-viability>
+        <is-poor-terms-of-service>no</is-poor-terms-of-service>
+    </saas>
+    <tag minver="9.1.0">
+        <member>[App-ID Cloud Engine]</member>
+        <member>[Web App]</member>
+    </tag>
+    <references>
+        <entry name="HomePage">
+            <link>https://www.utopiaadvisor.com</link>
+        </entry>
+    </references>
+    <default>
+        <port>
+            <member>tcp/80,443</member>
+        </port>
+    </default>
+    <use-applications>
+        <member>ssl</member>
+        <member>web-browsing</member>
+    </use-applications>
+    <tunnel-applications>
+        <member>utopia-advisor-delete</member>
+        <member>utopia-advisor-logout</member>
+    </tunnel-applications>
+    <risk>3</risk>
+    <create-date>2026-06-29</create-date>
+    <last-update-date>2026-06-29</last-update-date>
+    <application-container>utopia-advisor</application-container>
+</entry></result></response>

@@ -1,0 +1,52 @@
+<response status="success"><result><entry id="10019253" name="nx-cam-delete" minver="10.1.0" ori_country="USA" ori_language="English">
+    <category>general-internet</category>
+    <new-category>business-systems</new-category>
+    <subcategory>cad-plm</subcategory>
+    <technology>browser-based</technology>
+    <description>Maximize your manufacturing performance and gain a digital advantage using our advanced computer-aided manufacturing (CAM) software. Transform your entire part manufacturing process by using a single, comprehensive CAM software. Automate NC programming, accelerate machining, and achieve high accuracy using advanced toolpath technologies and integrated G-code-driven simulation. This App-ID covers the traffic for nx-cam-delete application.</description>
+    <appident>yes</appident>
+    <vulnerability-ident>yes</vulnerability-ident>
+    <evasive-behavior>no</evasive-behavior>
+    <consume-big-bandwidth>no</consume-big-bandwidth>
+    <used-by-malware>no</used-by-malware>
+    <able-to-transfer-file>no</able-to-transfer-file>
+    <has-known-vulnerability>yes</has-known-vulnerability>
+    <tunnel-other-application>no</tunnel-other-application>
+    <prone-to-misuse>no</prone-to-misuse>
+    <pervasive-use>no</pervasive-use>
+    <per-direction-regex>no</per-direction-regex>
+    <deny-action>drop-reset</deny-action>
+    <cachable>no</cachable>
+    <parent-app>nx-cam-base</parent-app>
+    <source-type>saas</source-type>
+    <cloud-move-to-predefined>no</cloud-move-to-predefined>
+    <is-saas>yes</is-saas>
+    <saas minver="8.1.0">
+        <is-data-breaches>no</is-data-breaches>
+        <is-ip-based-restrictions>no</is-ip-based-restrictions>
+        <is-poor-financial-viability>no</is-poor-financial-viability>
+        <is-poor-terms-of-service>no</is-poor-terms-of-service>
+    </saas>
+    <tag minver="9.1.0">
+        <member>[App-ID Cloud Engine]</member>
+        <member>[Deleting]</member>
+        <member>[Web App]</member>
+    </tag>
+    <references>
+        <entry name="nx-cam">
+            <link>https://www.plm.automation.siemens.com/global/en/products/manufacturing-planning/cam-software.html</link>
+        </entry>
+    </references>
+    <default>
+        <port>
+            <member>tcp/80,443</member>
+        </port>
+    </default>
+    <use-applications>
+        <member>nx-cam-base</member>
+    </use-applications>
+    <risk>3</risk>
+    <create-date>2021-08-24</create-date>
+    <last-update-date>2025-03-26</last-update-date>
+    <application-container>nx-cam</application-container>
+</entry></result></response>
