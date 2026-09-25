@@ -1,0 +1,52 @@
+<response status="success"><result><entry id="10011148" name="image4io-delete" minver="10.1.0" ori_country="USA" ori_language="English">
+    <category>general-internet</category>
+    <new-category>business-systems</new-category>
+    <subcategory>content-management</subcategory>
+    <technology>browser-based</technology>
+    <description>image4io seems like a great platform for web-based images that offers a range of features for optimizing, distributing, and personalizing images. The content distribution network (CDN) feature can help with faster image delivery and management, while the AI filters for image perfection can enhance the visual experience for users. Additionally, the platform's focus on security is a critical aspect to ensure that images are protected from potential threats. Overall, image4io appears to be a comprehensive solution for businesses seeking to improve their web-based images. This App-ID covers the traffic for image4io-delete application.</description>
+    <appident>yes</appident>
+    <vulnerability-ident>yes</vulnerability-ident>
+    <evasive-behavior>no</evasive-behavior>
+    <consume-big-bandwidth>no</consume-big-bandwidth>
+    <used-by-malware>no</used-by-malware>
+    <able-to-transfer-file>no</able-to-transfer-file>
+    <has-known-vulnerability>yes</has-known-vulnerability>
+    <tunnel-other-application>no</tunnel-other-application>
+    <prone-to-misuse>no</prone-to-misuse>
+    <pervasive-use>no</pervasive-use>
+    <per-direction-regex>no</per-direction-regex>
+    <deny-action>drop-reset</deny-action>
+    <cachable>no</cachable>
+    <parent-app>image4io-base</parent-app>
+    <source-type>saas</source-type>
+    <cloud-move-to-predefined>no</cloud-move-to-predefined>
+    <is-saas>yes</is-saas>
+    <saas minver="8.1.0">
+        <is-data-breaches>no</is-data-breaches>
+        <is-ip-based-restrictions>no</is-ip-based-restrictions>
+        <is-poor-financial-viability>no</is-poor-financial-viability>
+        <is-poor-terms-of-service>no</is-poor-terms-of-service>
+    </saas>
+    <tag minver="9.1.0">
+        <member>[App-ID Cloud Engine]</member>
+        <member>[Deleting]</member>
+        <member>[Web App]</member>
+    </tag>
+    <references>
+        <entry name="image4io">
+            <link>https://image4.io/en/pricing</link>
+        </entry>
+    </references>
+    <default>
+        <port>
+            <member>tcp/80,443</member>
+        </port>
+    </default>
+    <use-applications>
+        <member>image4io-base</member>
+    </use-applications>
+    <risk>5</risk>
+    <create-date>2021-04-03</create-date>
+    <last-update-date>2025-03-28</last-update-date>
+    <application-container>image4io</application-container>
+</entry></result></response>

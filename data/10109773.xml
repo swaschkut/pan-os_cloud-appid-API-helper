@@ -1,0 +1,56 @@
+<response status="success"><result><entry id="10109773" name="epark-kusuri-madoguchi-base" minver="10.1.0" ori_country="USA" ori_language="English">
+    <ottawa-name>epark-kusuri-madoguchi</ottawa-name>
+    <category>general-internet</category>
+    <new-category>business-systems</new-category>
+    <subcategory>erp-crm</subcategory>
+    <technology>browser-based</technology>
+    <description>EPARK Kusuri no Madoguchi is a Japanese online pharmacy search and prescription reservation platform. It allows users to find pharmacies nationwide, reserve prescription medicine pickups in advance to minimize waiting times, and manage their medication history using a digital prescription notebook.</description>
+    <appident>yes</appident>
+    <vulnerability-ident>yes</vulnerability-ident>
+    <evasive-behavior>no</evasive-behavior>
+    <consume-big-bandwidth>no</consume-big-bandwidth>
+    <used-by-malware>no</used-by-malware>
+    <able-to-transfer-file>no</able-to-transfer-file>
+    <has-known-vulnerability>yes</has-known-vulnerability>
+    <tunnel-other-application>no</tunnel-other-application>
+    <prone-to-misuse>no</prone-to-misuse>
+    <pervasive-use>no</pervasive-use>
+    <per-direction-regex>no</per-direction-regex>
+    <deny-action>drop-reset</deny-action>
+    <cachable>no</cachable>
+    <source-type>se-saas</source-type>
+    <cloud-move-to-predefined>no</cloud-move-to-predefined>
+    <is-saas>yes</is-saas>
+    <saas minver="8.1.0">
+        <is-data-breaches>no</is-data-breaches>
+        <is-ip-based-restrictions>no</is-ip-based-restrictions>
+        <is-poor-financial-viability>no</is-poor-financial-viability>
+        <is-poor-terms-of-service>no</is-poor-terms-of-service>
+    </saas>
+    <tag minver="9.1.0">
+        <member>[App-ID Cloud Engine]</member>
+        <member>[Web App]</member>
+    </tag>
+    <references>
+        <entry name="HomePage">
+            <link>https://www.kusurinomadoguchi.com</link>
+        </entry>
+    </references>
+    <default>
+        <port>
+            <member>tcp/80,443</member>
+        </port>
+    </default>
+    <use-applications>
+        <member>ssl</member>
+        <member>web-browsing</member>
+    </use-applications>
+    <tunnel-applications>
+        <member>epark-kusuri-madoguchi-logout</member>
+        <member>epark-kusuri-madoguchi-upload</member>
+    </tunnel-applications>
+    <risk>3</risk>
+    <create-date>2026-07-23</create-date>
+    <last-update-date>2026-07-23</last-update-date>
+    <application-container>epark-kusuri-madoguchi</application-container>
+</entry></result></response>
