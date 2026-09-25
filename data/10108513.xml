@@ -1,0 +1,52 @@
+<response status="success"><result><entry id="10108513" name="ce-file-upload" minver="10.1.0" ori_country="USA" ori_language="English">
+    <category>general-internet</category>
+    <new-category>general-internet</new-category>
+    <subcategory>file-sharing</subcategory>
+    <technology>browser-based</technology>
+    <description>The CE-File platform is an electronic filing system designed to facilitate document submission and management. Users can register by providing personal information, including email and password, adhering to specified security guidelines. The platform offers technical support during business hours and provides guidance for effective usage.</description>
+    <appident>yes</appident>
+    <vulnerability-ident>yes</vulnerability-ident>
+    <evasive-behavior>no</evasive-behavior>
+    <consume-big-bandwidth>no</consume-big-bandwidth>
+    <used-by-malware>no</used-by-malware>
+    <able-to-transfer-file>no</able-to-transfer-file>
+    <has-known-vulnerability>yes</has-known-vulnerability>
+    <tunnel-other-application>no</tunnel-other-application>
+    <prone-to-misuse>no</prone-to-misuse>
+    <pervasive-use>no</pervasive-use>
+    <per-direction-regex>no</per-direction-regex>
+    <deny-action>drop-reset</deny-action>
+    <cachable>no</cachable>
+    <parent-app>ce-file-base</parent-app>
+    <source-type>se-saas</source-type>
+    <cloud-move-to-predefined>no</cloud-move-to-predefined>
+    <is-saas>yes</is-saas>
+    <saas minver="8.1.0">
+        <is-data-breaches>no</is-data-breaches>
+        <is-ip-based-restrictions>no</is-ip-based-restrictions>
+        <is-poor-financial-viability>no</is-poor-financial-viability>
+        <is-poor-terms-of-service>no</is-poor-terms-of-service>
+    </saas>
+    <tag minver="9.1.0">
+        <member>[App-ID Cloud Engine]</member>
+        <member>[Uploading]</member>
+        <member>[Web App]</member>
+    </tag>
+    <references>
+        <entry name="HomePage">
+            <link>https://efile.cefile-app.com</link>
+        </entry>
+    </references>
+    <default>
+        <port>
+            <member>tcp/80,443</member>
+        </port>
+    </default>
+    <use-applications>
+        <member>ce-file-base</member>
+    </use-applications>
+    <risk>3</risk>
+    <create-date>2026-07-01</create-date>
+    <last-update-date>2026-07-01</last-update-date>
+    <application-container>ce-file</application-container>
+</entry></result></response>

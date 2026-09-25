@@ -18,15 +18,41 @@ if (!file_exists($txtFile)) {
     exit();
 }
 
-// 2. Prüfung auf "ALL" Abfrage
-$isAllQuery = preg_match('/<application>\s*<all\s*\/?>/i', $cmd);
+// 2. Extrahiere den Such-String aus <application>...</application> oder <all>...</all>
+$searchTerm = '';
 
-if ($isAllQuery) {
+if (preg_match('/<application>(.*?)<\/application>/i', $cmd, $matches)) {
+    $searchTerm = trim($matches[1]);
+
+    // Falls <all>%pattern%</all> verschachtelt ist
+    if (preg_match('/<all>(.*?)<\/all>/i', $searchTerm, $allMatches)) {
+        $searchTerm = trim($allMatches[1]);
+    }
+}
+
+// 3. Entscheiden, ob es eine Wildcard- / Filter-Suche ist
+$isWildcardSearch = (strpos($searchTerm, '%') !== false || strpos($searchTerm, '*') !== false);
+$isAllQuery       = (empty($searchTerm) || strtolower($searchTerm) === 'all' || strtolower($searchTerm) === '<all></all>');
+
+if ($isWildcardSearch || $isAllQuery) {
+
+    // Wildcard % oder * in Regex-Pattern umwandeln
+    $pattern = null;
+    if ($isWildcardSearch) {
+        // XML-Tags entfernen, falls <all>...</all> als String übergeben wurde
+        $cleanSearch = strip_tags($searchTerm);
+        $cleanSearch = str_replace(['<all>', '</all>'], '', $cleanSearch);
+
+        // % und * durch .* ersetzen und Sonderzeichen maskieren
+        $regex = str_replace(['%', '*'], '.*', preg_quote($cleanSearch, '/'));
+        $regex = str_replace('\.\*', '.*', $regex); // Ausmaskierung für .* zurücknehmen
+        $pattern = '/^' . $regex . '$/i';
+    }
+
     $lines = file($txtFile, FILE_IGNORE_NEW_LINES | FILE_SKIP_EMPTY_LINES);
 
-    // DOMDocument für hübsch formatiertes XML initialisieren
     $dom = new DOMDocument('1.0', 'UTF-8');
-    $dom->formatOutput = true; // Sorgt für Zeilenumbrüche und Einrückungen
+    $dom->formatOutput = true;
 
     $responseNode = $dom->createElement('response');
     $responseNode->setAttribute('status', 'success');
@@ -38,12 +64,10 @@ if ($isAllQuery) {
     foreach ($lines as $line) {
         $line = trim($line);
 
-        // Header und Trennlinien überspringen
         if (strpos($line, 'Id') === 0 || strpos($line, '---') === 0) {
             continue;
         }
 
-        // Spalten anhand von 2 oder mehr Leerzeichen trennen
         $columns = preg_split('/\s{2,}/', $line);
 
         if (count($columns) >= 5) {
@@ -53,7 +77,12 @@ if ($isAllQuery) {
             $taskId        = trim($columns[3]);
             $xmlHashcode   = trim($columns[4]);
 
-            // <entry name="..."> Node bauen
+            // Falls Suchmuster aktiv ist -> Filtern
+            if ($pattern !== null && !preg_match($pattern, $name)) {
+                continue;
+            }
+
+            // <entry name="..."> Node erstellen
             $entry = $dom->createElement('entry');
             $entry->setAttribute('name', $name);
 
@@ -71,19 +100,9 @@ if ($isAllQuery) {
     exit();
 }
 
-// 3. Einzelabfrage (Name -> ID.xml)
-$appName = '';
-if (preg_match('/<application>(.*?)<\/application>/i', $cmd, $matches)) {
-    $appName = trim($matches[1]);
-}
+// 4. Einzelabfrage ohne Wildcards (Sucht exakten Namen -> liefert ID.xml)
+$appName = strip_tags($searchTerm);
 
-if (empty($appName)) {
-    http_response_code(400);
-    echo '<?xml version="1.0" encoding="UTF-8"?><response status="error" code="400"><msg><line>Could not parse application name</line></msg></response>';
-    exit();
-}
-
-// Index laden & Mappen
 $nameToIdMap = [];
 $lines = file($txtFile, FILE_IGNORE_NEW_LINES | FILE_SKIP_EMPTY_LINES);
 
@@ -106,7 +125,6 @@ $appId = $nameToIdMap[$appName];
 $filePath = __DIR__ . '/../data/' . $appId . '.xml';
 
 if (file_exists($filePath)) {
-    // Einzelne XML-Datei ebenfalls hübsch formatiert ausgeben
     $dom = new DOMDocument('1.0', 'UTF-8');
     $dom->formatOutput = true;
     if (@$dom->load($filePath)) {

@@ -1,0 +1,58 @@
+<response status="success"><result><entry id="10006949" name="porto-venere-base" minver="10.1.0" ori_country="USA" ori_language="English">
+    <ottawa-name>porto-venere</ottawa-name>
+    <category>general-internet</category>
+    <new-category>business-systems</new-category>
+    <subcategory>vertical-industry</subcategory>
+    <technology>browser-based</technology>
+    <description>Manage your collections of art and more. Porto Venere is the straightforward collection management tool for collectors to protect the value of their passion-based assets. Record and preserve important information and artifacts relating to your collectibles. It's the smart way to appreciate your art, as it appreciates in value. Best of all, it's FREE for collectors.</description>
+    <appident>yes</appident>
+    <vulnerability-ident>yes</vulnerability-ident>
+    <evasive-behavior>no</evasive-behavior>
+    <consume-big-bandwidth>no</consume-big-bandwidth>
+    <used-by-malware>no</used-by-malware>
+    <able-to-transfer-file>no</able-to-transfer-file>
+    <has-known-vulnerability>yes</has-known-vulnerability>
+    <tunnel-other-application>no</tunnel-other-application>
+    <prone-to-misuse>no</prone-to-misuse>
+    <pervasive-use>no</pervasive-use>
+    <per-direction-regex>no</per-direction-regex>
+    <deny-action>drop-reset</deny-action>
+    <cachable>no</cachable>
+    <source-type>saas</source-type>
+    <cloud-move-to-predefined>no</cloud-move-to-predefined>
+    <is-saas>yes</is-saas>
+    <saas minver="8.1.0">
+        <is-data-breaches>no</is-data-breaches>
+        <is-ip-based-restrictions>no</is-ip-based-restrictions>
+        <is-poor-financial-viability>no</is-poor-financial-viability>
+        <is-poor-terms-of-service>no</is-poor-terms-of-service>
+    </saas>
+    <tag minver="9.1.0">
+        <member>[App-ID Cloud Engine]</member>
+        <member>[Web App]</member>
+    </tag>
+    <references>
+        <entry name="porto-venere">
+            <link>https://www.portovenereart.com</link>
+        </entry>
+    </references>
+    <default>
+        <port>
+            <member>tcp/80,443</member>
+        </port>
+    </default>
+    <use-applications>
+        <member>ssl</member>
+        <member>web-browsing</member>
+    </use-applications>
+    <tunnel-applications>
+        <member>porto-venere-delete</member>
+        <member>porto-venere-download</member>
+        <member>porto-venere-logout</member>
+        <member>porto-venere-share</member>
+    </tunnel-applications>
+    <risk>4</risk>
+    <create-date>2021-04-03</create-date>
+    <last-update-date>2025-03-27</last-update-date>
+    <application-container>porto-venere</application-container>
+</entry></result></response>
