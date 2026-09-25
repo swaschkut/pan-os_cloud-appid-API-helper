@@ -1,0 +1,52 @@
+<response status="success"><result><entry id="10111515" name="i3-systems-clomo-mdm-upload" minver="10.1.0" ori_country="USA" ori_language="English">
+    <category>general-internet</category>
+    <new-category>networking</new-category>
+    <subcategory>it-management</subcategory>
+    <technology>browser-based</technology>
+    <description>CLOMO MDM, developed by CLOMO, is a cloud-based service designed for integrated management and operation of iOS and Android devices within corporate environments. The platform supports Enterprise Mobile Management (EMM), iOS Volume Purchase Program (VPP), Device Enrollment Program (DEP), and Android Enterprise Recommended (AER) standards. It enables remote monitoring of device usage, providing access to basic information such as phone numbers, device identifiers, location data, and installed applications.</description>
+    <appident>yes</appident>
+    <vulnerability-ident>yes</vulnerability-ident>
+    <evasive-behavior>no</evasive-behavior>
+    <consume-big-bandwidth>no</consume-big-bandwidth>
+    <used-by-malware>no</used-by-malware>
+    <able-to-transfer-file>no</able-to-transfer-file>
+    <has-known-vulnerability>yes</has-known-vulnerability>
+    <tunnel-other-application>no</tunnel-other-application>
+    <prone-to-misuse>no</prone-to-misuse>
+    <pervasive-use>no</pervasive-use>
+    <per-direction-regex>no</per-direction-regex>
+    <deny-action>drop-reset</deny-action>
+    <cachable>no</cachable>
+    <parent-app>i3-systems-clomo-mdm-base</parent-app>
+    <source-type>se-saas</source-type>
+    <cloud-move-to-predefined>no</cloud-move-to-predefined>
+    <is-saas>yes</is-saas>
+    <saas minver="8.1.0">
+        <is-data-breaches>no</is-data-breaches>
+        <is-ip-based-restrictions>no</is-ip-based-restrictions>
+        <is-poor-financial-viability>no</is-poor-financial-viability>
+        <is-poor-terms-of-service>no</is-poor-terms-of-service>
+    </saas>
+    <tag minver="9.1.0">
+        <member>[App-ID Cloud Engine]</member>
+        <member>[Uploading]</member>
+        <member>[Web App]</member>
+    </tag>
+    <references>
+        <entry name="HomePage">
+            <link>https://clomo.com</link>
+        </entry>
+    </references>
+    <default>
+        <port>
+            <member>tcp/80,443</member>
+        </port>
+    </default>
+    <use-applications>
+        <member>i3-systems-clomo-mdm-base</member>
+    </use-applications>
+    <risk>3</risk>
+    <create-date>2026-08-25</create-date>
+    <last-update-date>2026-08-25</last-update-date>
+    <application-container>i3-systems-clomo-mdm</application-container>
+</entry></result></response>
