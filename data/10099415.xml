@@ -1,0 +1,56 @@
+<response status="success"><result><entry id="10099415" name="alpha-school-base" minver="10.1.0" ori_country="USA" ori_language="English">
+    <ottawa-name>alpha-school</ottawa-name>
+    <category>general-internet</category>
+    <new-category>business-systems</new-category>
+    <subcategory>artificial-intelligence</subcategory>
+    <technology>browser-based</technology>
+    <description>Alpha School offers an AI-powered educational model designed to enhance academic performance and foster real-world skills and passions in students. Catering to individuals aged 521, Alpha School provides a supportive and nurturing environment tailored to diverse challenges. The institution operates multiple campuses, including Alpha School Austin, and employs innovative learning methodologies to empower students in their educational journey.</description>
+    <appident>yes</appident>
+    <vulnerability-ident>yes</vulnerability-ident>
+    <evasive-behavior>no</evasive-behavior>
+    <consume-big-bandwidth>no</consume-big-bandwidth>
+    <used-by-malware>no</used-by-malware>
+    <able-to-transfer-file>no</able-to-transfer-file>
+    <has-known-vulnerability>yes</has-known-vulnerability>
+    <tunnel-other-application>no</tunnel-other-application>
+    <prone-to-misuse>no</prone-to-misuse>
+    <pervasive-use>no</pervasive-use>
+    <per-direction-regex>no</per-direction-regex>
+    <deny-action>drop-reset</deny-action>
+    <cachable>no</cachable>
+    <source-type>se-saas</source-type>
+    <cloud-move-to-predefined>no</cloud-move-to-predefined>
+    <is-saas>yes</is-saas>
+    <saas minver="8.1.0">
+        <is-data-breaches>no</is-data-breaches>
+        <is-ip-based-restrictions>no</is-ip-based-restrictions>
+        <is-poor-financial-viability>no</is-poor-financial-viability>
+        <is-poor-terms-of-service>no</is-poor-terms-of-service>
+    </saas>
+    <tag minver="9.1.0">
+        <member>[App-ID Cloud Engine]</member>
+        <member>[Generative AI]</member>
+        <member>[Web App]</member>
+    </tag>
+    <references>
+        <entry name="HomePage">
+            <link>https://alpha.school</link>
+        </entry>
+    </references>
+    <default>
+        <port>
+            <member>tcp/80,443</member>
+        </port>
+    </default>
+    <use-applications>
+        <member>ssl</member>
+        <member>web-browsing</member>
+    </use-applications>
+    <tunnel-applications>
+        <member>alpha-school-upload</member>
+    </tunnel-applications>
+    <risk>2</risk>
+    <create-date>2026-02-24</create-date>
+    <last-update-date>2026-02-24</last-update-date>
+    <application-container>alpha-school</application-container>
+</entry></result></response>

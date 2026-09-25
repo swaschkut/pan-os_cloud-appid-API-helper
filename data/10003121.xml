@@ -1,0 +1,52 @@
+<response status="success"><result><entry id="10003121" name="easymeeting.net-upload" minver="10.1.0" ori_country="USA" ori_language="English">
+    <category>general-internet</category>
+    <new-category>collaboration</new-category>
+    <subcategory>internet-conferencing</subcategory>
+    <technology>browser-based</technology>
+    <description>EasyMeeting is a video conferencing solution that makes video communication as easy as a phone call. It offers a user-friendly platform for virtual meetings and webinars, with features such as screen sharing, recording, and chat. EasyMeeting can be used on multiple devices, including desktop computers, laptops, tablets, and smartphones, and is compatible with different operating systems. This App-ID covers the traffic for easymeeting.net-upload application.</description>
+    <appident>yes</appident>
+    <vulnerability-ident>yes</vulnerability-ident>
+    <evasive-behavior>no</evasive-behavior>
+    <consume-big-bandwidth>no</consume-big-bandwidth>
+    <used-by-malware>no</used-by-malware>
+    <able-to-transfer-file>no</able-to-transfer-file>
+    <has-known-vulnerability>yes</has-known-vulnerability>
+    <tunnel-other-application>no</tunnel-other-application>
+    <prone-to-misuse>no</prone-to-misuse>
+    <pervasive-use>no</pervasive-use>
+    <per-direction-regex>no</per-direction-regex>
+    <deny-action>drop-reset</deny-action>
+    <cachable>no</cachable>
+    <parent-app>easymeeting.net-base</parent-app>
+    <source-type>saas</source-type>
+    <cloud-move-to-predefined>no</cloud-move-to-predefined>
+    <is-saas>yes</is-saas>
+    <saas minver="8.1.0">
+        <is-data-breaches>no</is-data-breaches>
+        <is-ip-based-restrictions>no</is-ip-based-restrictions>
+        <is-poor-financial-viability>no</is-poor-financial-viability>
+        <is-poor-terms-of-service>no</is-poor-terms-of-service>
+    </saas>
+    <tag minver="9.1.0">
+        <member>[App-ID Cloud Engine]</member>
+        <member>[Uploading]</member>
+        <member>[Web App]</member>
+    </tag>
+    <references>
+        <entry name="easymeeting.net">
+            <link>https://www.easymeeting.net/products/easymeeting/</link>
+        </entry>
+    </references>
+    <default>
+        <port>
+            <member>tcp/80,443</member>
+        </port>
+    </default>
+    <use-applications>
+        <member>easymeeting.net-base</member>
+    </use-applications>
+    <risk>4</risk>
+    <create-date>2021-04-03</create-date>
+    <last-update-date>2025-03-26</last-update-date>
+    <application-container>easymeeting.net</application-container>
+</entry></result></response>
