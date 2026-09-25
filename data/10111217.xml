@@ -1,0 +1,51 @@
+<response status="success"><result><entry id="10111217" name="laposte-net-logout" minver="10.1.0" ori_country="USA" ori_language="English">
+    <category>general-internet</category>
+    <new-category>collaboration</new-category>
+    <subcategory>email</subcategory>
+    <technology>browser-based</technology>
+    <description>The laposte.net application, developed by La Poste, is an email management platform designed to simplify and enhance the user experience. It provides a unified interface for organizing emails from multiple accounts, including Gmail and Outlook, in one place. The application features real-time notifications, offline access, and an intuitive design compatible with various devices, ensuring efficient email handling.</description>
+    <appident>yes</appident>
+    <vulnerability-ident>yes</vulnerability-ident>
+    <evasive-behavior>no</evasive-behavior>
+    <consume-big-bandwidth>no</consume-big-bandwidth>
+    <used-by-malware>no</used-by-malware>
+    <able-to-transfer-file>no</able-to-transfer-file>
+    <has-known-vulnerability>yes</has-known-vulnerability>
+    <tunnel-other-application>no</tunnel-other-application>
+    <prone-to-misuse>no</prone-to-misuse>
+    <pervasive-use>no</pervasive-use>
+    <per-direction-regex>no</per-direction-regex>
+    <deny-action>drop-reset</deny-action>
+    <cachable>no</cachable>
+    <parent-app>laposte-net-base</parent-app>
+    <source-type>se-saas</source-type>
+    <cloud-move-to-predefined>no</cloud-move-to-predefined>
+    <is-saas>yes</is-saas>
+    <saas minver="8.1.0">
+        <is-data-breaches>no</is-data-breaches>
+        <is-ip-based-restrictions>no</is-ip-based-restrictions>
+        <is-poor-financial-viability>no</is-poor-financial-viability>
+        <is-poor-terms-of-service>no</is-poor-terms-of-service>
+    </saas>
+    <tag minver="9.1.0">
+        <member>[App-ID Cloud Engine]</member>
+        <member>[Web App]</member>
+    </tag>
+    <references>
+        <entry name="HomePage">
+            <link>https://www.laposte.net</link>
+        </entry>
+    </references>
+    <default>
+        <port>
+            <member>tcp/80,443</member>
+        </port>
+    </default>
+    <use-applications>
+        <member>laposte-net-base</member>
+    </use-applications>
+    <risk>3</risk>
+    <create-date>2026-08-20</create-date>
+    <last-update-date>2026-08-20</last-update-date>
+    <application-container>laposte-net</application-container>
+</entry></result></response>

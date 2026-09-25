@@ -1,0 +1,52 @@
+<response status="success"><result><entry id="10022424" name="swell-delete" minver="10.1.0" ori_country="USA" ori_language="English">
+    <category>general-internet</category>
+    <new-category>saas</new-category>
+    <subcategory>commerce</subcategory>
+    <technology>browser-based</technology>
+    <description>Swell is a modern e-commerce platform for ambitious brands. A truly API-first approach and headless architecture enables small to medium businesses and middle-market enterprises alike to sell creatively and grow rapidly through a robust and customizable solution. Modern online storefronts can be created with any web, mobile or VR/AR technology. Build D2C, B2B, marketplaces, subscriptions, pre-orders, enterprise or any custom online experiences from scratch. Powerful performance combined with unlimited design possibilities, a functional and intuitive dashboard with a modern developer workflow make Swell a perfect choice for the modern online business. This App-ID covers the traffic for swell-delete application.</description>
+    <appident>yes</appident>
+    <vulnerability-ident>yes</vulnerability-ident>
+    <evasive-behavior>no</evasive-behavior>
+    <consume-big-bandwidth>no</consume-big-bandwidth>
+    <used-by-malware>no</used-by-malware>
+    <able-to-transfer-file>no</able-to-transfer-file>
+    <has-known-vulnerability>yes</has-known-vulnerability>
+    <tunnel-other-application>no</tunnel-other-application>
+    <prone-to-misuse>no</prone-to-misuse>
+    <pervasive-use>no</pervasive-use>
+    <per-direction-regex>no</per-direction-regex>
+    <deny-action>drop-reset</deny-action>
+    <cachable>no</cachable>
+    <parent-app>swell-base</parent-app>
+    <source-type>saas</source-type>
+    <cloud-move-to-predefined>no</cloud-move-to-predefined>
+    <is-saas>yes</is-saas>
+    <saas minver="8.1.0">
+        <is-data-breaches>no</is-data-breaches>
+        <is-ip-based-restrictions>no</is-ip-based-restrictions>
+        <is-poor-financial-viability>no</is-poor-financial-viability>
+        <is-poor-terms-of-service>no</is-poor-terms-of-service>
+    </saas>
+    <tag minver="9.1.0">
+        <member>[App-ID Cloud Engine]</member>
+        <member>[Deleting]</member>
+        <member>[Web App]</member>
+    </tag>
+    <references>
+        <entry name="swell">
+            <link>https://www.swell.is/features</link>
+        </entry>
+    </references>
+    <default>
+        <port>
+            <member>tcp/80,443</member>
+        </port>
+    </default>
+    <use-applications>
+        <member>swell-base</member>
+    </use-applications>
+    <risk>4</risk>
+    <create-date>2022-01-26</create-date>
+    <last-update-date>2022-10-11</last-update-date>
+    <application-container>swell</application-container>
+</entry></result></response>
