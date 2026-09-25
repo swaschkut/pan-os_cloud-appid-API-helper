@@ -1,0 +1,15 @@
+version: '3.8'
+
+services:
+  panos-mock-api:
+    build: .
+    container_name: panos-mock-api
+    ports:
+      - "8080:8080"
+
+  my-script-runner:
+    image: php:8.2-cli
+    depends_on:
+      - panos-mock-api
+    # In deinem PHP Skript kannst du nun in=api://panos-mock-api:8080 verwenden
+    command: php cloud-appid_get-application-details.php in=api://panos-mock-api:8080
