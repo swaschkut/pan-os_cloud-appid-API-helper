@@ -1,0 +1,25 @@
+FROM php:8.2-apache
+
+# 1. System-Abhängigkeiten und SQLite-Bibliotheken installieren
+RUN apt-get update && apt-get install -y \
+    sqlite3 \
+    libsqlite3-dev \
+    && rm -rf /var/lib/apt/lists/*
+
+# 2. PHP SQLite-Erweiterungen aktivieren
+RUN docker-php-ext-install pdo_sqlite pdo
+
+# 3. Arbeitsverzeichnis setzen
+WORKDIR /var/www/html
+
+# 4. GESAMTES Projekt inkl. der fertig befüllten cloud_appid.db kopieren
+COPY . /var/www/html/
+
+# 5. Apache DocumentRoot auf das /src Verzeichnis umbiegen
+RUN sed -i 's|/var/www/html|/var/www/html/src|g' /etc/apache2/sites-available/000-default.conf
+
+# 6. Schreibrechte setzen (Wichtig für SQLite Temp/WAL-Dateien)
+RUN chown -R www-data:www-data /var/www/html \
+    && chmod -R 775 /var/www/html
+
+EXPOSE 80
