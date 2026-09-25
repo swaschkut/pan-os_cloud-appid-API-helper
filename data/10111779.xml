@@ -1,0 +1,61 @@
+<response status="success"><result><entry id="10111779" name="hero-coder-base" minver="10.1.0" ori_country="USA" ori_language="English">
+    <ottawa-name>hero-coder</ottawa-name>
+    <category>general-internet</category>
+    <new-category>business-systems</new-category>
+    <subcategory>management</subcategory>
+    <technology>browser-based</technology>
+    <description>HeroCoders develops workflow applications designed to enhance project management and team collaboration. Their tools integrate with platforms such as Jira, Microsoft Teams, and monday.com, offering features like checklists and time tracking to streamline workflows and improve efficiency. Over 70,000 companies utilize HeroCoders' cloud-based solutions to simplify and optimize their operational processes.</description>
+    <appident>yes</appident>
+    <vulnerability-ident>yes</vulnerability-ident>
+    <evasive-behavior>no</evasive-behavior>
+    <consume-big-bandwidth>no</consume-big-bandwidth>
+    <used-by-malware>no</used-by-malware>
+    <able-to-transfer-file>no</able-to-transfer-file>
+    <has-known-vulnerability>yes</has-known-vulnerability>
+    <tunnel-other-application>no</tunnel-other-application>
+    <prone-to-misuse>no</prone-to-misuse>
+    <pervasive-use>no</pervasive-use>
+    <per-direction-regex>no</per-direction-regex>
+    <deny-action>drop-reset</deny-action>
+    <cachable>no</cachable>
+    <source-type>se-saas</source-type>
+    <cloud-move-to-predefined>no</cloud-move-to-predefined>
+    <is-saas>yes</is-saas>
+    <saas minver="8.1.0">
+        <certifications>
+            <is-fedramp>yes</is-fedramp>
+            <is-hipaa>yes</is-hipaa>
+            <is-soc2>yes</is-soc2>
+        </certifications>
+        <is-data-breaches>no</is-data-breaches>
+        <is-ip-based-restrictions>no</is-ip-based-restrictions>
+        <is-poor-financial-viability>no</is-poor-financial-viability>
+        <is-poor-terms-of-service>no</is-poor-terms-of-service>
+    </saas>
+    <tag minver="9.1.0">
+        <member>[App-ID Cloud Engine]</member>
+        <member>[Generative AI]</member>
+        <member>[Web App]</member>
+    </tag>
+    <references>
+        <entry name="HomePage">
+            <link>https://www.herocoders.com</link>
+        </entry>
+    </references>
+    <default>
+        <port>
+            <member>tcp/80,443</member>
+        </port>
+    </default>
+    <use-applications>
+        <member>ssl</member>
+        <member>web-browsing</member>
+    </use-applications>
+    <tunnel-applications>
+        <member>hero-coder-delete</member>
+    </tunnel-applications>
+    <risk>3</risk>
+    <create-date>2026-08-31</create-date>
+    <last-update-date>2026-08-31</last-update-date>
+    <application-container>hero-coder</application-container>
+</entry></result></response>
