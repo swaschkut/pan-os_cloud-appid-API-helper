@@ -1,0 +1,57 @@
+<response status="success"><result><entry id="10012867" name="oracle-standalone-co" minver="10.1.0" ori_country="USA" ori_language="English">
+    <category>general-internet</category>
+    <new-category>business-systems</new-category>
+    <subcategory>customer-service</subcategory>
+    <technology>browser-based</technology>
+    <description>Cobrowse technology puts your customers and agents on the same page-literally. With the click of a button, customers can show their screens to agents during a service call. When issues are too complex to resolve effectively over the phone or via live chat, Oracle Standalone Cobrowse can mean the difference between a slow and frustrating interaction and a quick, positive service experience.</description>
+    <appident>yes</appident>
+    <vulnerability-ident>yes</vulnerability-ident>
+    <evasive-behavior>no</evasive-behavior>
+    <consume-big-bandwidth>no</consume-big-bandwidth>
+    <used-by-malware>no</used-by-malware>
+    <able-to-transfer-file>no</able-to-transfer-file>
+    <has-known-vulnerability>yes</has-known-vulnerability>
+    <tunnel-other-application>no</tunnel-other-application>
+    <prone-to-misuse>no</prone-to-misuse>
+    <pervasive-use>no</pervasive-use>
+    <per-direction-regex>no</per-direction-regex>
+    <deny-action>drop-reset</deny-action>
+    <cachable>no</cachable>
+    <source-type>saas</source-type>
+    <cloud-move-to-predefined>no</cloud-move-to-predefined>
+    <is-saas>yes</is-saas>
+    <saas minver="8.1.0">
+        <certifications>
+            <is-fedramp>yes</is-fedramp>
+            <is-hipaa>yes</is-hipaa>
+            <is-pci>yes</is-pci>
+            <is-soc1>yes</is-soc1>
+            <is-soc2>yes</is-soc2>
+        </certifications>
+        <is-data-breaches>no</is-data-breaches>
+        <is-ip-based-restrictions>yes</is-ip-based-restrictions>
+        <is-poor-financial-viability>no</is-poor-financial-viability>
+        <is-poor-terms-of-service>no</is-poor-terms-of-service>
+    </saas>
+    <tag minver="9.1.0">
+        <member>[App-ID Cloud Engine]</member>
+        <member>[Web App]</member>
+    </tag>
+    <references>
+        <entry name="oracle-standalone-co">
+            <link>https://www.oracle.com/cx/service/digital-customer-service/</link>
+        </entry>
+    </references>
+    <default>
+        <port>
+            <member>tcp/80,443</member>
+        </port>
+    </default>
+    <use-applications>
+        <member>ssl</member>
+        <member>web-browsing</member>
+    </use-applications>
+    <risk>1</risk>
+    <create-date>2021-04-23</create-date>
+    <last-update-date>2024-08-22</last-update-date>
+</entry></result></response>

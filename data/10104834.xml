@@ -1,0 +1,52 @@
+<response status="success"><result><entry id="10104834" name="haver-analytics-download" minver="10.1.0" ori_country="USA" ori_language="English">
+    <category>general-internet</category>
+    <new-category>business-systems</new-category>
+    <subcategory>analytics</subcategory>
+    <technology>browser-based</technology>
+    <description>Haver Analytics provides a comprehensive platform for managing and analyzing historical time series data, catering to macroeconomic strategy and research needs. The application offers worldwide economic data coverage, supporting analysts, strategists, and risk managers. It includes software platforms and delivery solutions adaptable to various technical requirements, such as database feeds and cloud-based systems, ensuring accessibility and integration for diverse use cases.</description>
+    <appident>yes</appident>
+    <vulnerability-ident>yes</vulnerability-ident>
+    <evasive-behavior>no</evasive-behavior>
+    <consume-big-bandwidth>no</consume-big-bandwidth>
+    <used-by-malware>no</used-by-malware>
+    <able-to-transfer-file>no</able-to-transfer-file>
+    <has-known-vulnerability>yes</has-known-vulnerability>
+    <tunnel-other-application>no</tunnel-other-application>
+    <prone-to-misuse>no</prone-to-misuse>
+    <pervasive-use>no</pervasive-use>
+    <per-direction-regex>no</per-direction-regex>
+    <deny-action>drop-reset</deny-action>
+    <cachable>no</cachable>
+    <parent-app>haver-analytics-base</parent-app>
+    <source-type>se-saas</source-type>
+    <cloud-move-to-predefined>no</cloud-move-to-predefined>
+    <is-saas>yes</is-saas>
+    <saas minver="8.1.0">
+        <is-data-breaches>no</is-data-breaches>
+        <is-ip-based-restrictions>no</is-ip-based-restrictions>
+        <is-poor-financial-viability>no</is-poor-financial-viability>
+        <is-poor-terms-of-service>no</is-poor-terms-of-service>
+    </saas>
+    <tag minver="9.1.0">
+        <member>[App-ID Cloud Engine]</member>
+        <member>[Downloading]</member>
+        <member>[Web App]</member>
+    </tag>
+    <references>
+        <entry name="HomePage">
+            <link>https://www.haver.com</link>
+        </entry>
+    </references>
+    <default>
+        <port>
+            <member>tcp/80,443</member>
+        </port>
+    </default>
+    <use-applications>
+        <member>haver-analytics-base</member>
+    </use-applications>
+    <risk>4</risk>
+    <create-date>2026-05-18</create-date>
+    <last-update-date>2026-05-18</last-update-date>
+    <application-container>haver-analytics</application-container>
+</entry></result></response>

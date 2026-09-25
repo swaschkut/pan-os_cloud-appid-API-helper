@@ -1,0 +1,61 @@
+<response status="success"><result><entry id="10098732" name="rocket-enterprise-suite-base" minver="10.1.0" ori_country="USA" ori_language="English">
+    <ottawa-name>rocket-enterprise-suite</ottawa-name>
+    <category>general-internet</category>
+    <new-category>networking</new-category>
+    <subcategory>it-management</subcategory>
+    <technology>browser-based</technology>
+    <description>Rocket Software provides technology solutions aimed at modernizing and optimizing IT systems for businesses. With over 30 years of expertise, Rocket Software offers tools such as Rocket Mainstar systems optimization and data management solutions, enabling efficient operation of IBM z/OS, Db2, and IMS systems. Their services support organizations in transitioning core systems to cloud environments, ensuring future-proof IT infrastructure.</description>
+    <appident>yes</appident>
+    <vulnerability-ident>yes</vulnerability-ident>
+    <evasive-behavior>no</evasive-behavior>
+    <consume-big-bandwidth>no</consume-big-bandwidth>
+    <used-by-malware>no</used-by-malware>
+    <able-to-transfer-file>no</able-to-transfer-file>
+    <has-known-vulnerability>yes</has-known-vulnerability>
+    <tunnel-other-application>no</tunnel-other-application>
+    <prone-to-misuse>no</prone-to-misuse>
+    <pervasive-use>no</pervasive-use>
+    <per-direction-regex>no</per-direction-regex>
+    <deny-action>drop-reset</deny-action>
+    <cachable>no</cachable>
+    <source-type>se-saas</source-type>
+    <cloud-move-to-predefined>no</cloud-move-to-predefined>
+    <is-saas>yes</is-saas>
+    <saas minver="8.1.0">
+        <certifications>
+            <is-hipaa>yes</is-hipaa>
+            <is-pci>yes</is-pci>
+            <is-soc2>yes</is-soc2>
+        </certifications>
+        <is-data-breaches>no</is-data-breaches>
+        <is-ip-based-restrictions>yes</is-ip-based-restrictions>
+        <is-poor-financial-viability>no</is-poor-financial-viability>
+        <is-poor-terms-of-service>no</is-poor-terms-of-service>
+    </saas>
+    <tag minver="9.1.0">
+        <member>[App-ID Cloud Engine]</member>
+        <member>[Web App]</member>
+    </tag>
+    <references>
+        <entry name="HomePage">
+            <link>https://www.rocketsoftware.com</link>
+        </entry>
+    </references>
+    <default>
+        <port>
+            <member>tcp/80,443</member>
+        </port>
+    </default>
+    <use-applications>
+        <member>ssl</member>
+        <member>web-browsing</member>
+    </use-applications>
+    <tunnel-applications>
+        <member>rocket-enterprise-suite-upload</member>
+        <member>rocket-entsuite-download</member>
+    </tunnel-applications>
+    <risk>3</risk>
+    <create-date>2026-02-03</create-date>
+    <last-update-date>2026-02-03</last-update-date>
+    <application-container>rocket-enterprise-suite</application-container>
+</entry></result></response>
