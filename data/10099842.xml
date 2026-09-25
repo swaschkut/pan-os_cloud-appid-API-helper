@@ -1,0 +1,58 @@
+<response status="success"><result><entry id="10099842" name="bestcoffer-vdr-download" minver="10.1.0" ori_country="USA" ori_language="English">
+    <category>general-internet</category>
+    <new-category>business-systems</new-category>
+    <subcategory>artificial-intelligence</subcategory>
+    <technology>browser-based</technology>
+    <description>bestCoffer is a Virtual Data Room (VDR) platform designed to ensure secure handling and sharing of confidential documents. The application employs full lifecycle encryption to protect files from the moment they are uploaded. It supports regional deployment worldwide, facilitating compliance with local regulations. Additionally, bestCoffer offers AI-powered redaction features, with a free trial available for testing advanced functionalities.</description>
+    <appident>yes</appident>
+    <vulnerability-ident>yes</vulnerability-ident>
+    <evasive-behavior>no</evasive-behavior>
+    <consume-big-bandwidth>no</consume-big-bandwidth>
+    <used-by-malware>no</used-by-malware>
+    <able-to-transfer-file>no</able-to-transfer-file>
+    <has-known-vulnerability>yes</has-known-vulnerability>
+    <tunnel-other-application>no</tunnel-other-application>
+    <prone-to-misuse>no</prone-to-misuse>
+    <pervasive-use>no</pervasive-use>
+    <per-direction-regex>no</per-direction-regex>
+    <deny-action>drop-reset</deny-action>
+    <cachable>no</cachable>
+    <parent-app>bestcoffer-vdr-base</parent-app>
+    <source-type>se-saas</source-type>
+    <cloud-move-to-predefined>no</cloud-move-to-predefined>
+    <is-saas>yes</is-saas>
+    <saas minver="8.1.0">
+        <certifications>
+            <is-hipaa>yes</is-hipaa>
+            <is-pci>yes</is-pci>
+            <is-soc1>yes</is-soc1>
+        </certifications>
+        <is-data-breaches>no</is-data-breaches>
+        <is-ip-based-restrictions>no</is-ip-based-restrictions>
+        <is-poor-financial-viability>no</is-poor-financial-viability>
+        <is-poor-terms-of-service>no</is-poor-terms-of-service>
+    </saas>
+    <tag minver="9.1.0">
+        <member>[App-ID Cloud Engine]</member>
+        <member>[Downloading]</member>
+        <member>[Generative AI]</member>
+        <member>[Web App]</member>
+    </tag>
+    <references>
+        <entry name="HomePage">
+            <link>https://www.bestcoffer.com</link>
+        </entry>
+    </references>
+    <default>
+        <port>
+            <member>tcp/80,443</member>
+        </port>
+    </default>
+    <use-applications>
+        <member>bestcoffer-vdr-base</member>
+    </use-applications>
+    <risk>2</risk>
+    <create-date>2026-03-10</create-date>
+    <last-update-date>2026-03-10</last-update-date>
+    <application-container>bestcoffer-vdr</application-container>
+</entry></result></response>

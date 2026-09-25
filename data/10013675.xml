@@ -1,0 +1,48 @@
+<response status="success"><result><entry id="10013675" name="wolframalpha" minver="10.1.0" ori_country="USA" ori_language="English">
+    <category>general-internet</category>
+    <new-category>general-internet</new-category>
+    <subcategory>internet-utility</subcategory>
+    <technology>browser-based</technology>
+    <description>WolframAlpha (also styled Wolfram|Alpha) is a computational knowledge engine or answer engine developed by WolframAlpha LLC, a subsidiary of Wolfram Research. It is an online service that answers factual queries directly by computing the answer from externally sourced "curated data", rather than providing a list of documents or web pages that might contain the answer, as a search engine might.WolframAlpha, which was released on May 18, 2009, is based on Wolfram's earlier flagship product Wolfram Mathematica, a computational platform or toolkit that encompasses computer algebra, symbolic and numerical computation, visualization, and statistics capabilities.</description>
+    <appident>yes</appident>
+    <evasive-behavior>no</evasive-behavior>
+    <consume-big-bandwidth>no</consume-big-bandwidth>
+    <used-by-malware>no</used-by-malware>
+    <able-to-transfer-file>no</able-to-transfer-file>
+    <has-known-vulnerability>no</has-known-vulnerability>
+    <tunnel-other-application>no</tunnel-other-application>
+    <prone-to-misuse>no</prone-to-misuse>
+    <pervasive-use>no</pervasive-use>
+    <per-direction-regex>no</per-direction-regex>
+    <deny-action>drop-reset</deny-action>
+    <cachable>no</cachable>
+    <source-type>se-saas</source-type>
+    <cloud-move-to-predefined>no</cloud-move-to-predefined>
+    <is-saas>yes</is-saas>
+    <saas minver="8.1.0">
+        <is-data-breaches>no</is-data-breaches>
+        <is-ip-based-restrictions>no</is-ip-based-restrictions>
+        <is-poor-financial-viability>no</is-poor-financial-viability>
+        <is-poor-terms-of-service>no</is-poor-terms-of-service>
+    </saas>
+    <tag minver="9.1.0">
+        <member>[App-ID Cloud Engine]</member>
+        <member>[Web App]</member>
+    </tag>
+    <references>
+        <entry name="Wikipedia">
+            <link>https://en.wikipedia.org/wiki/WolframAlpha</link>
+        </entry>
+    </references>
+    <default>
+        <port>
+            <member>tcp/443</member>
+        </port>
+    </default>
+    <use-applications>
+        <member>ssl</member>
+    </use-applications>
+    <risk>1</risk>
+    <create-date>2021-05-28</create-date>
+    <last-update-date>2021-06-15</last-update-date>
+</entry></result></response>

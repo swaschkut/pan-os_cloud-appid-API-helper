@@ -1,0 +1,55 @@
+<response status="success"><result><entry id="10111130" name="hisplayer-base" minver="10.1.0" ori_country="USA" ori_language="English">
+    <ottawa-name>hisplayer</ottawa-name>
+    <category>general-internet</category>
+    <new-category>media</new-category>
+    <subcategory>photo-video</subcategory>
+    <technology>browser-based</technology>
+    <description>HISPlayer is a video player software development kit (SDK) designed for integration with Unity and Unreal Engine. It supports advanced video streaming technologies, including HLS and DASH, enabling seamless video playback within games and VR/AR/XR applications. HISPlayer is compatible with various platforms, such as Tizen, WebOS, Meta Quest, Xbox, PlayStation, and Hisense applications, providing a versatile solution for developers to incorporate high-quality video streaming into their projects.</description>
+    <appident>yes</appident>
+    <vulnerability-ident>yes</vulnerability-ident>
+    <evasive-behavior>no</evasive-behavior>
+    <consume-big-bandwidth>no</consume-big-bandwidth>
+    <used-by-malware>no</used-by-malware>
+    <able-to-transfer-file>no</able-to-transfer-file>
+    <has-known-vulnerability>yes</has-known-vulnerability>
+    <tunnel-other-application>no</tunnel-other-application>
+    <prone-to-misuse>no</prone-to-misuse>
+    <pervasive-use>no</pervasive-use>
+    <per-direction-regex>no</per-direction-regex>
+    <deny-action>drop-reset</deny-action>
+    <cachable>no</cachable>
+    <source-type>se-saas</source-type>
+    <cloud-move-to-predefined>no</cloud-move-to-predefined>
+    <is-saas>yes</is-saas>
+    <saas minver="8.1.0">
+        <is-data-breaches>no</is-data-breaches>
+        <is-ip-based-restrictions>no</is-ip-based-restrictions>
+        <is-poor-financial-viability>no</is-poor-financial-viability>
+        <is-poor-terms-of-service>no</is-poor-terms-of-service>
+    </saas>
+    <tag minver="9.1.0">
+        <member>[App-ID Cloud Engine]</member>
+        <member>[Web App]</member>
+    </tag>
+    <references>
+        <entry name="HomePage">
+            <link>https://hisplayer.com</link>
+        </entry>
+    </references>
+    <default>
+        <port>
+            <member>tcp/80,443</member>
+        </port>
+    </default>
+    <use-applications>
+        <member>ssl</member>
+        <member>web-browsing</member>
+    </use-applications>
+    <tunnel-applications>
+        <member>hisplayer-download</member>
+    </tunnel-applications>
+    <risk>3</risk>
+    <create-date>2026-08-19</create-date>
+    <last-update-date>2026-08-19</last-update-date>
+    <application-container>hisplayer</application-container>
+</entry></result></response>
