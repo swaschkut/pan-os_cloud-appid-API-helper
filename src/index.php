@@ -19,10 +19,7 @@ if (!file_exists($txtFile)) {
     exit();
 }
 
-// 2. Erkenne, ob es sich um eine Übersichtsabfrage (<cloud-app-data>) handelt
-$isDataSummaryQuery = (stripos($cmd, '<cloud-app-data>') !== false);
-
-// 3. Extrahiere den Suchbegriff
+// 2. Extrahiere den Suchbegriff
 $searchTerm = '';
 if (preg_match('/<application>(.*?)<\/application>/i', $cmd, $matches)) {
     $searchTerm = trim($matches[1]);
@@ -31,12 +28,17 @@ if (preg_match('/<application>(.*?)<\/application>/i', $cmd, $matches)) {
     }
 }
 
+// Prüfen, ob explizit nach der Index-Übersicht (<cloud-app-data>) gefragt wird
+$isDataSummaryQuery = (stripos($cmd, '<cloud-app-data>') !== false);
+
+// Prüfen auf Wildcards oder ALL
 $isWildcardSearch = (strpos($searchTerm, '%') !== false || strpos($searchTerm, '*') !== false);
 $isAllQuery       = (empty($searchTerm) || strtolower($searchTerm) === 'all' || stripos($searchTerm, '<all>') !== false);
 
-// -------------------------------------------------------------------------
-// FALL A: ÜBERSICHTS-ABFRAGE (<cloud-app-data> ist in der Anfrage enthalten)
-// -------------------------------------------------------------------------
+
+// =========================================================================
+// FALL 1: INDEX-ÜBERSICHT (NUR wenn <cloud-app-data> explizit im CMD steht)
+// =========================================================================
 if ($isDataSummaryQuery) {
     $pattern = null;
     if ($isWildcardSearch) {
@@ -90,16 +92,19 @@ if ($isDataSummaryQuery) {
     exit();
 }
 
-// -------------------------------------------------------------------------
-// FALL B: DETAIL-ABFRAGE MIT WILDCARD ODER ALL (Liefert Inhalte aus data/*.xml)
-// -------------------------------------------------------------------------
+
+// =========================================================================
+// FALL 2: DETAIL-ABFRAGEN (OHNE <cloud-app-data>) -> Baut XMLs aus data/*.xml
+// =========================================================================
+
+// A) Mehrere Detail-XMLs wegen Wildcard (%) oder ALL
 if ($isWildcardSearch || $isAllQuery) {
     $cleanSearch = strip_tags($searchTerm);
     $regex = str_replace(['%', '*'], '.*', preg_quote($cleanSearch, '/'));
     $regex = str_replace('\.\*', '.*', $regex);
     $pattern = '/^' . $regex . '$/i';
 
-    // TXT-Datei einlesen, um Namen auf IDs zu mappen
+    // Passende IDs über cloud-appid.txt ermitteln
     $lines = file($txtFile, FILE_IGNORE_NEW_LINES | FILE_SKIP_EMPTY_LINES);
     $matchedIds = [];
 
@@ -117,7 +122,7 @@ if ($isWildcardSearch || $isAllQuery) {
         }
     }
 
-    // DOM für die zusammengefasste Detail-Antwort erstellen
+    // Response aus den jeweiligen data/<ID>.xml Dateien bauen
     $dom = new DOMDocument('1.0', 'UTF-8');
     $dom->formatOutput = true;
 
@@ -128,13 +133,11 @@ if ($isWildcardSearch || $isAllQuery) {
     $resultNode = $dom->createElement('result');
     $responseNode->appendChild($resultNode);
 
-    // Alle gematchten IDs aus dem data/-Ordner einladen
     foreach ($matchedIds as $id) {
         $filePath = $dataDir . '/' . $id . '.xml';
         if (file_exists($filePath)) {
             $fileDom = new DOMDocument();
             if (@$fileDom->load($filePath)) {
-                // Suchen nach <entry> Tags in der Detail-XML
                 $entries = $fileDom->getElementsByTagName('entry');
                 if ($entries->length > 0) {
                     foreach ($entries as $entry) {
@@ -142,7 +145,6 @@ if ($isWildcardSearch || $isAllQuery) {
                         $resultNode->appendChild($importedNode);
                     }
                 } else {
-                    // Fallback, falls die Datei direkt den Knoten enthält
                     $importedNode = $dom->importNode($fileDom->documentElement, true);
                     $resultNode->appendChild($importedNode);
                 }
@@ -155,9 +157,7 @@ if ($isWildcardSearch || $isAllQuery) {
     exit();
 }
 
-// -------------------------------------------------------------------------
-// FALL C: EXAKTE EINZEL-DETAIL-ABFRAGE (z.B. <application>chronosphere</application>)
-// -------------------------------------------------------------------------
+// B) Exakte Einzel-Detail-Abfrage (z.B. <application>chronosphere</application>)
 $appName = strip_tags($searchTerm);
 $nameToIdMap = [];
 $lines = file($txtFile, FILE_IGNORE_NEW_LINES | FILE_SKIP_EMPTY_LINES);
