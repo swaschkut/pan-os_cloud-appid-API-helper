@@ -1,0 +1,50 @@
+<response status="success"><result><entry id="10087723" name="mailcloud" minver="10.1.0" ori_country="USA" ori_language="English">
+    <category>general-internet</category>
+    <new-category>collaboration</new-category>
+    <subcategory>email</subcategory>
+    <technology>browser-based</technology>
+    <description>Mailcloud enterprise cloud service is a new generation cloud service brand launched by openfind after renaming the original enterprise hosting brand mailasp and expanding the service scope. powerful software and hardware performance combined with the computer room and bandwidth management of international telecom operators have provided customers with stable and secure cloud computing for 12 years. the maintenance team and management system have passed the international information security iso27001 certification since 2009 and are worthy of customers' trust. in july 2011, mailcloud launched a new brand and launched a number of new cloud services. it will continue to pursue the highest customer satisfaction and continue to provide high-quality cloud computing services.</description>
+    <appident>yes</appident>
+    <vulnerability-ident>yes</vulnerability-ident>
+    <evasive-behavior>no</evasive-behavior>
+    <consume-big-bandwidth>no</consume-big-bandwidth>
+    <used-by-malware>no</used-by-malware>
+    <able-to-transfer-file>no</able-to-transfer-file>
+    <has-known-vulnerability>yes</has-known-vulnerability>
+    <tunnel-other-application>no</tunnel-other-application>
+    <prone-to-misuse>no</prone-to-misuse>
+    <pervasive-use>no</pervasive-use>
+    <per-direction-regex>no</per-direction-regex>
+    <deny-action>drop-reset</deny-action>
+    <cachable>no</cachable>
+    <source-type>saas</source-type>
+    <cloud-move-to-predefined>no</cloud-move-to-predefined>
+    <is-saas>yes</is-saas>
+    <saas minver="8.1.0">
+        <is-data-breaches>no</is-data-breaches>
+        <is-ip-based-restrictions>no</is-ip-based-restrictions>
+        <is-poor-financial-viability>no</is-poor-financial-viability>
+        <is-poor-terms-of-service>no</is-poor-terms-of-service>
+    </saas>
+    <tag minver="9.1.0">
+        <member>[App-ID Cloud Engine]</member>
+        <member>[Web App]</member>
+    </tag>
+    <references>
+        <entry name="mailcloud">
+            <link>https://www.mailcloud.com.tw/web/</link>
+        </entry>
+    </references>
+    <default>
+        <port>
+            <member>tcp/80,443</member>
+        </port>
+    </default>
+    <use-applications>
+        <member>ssl</member>
+        <member>web-browsing</member>
+    </use-applications>
+    <risk>3</risk>
+    <create-date>2024-11-06</create-date>
+    <last-update-date>2024-11-21</last-update-date>
+</entry></result></response>
