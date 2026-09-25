@@ -1,0 +1,51 @@
+<response status="success"><result><entry id="10071280" name="mirantis-kubernetes-share" minver="10.1.0" ori_country="USA" ori_language="English">
+    <category>general-internet</category>
+    <new-category>networking</new-category>
+    <subcategory>infrastructure</subcategory>
+    <technology>browser-based</technology>
+    <description>Mirantis Kubernetes Engine (formerly Docker Enterprise/UCP) offers the best and fastest way to deploy cloud native applications at scale in any environment. This App-ID covers the traffic for mirantis-kubernetes-share application.</description>
+    <appident>yes</appident>
+    <vulnerability-ident>yes</vulnerability-ident>
+    <evasive-behavior>no</evasive-behavior>
+    <consume-big-bandwidth>no</consume-big-bandwidth>
+    <used-by-malware>no</used-by-malware>
+    <able-to-transfer-file>no</able-to-transfer-file>
+    <has-known-vulnerability>yes</has-known-vulnerability>
+    <tunnel-other-application>no</tunnel-other-application>
+    <prone-to-misuse>no</prone-to-misuse>
+    <pervasive-use>no</pervasive-use>
+    <per-direction-regex>no</per-direction-regex>
+    <deny-action>drop-reset</deny-action>
+    <cachable>no</cachable>
+    <parent-app>mirantis-kubernetes-base</parent-app>
+    <source-type>saas</source-type>
+    <cloud-move-to-predefined>no</cloud-move-to-predefined>
+    <is-saas>yes</is-saas>
+    <saas minver="8.1.0">
+        <is-data-breaches>no</is-data-breaches>
+        <is-ip-based-restrictions>yes</is-ip-based-restrictions>
+        <is-poor-financial-viability>no</is-poor-financial-viability>
+        <is-poor-terms-of-service>no</is-poor-terms-of-service>
+    </saas>
+    <tag minver="9.1.0">
+        <member>[App-ID Cloud Engine]</member>
+        <member>[Web App]</member>
+    </tag>
+    <references>
+        <entry name="mirantis-kubernetes">
+            <link>https://www.mirantis.com/software/mirantis-kubernetes-engine/</link>
+        </entry>
+    </references>
+    <default>
+        <port>
+            <member>tcp/80,443</member>
+        </port>
+    </default>
+    <use-applications>
+        <member>mirantis-kubernetes-base</member>
+    </use-applications>
+    <risk>3</risk>
+    <create-date>2023-06-13</create-date>
+    <last-update-date>2025-04-09</last-update-date>
+    <application-container>mirantis-kubernetes</application-container>
+</entry></result></response>

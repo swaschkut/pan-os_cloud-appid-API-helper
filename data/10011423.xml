@@ -1,0 +1,38 @@
+<response status="success"><result><entry id="10011423" name="ibm-cloud-db" minver="10.1.0" ori_country="USA" ori_language="English">
+    <category>general-internet</category>
+    <new-category>general-internet</new-category>
+    <subcategory>internet-utility</subcategory>
+    <technology>browser-based</technology>
+    <description>IBM Db2 Database is a relational database that delivers advanced data management and analytics capabilities for your transactional workloads.</description>
+    <appident>yes</appident>
+    <evasive-behavior>no</evasive-behavior>
+    <consume-big-bandwidth>no</consume-big-bandwidth>
+    <used-by-malware>no</used-by-malware>
+    <able-to-transfer-file>no</able-to-transfer-file>
+    <has-known-vulnerability>no</has-known-vulnerability>
+    <tunnel-other-application>no</tunnel-other-application>
+    <prone-to-misuse>no</prone-to-misuse>
+    <pervasive-use>no</pervasive-use>
+    <per-direction-regex>no</per-direction-regex>
+    <deny-action>drop-reset</deny-action>
+    <cachable>no</cachable>
+    <source-type>se</source-type>
+    <cloud-move-to-predefined>no</cloud-move-to-predefined>
+    <tag minver="9.1.0">
+        <member>[App-ID Cloud Engine]</member>
+        <member>[Web App]</member>
+    </tag>
+    <references>
+        <entry name="ibm-cloud-db">
+            <link>https://www.ibm.com/cloud/databases</link>
+        </entry>
+    </references>
+    <default>
+        <port>
+            <member>tcp/dynamic</member>
+        </port>
+    </default>
+    <risk>1</risk>
+    <create-date>2021-04-04</create-date>
+    <last-update-date>2021-04-09</last-update-date>
+</entry></result></response>
