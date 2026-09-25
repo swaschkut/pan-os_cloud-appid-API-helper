@@ -1,0 +1,51 @@
+<response status="success"><result><entry id="10007575" name="reltio-connected-cus" minver="10.1.0" ori_country="USA" ori_language="English">
+    <category>general-internet</category>
+    <new-category>saas</new-category>
+    <subcategory>it-infrastructure</subcategory>
+    <technology>browser-based</technology>
+    <description>[Obsolete] Innovative Global 2000 companies trust Reltio to manage their mission-critical data and thrive in the experience economy. Reltio Connected Customer 360 is a fundamentally better way to create rich customer profiles that include relationships, omnichannel transactions, and interaction data, and other valuable insights. Global 2000 enterprises use this information to fully understand customers and deliver exceptional experiences. Reltio Connected Customer 360, built on cloud-native, big data architecture featuring graph technology and machine learning, is at the heart of customer experience to drive hyper-personalization, accelerate real-time operations, and simplify compliance, all at scale.</description>
+    <appident>yes</appident>
+    <vulnerability-ident>yes</vulnerability-ident>
+    <evasive-behavior>no</evasive-behavior>
+    <consume-big-bandwidth>no</consume-big-bandwidth>
+    <used-by-malware>no</used-by-malware>
+    <able-to-transfer-file>no</able-to-transfer-file>
+    <has-known-vulnerability>yes</has-known-vulnerability>
+    <tunnel-other-application>no</tunnel-other-application>
+    <prone-to-misuse>no</prone-to-misuse>
+    <pervasive-use>no</pervasive-use>
+    <per-direction-regex>no</per-direction-regex>
+    <deny-action>drop-reset</deny-action>
+    <cachable>no</cachable>
+    <obsolete>yes</obsolete>
+    <source-type>saas</source-type>
+    <cloud-move-to-predefined>no</cloud-move-to-predefined>
+    <is-saas>yes</is-saas>
+    <saas minver="8.1.0">
+        <is-data-breaches>no</is-data-breaches>
+        <is-ip-based-restrictions>no</is-ip-based-restrictions>
+        <is-poor-financial-viability>no</is-poor-financial-viability>
+        <is-poor-terms-of-service>no</is-poor-terms-of-service>
+    </saas>
+    <tag minver="9.1.0">
+        <member>[App-ID Cloud Engine]</member>
+        <member>[Web App]</member>
+    </tag>
+    <references>
+        <entry name="reltio-connected-cus">
+            <link>http://www.reltio.com/</link>
+        </entry>
+    </references>
+    <default>
+        <port>
+            <member>tcp/80,443</member>
+        </port>
+    </default>
+    <use-applications>
+        <member>ssl</member>
+        <member>web-browsing</member>
+    </use-applications>
+    <risk>4</risk>
+    <create-date>2021-04-03</create-date>
+    <last-update-date>2025-03-28</last-update-date>
+</entry></result></response>

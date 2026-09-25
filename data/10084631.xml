@@ -1,0 +1,59 @@
+<response status="success"><result><entry id="10084631" name="aws-import-export-sn-logout" minver="10.1.0" ori_country="USA" ori_language="English">
+    <category>general-internet</category>
+    <new-category>networking</new-category>
+    <subcategory>it-infrastructure</subcategory>
+    <technology>browser-based</technology>
+    <description>AWS Snowball is a petabyte-scale data transport service that uses secure devices to transfer large amounts of data into and out of the AWS Cloud. Snowball addresses challenges like high network costs, long transfer times, and security concerns to migrate data as efficiently as possible. This App-ID covers the traffic for aws-import-export-sn-logout application.</description>
+    <appident>yes</appident>
+    <vulnerability-ident>yes</vulnerability-ident>
+    <evasive-behavior>no</evasive-behavior>
+    <consume-big-bandwidth>no</consume-big-bandwidth>
+    <used-by-malware>no</used-by-malware>
+    <able-to-transfer-file>no</able-to-transfer-file>
+    <has-known-vulnerability>yes</has-known-vulnerability>
+    <tunnel-other-application>no</tunnel-other-application>
+    <prone-to-misuse>no</prone-to-misuse>
+    <pervasive-use>no</pervasive-use>
+    <per-direction-regex>no</per-direction-regex>
+    <deny-action>drop-reset</deny-action>
+    <cachable>no</cachable>
+    <parent-app>aws-import-export-sn-base</parent-app>
+    <source-type>saas</source-type>
+    <cloud-move-to-predefined>no</cloud-move-to-predefined>
+    <is-saas>yes</is-saas>
+    <saas minver="8.1.0">
+        <certifications>
+            <is-fedramp>yes</is-fedramp>
+            <is-finra>yes</is-finra>
+            <is-hipaa>yes</is-hipaa>
+            <is-pci>yes</is-pci>
+            <is-soc1>yes</is-soc1>
+            <is-soc2>yes</is-soc2>
+        </certifications>
+        <is-data-breaches>no</is-data-breaches>
+        <is-ip-based-restrictions>yes</is-ip-based-restrictions>
+        <is-poor-financial-viability>no</is-poor-financial-viability>
+        <is-poor-terms-of-service>no</is-poor-terms-of-service>
+    </saas>
+    <tag minver="9.1.0">
+        <member>[App-ID Cloud Engine]</member>
+        <member>[Web App]</member>
+    </tag>
+    <references>
+        <entry name="aws-import-export-sn">
+            <link>https://aws.amazon.com/importexport/</link>
+        </entry>
+    </references>
+    <default>
+        <port>
+            <member>tcp/80,443</member>
+        </port>
+    </default>
+    <use-applications>
+        <member>aws-import-export-sn-base</member>
+    </use-applications>
+    <risk>1</risk>
+    <create-date>2024-07-21</create-date>
+    <last-update-date>2024-09-10</last-update-date>
+    <application-container>aws-import-export-sn</application-container>
+</entry></result></response>

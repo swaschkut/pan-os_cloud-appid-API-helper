@@ -1,0 +1,58 @@
+<response status="success"><result><entry id="10004449" name="ibm-x-force-exchange-base" minver="10.1.0" ori_country="USA" ori_language="English">
+    <ottawa-name>ibm-x-force-exchange</ottawa-name>
+    <category>general-internet</category>
+    <new-category>saas</new-category>
+    <subcategory>security</subcategory>
+    <technology>browser-based</technology>
+    <description>[Obsolete] IBM Security X-Force Threat Intelligence is a security solution that adds dynamic Internet threat data to the analytical capabilities of IBM QRadar Security Intelligence Platform.</description>
+    <appident>yes</appident>
+    <vulnerability-ident>yes</vulnerability-ident>
+    <evasive-behavior>no</evasive-behavior>
+    <consume-big-bandwidth>no</consume-big-bandwidth>
+    <used-by-malware>no</used-by-malware>
+    <able-to-transfer-file>no</able-to-transfer-file>
+    <has-known-vulnerability>yes</has-known-vulnerability>
+    <tunnel-other-application>no</tunnel-other-application>
+    <prone-to-misuse>no</prone-to-misuse>
+    <pervasive-use>no</pervasive-use>
+    <per-direction-regex>no</per-direction-regex>
+    <deny-action>drop-reset</deny-action>
+    <cachable>no</cachable>
+    <obsolete>yes</obsolete>
+    <source-type>saas</source-type>
+    <cloud-move-to-predefined>no</cloud-move-to-predefined>
+    <is-saas>yes</is-saas>
+    <saas minver="8.1.0">
+        <is-data-breaches>no</is-data-breaches>
+        <is-ip-based-restrictions>no</is-ip-based-restrictions>
+        <is-poor-financial-viability>no</is-poor-financial-viability>
+        <is-poor-terms-of-service>no</is-poor-terms-of-service>
+    </saas>
+    <tag minver="9.1.0">
+        <member>[App-ID Cloud Engine]</member>
+        <member>[Web App]</member>
+    </tag>
+    <references>
+        <entry name="ibm-x-force-exchange">
+            <link>https://www.ibm.com/us-en/marketplace/ibm-xforce-exchange</link>
+        </entry>
+    </references>
+    <default>
+        <port>
+            <member>tcp/80,443</member>
+        </port>
+    </default>
+    <use-applications>
+        <member>ssl</member>
+        <member>web-browsing</member>
+    </use-applications>
+    <tunnel-applications>
+        <member>ibm-x-force-exchange-delete</member>
+        <member>ibm-x-force-exchange-download</member>
+        <member>ibm-x-force-exchange-logout</member>
+    </tunnel-applications>
+    <risk>3</risk>
+    <create-date>2021-04-03</create-date>
+    <last-update-date>2025-03-28</last-update-date>
+    <application-container>ibm-x-force-exchange</application-container>
+</entry></result></response>
