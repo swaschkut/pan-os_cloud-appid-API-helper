@@ -11,6 +11,7 @@ if (empty($cmd)) {
 }
 
 $txtFile = __DIR__ . '/../cloud-appid.txt';
+$dataDir = __DIR__ . '/../data';
 
 if (!file_exists($txtFile)) {
     http_response_code(500);
@@ -18,34 +19,30 @@ if (!file_exists($txtFile)) {
     exit();
 }
 
-// 2. Extrahiere den Such-String aus <application>...</application> oder <all>...</all>
-$searchTerm = '';
+// 2. Erkenne, ob es sich um eine Übersichtsabfrage (<cloud-app-data>) handelt
+$isDataSummaryQuery = (stripos($cmd, '<cloud-app-data>') !== false);
 
+// 3. Extrahiere den Suchbegriff
+$searchTerm = '';
 if (preg_match('/<application>(.*?)<\/application>/i', $cmd, $matches)) {
     $searchTerm = trim($matches[1]);
-
-    // Falls <all>%pattern%</all> verschachtelt ist
     if (preg_match('/<all>(.*?)<\/all>/i', $searchTerm, $allMatches)) {
         $searchTerm = trim($allMatches[1]);
     }
 }
 
-// 3. Entscheiden, ob es eine Wildcard- / Filter-Suche ist
 $isWildcardSearch = (strpos($searchTerm, '%') !== false || strpos($searchTerm, '*') !== false);
-$isAllQuery       = (empty($searchTerm) || strtolower($searchTerm) === 'all' || strtolower($searchTerm) === '<all></all>');
+$isAllQuery       = (empty($searchTerm) || strtolower($searchTerm) === 'all' || stripos($searchTerm, '<all>') !== false);
 
-if ($isWildcardSearch || $isAllQuery) {
-
-    // Wildcard % oder * in Regex-Pattern umwandeln
+// -------------------------------------------------------------------------
+// FALL A: ÜBERSICHTS-ABFRAGE (<cloud-app-data> ist in der Anfrage enthalten)
+// -------------------------------------------------------------------------
+if ($isDataSummaryQuery) {
     $pattern = null;
     if ($isWildcardSearch) {
-        // XML-Tags entfernen, falls <all>...</all> als String übergeben wurde
         $cleanSearch = strip_tags($searchTerm);
-        $cleanSearch = str_replace(['<all>', '</all>'], '', $cleanSearch);
-
-        // % und * durch .* ersetzen und Sonderzeichen maskieren
         $regex = str_replace(['%', '*'], '.*', preg_quote($cleanSearch, '/'));
-        $regex = str_replace('\.\*', '.*', $regex); // Ausmaskierung für .* zurücknehmen
+        $regex = str_replace('\.\*', '.*', $regex);
         $pattern = '/^' . $regex . '$/i';
     }
 
@@ -63,13 +60,9 @@ if ($isWildcardSearch || $isAllQuery) {
 
     foreach ($lines as $line) {
         $line = trim($line);
-
-        if (strpos($line, 'Id') === 0 || strpos($line, '---') === 0) {
-            continue;
-        }
+        if (strpos($line, 'Id') === 0 || strpos($line, '---') === 0) continue;
 
         $columns = preg_split('/\s{2,}/', $line);
-
         if (count($columns) >= 5) {
             $id            = trim($columns[0]);
             $name          = trim($columns[1]);
@@ -77,15 +70,12 @@ if ($isWildcardSearch || $isAllQuery) {
             $taskId        = trim($columns[3]);
             $xmlHashcode   = trim($columns[4]);
 
-            // Falls Suchmuster aktiv ist -> Filtern
             if ($pattern !== null && !preg_match($pattern, $name)) {
                 continue;
             }
 
-            // <entry name="..."> Node erstellen
             $entry = $dom->createElement('entry');
             $entry->setAttribute('name', $name);
-
             $entry->appendChild($dom->createElement('id', $id));
             $entry->appendChild($dom->createElement('receiving-time', $receivingTime));
             $entry->appendChild($dom->createElement('task-id', $taskId));
@@ -100,9 +90,75 @@ if ($isWildcardSearch || $isAllQuery) {
     exit();
 }
 
-// 4. Einzelabfrage ohne Wildcards (Sucht exakten Namen -> liefert ID.xml)
-$appName = strip_tags($searchTerm);
+// -------------------------------------------------------------------------
+// FALL B: DETAIL-ABFRAGE MIT WILDCARD ODER ALL (Liefert Inhalte aus data/*.xml)
+// -------------------------------------------------------------------------
+if ($isWildcardSearch || $isAllQuery) {
+    $cleanSearch = strip_tags($searchTerm);
+    $regex = str_replace(['%', '*'], '.*', preg_quote($cleanSearch, '/'));
+    $regex = str_replace('\.\*', '.*', $regex);
+    $pattern = '/^' . $regex . '$/i';
 
+    // TXT-Datei einlesen, um Namen auf IDs zu mappen
+    $lines = file($txtFile, FILE_IGNORE_NEW_LINES | FILE_SKIP_EMPTY_LINES);
+    $matchedIds = [];
+
+    foreach ($lines as $line) {
+        $line = trim($line);
+        if (strpos($line, 'Id') === 0 || strpos($line, '---') === 0) continue;
+        $columns = preg_split('/\s{2,}/', $line);
+        if (isset($columns[0]) && isset($columns[1])) {
+            $id   = trim($columns[0]);
+            $name = trim($columns[1]);
+
+            if ($isAllQuery || preg_match($pattern, $name)) {
+                $matchedIds[] = $id;
+            }
+        }
+    }
+
+    // DOM für die zusammengefasste Detail-Antwort erstellen
+    $dom = new DOMDocument('1.0', 'UTF-8');
+    $dom->formatOutput = true;
+
+    $responseNode = $dom->createElement('response');
+    $responseNode->setAttribute('status', 'success');
+    $dom->appendChild($responseNode);
+
+    $resultNode = $dom->createElement('result');
+    $responseNode->appendChild($resultNode);
+
+    // Alle gematchten IDs aus dem data/-Ordner einladen
+    foreach ($matchedIds as $id) {
+        $filePath = $dataDir . '/' . $id . '.xml';
+        if (file_exists($filePath)) {
+            $fileDom = new DOMDocument();
+            if (@$fileDom->load($filePath)) {
+                // Suchen nach <entry> Tags in der Detail-XML
+                $entries = $fileDom->getElementsByTagName('entry');
+                if ($entries->length > 0) {
+                    foreach ($entries as $entry) {
+                        $importedNode = $dom->importNode($entry, true);
+                        $resultNode->appendChild($importedNode);
+                    }
+                } else {
+                    // Fallback, falls die Datei direkt den Knoten enthält
+                    $importedNode = $dom->importNode($fileDom->documentElement, true);
+                    $resultNode->appendChild($importedNode);
+                }
+            }
+        }
+    }
+
+    http_response_code(200);
+    echo $dom->saveXML();
+    exit();
+}
+
+// -------------------------------------------------------------------------
+// FALL C: EXAKTE EINZEL-DETAIL-ABFRAGE (z.B. <application>chronosphere</application>)
+// -------------------------------------------------------------------------
+$appName = strip_tags($searchTerm);
 $nameToIdMap = [];
 $lines = file($txtFile, FILE_IGNORE_NEW_LINES | FILE_SKIP_EMPTY_LINES);
 
@@ -122,7 +178,7 @@ if (!isset($nameToIdMap[$appName])) {
 }
 
 $appId = $nameToIdMap[$appName];
-$filePath = __DIR__ . '/../data/' . $appId . '.xml';
+$filePath = $dataDir . '/' . $appId . '.xml';
 
 if (file_exists($filePath)) {
     $dom = new DOMDocument('1.0', 'UTF-8');
