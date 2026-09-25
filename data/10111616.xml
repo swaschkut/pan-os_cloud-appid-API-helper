@@ -1,0 +1,52 @@
+<response status="success"><result><entry id="10111616" name="lvgl" minver="10.1.0" ori_country="USA" ori_language="English">
+    <category>general-internet</category>
+    <new-category>business-systems</new-category>
+    <subcategory>artificial-intelligence</subcategory>
+    <technology>browser-based</technology>
+    <description>LVGL, short for Light and Versatile Graphics Library, is an open-source user interface library designed for creating graphical interfaces on microcontrollers (MCUs) and microprocessors (MPUs). It is compatible with modern hardware platforms and does not rely on external dependencies, simplifying its integration and porting process. LVGL is suitable for developers seeking to implement efficient and customizable UI solutions across various devices.</description>
+    <appident>yes</appident>
+    <vulnerability-ident>yes</vulnerability-ident>
+    <evasive-behavior>no</evasive-behavior>
+    <consume-big-bandwidth>no</consume-big-bandwidth>
+    <used-by-malware>no</used-by-malware>
+    <able-to-transfer-file>no</able-to-transfer-file>
+    <has-known-vulnerability>yes</has-known-vulnerability>
+    <tunnel-other-application>no</tunnel-other-application>
+    <prone-to-misuse>no</prone-to-misuse>
+    <pervasive-use>no</pervasive-use>
+    <per-direction-regex>no</per-direction-regex>
+    <deny-action>drop-reset</deny-action>
+    <cachable>no</cachable>
+    <source-type>se-saas</source-type>
+    <cloud-move-to-predefined>no</cloud-move-to-predefined>
+    <is-saas>yes</is-saas>
+    <saas minver="8.1.0">
+        <is-data-breaches>no</is-data-breaches>
+        <is-ip-based-restrictions>no</is-ip-based-restrictions>
+        <is-poor-financial-viability>no</is-poor-financial-viability>
+        <is-poor-terms-of-service>no</is-poor-terms-of-service>
+        <is-uses-genai-to-generate-code>yes</is-uses-genai-to-generate-code>
+    </saas>
+    <tag minver="9.1.0">
+        <member>[App-ID Cloud Engine]</member>
+        <member>[Generative AI]</member>
+        <member>[Web App]</member>
+    </tag>
+    <references>
+        <entry name="HomePage">
+            <link>https://lvgl.io</link>
+        </entry>
+    </references>
+    <default>
+        <port>
+            <member>tcp/80,443</member>
+        </port>
+    </default>
+    <use-applications>
+        <member>ssl</member>
+        <member>web-browsing</member>
+    </use-applications>
+    <risk>2</risk>
+    <create-date>2026-08-27</create-date>
+    <last-update-date>2026-08-27</last-update-date>
+</entry></result></response>

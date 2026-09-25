@@ -1,11 +1,11 @@
-pan-os_cloud-appid-api-helper
+pan-os_cloud-appid_api-helper
 ==================
 
 how to use the predefined Docker container:
 ---
 
 ```php
-docker run -d -p 8080:8080 --name panos-cloud-appid-mock swaschkut/pan-os_cloud-appid_api-helper  
+docker run -d -p 8080:8080 --name panos_cloud-appid_mock swaschkut/pan-os_cloud-appid_api-helper  
 ```
 
 Ask for a specific cloud-appid named application: 'chronosphere'
