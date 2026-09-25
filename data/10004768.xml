@@ -1,0 +1,60 @@
+<response status="success"><result><entry id="10004768" name="jellyfish-base" minver="10.1.0" ori_country="USA" ori_language="English">
+    <ottawa-name>jellyfish</ottawa-name>
+    <category>general-internet</category>
+    <new-category>collaboration</new-category>
+    <subcategory>instant-messaging</subcategory>
+    <technology>browser-based</technology>
+    <description>The AMA Q&amp;A Slack app is designed to enhance meeting engagement, foster company transparency, and create a positive atmosphere. With this app, participants can ask questions during meetings, and organizers or presenters can easily manage and address those questions.</description>
+    <appident>yes</appident>
+    <vulnerability-ident>yes</vulnerability-ident>
+    <evasive-behavior>no</evasive-behavior>
+    <consume-big-bandwidth>no</consume-big-bandwidth>
+    <used-by-malware>no</used-by-malware>
+    <able-to-transfer-file>no</able-to-transfer-file>
+    <has-known-vulnerability>yes</has-known-vulnerability>
+    <tunnel-other-application>no</tunnel-other-application>
+    <prone-to-misuse>no</prone-to-misuse>
+    <pervasive-use>no</pervasive-use>
+    <per-direction-regex>no</per-direction-regex>
+    <deny-action>drop-reset</deny-action>
+    <cachable>no</cachable>
+    <source-type>saas</source-type>
+    <cloud-move-to-predefined>no</cloud-move-to-predefined>
+    <is-saas>yes</is-saas>
+    <saas minver="8.1.0">
+        <certifications>
+            <is-soc2>yes</is-soc2>
+        </certifications>
+        <is-data-breaches>no</is-data-breaches>
+        <is-ip-based-restrictions>no</is-ip-based-restrictions>
+        <is-poor-financial-viability>no</is-poor-financial-viability>
+        <is-poor-terms-of-service>no</is-poor-terms-of-service>
+    </saas>
+    <tag minver="9.1.0">
+        <member>[App-ID Cloud Engine]</member>
+        <member>[Web App]</member>
+    </tag>
+    <references>
+        <entry name="jellyfish">
+            <link>https://www.jellyfish.chat/#how</link>
+        </entry>
+    </references>
+    <default>
+        <port>
+            <member>tcp/80,443</member>
+        </port>
+    </default>
+    <use-applications>
+        <member>ssl</member>
+        <member>web-browsing</member>
+    </use-applications>
+    <tunnel-applications>
+        <member>jellyfish-delete</member>
+        <member>jellyfish-download</member>
+        <member>jellyfish-upload</member>
+    </tunnel-applications>
+    <risk>3</risk>
+    <create-date>2021-04-03</create-date>
+    <last-update-date>2025-03-26</last-update-date>
+    <application-container>jellyfish</application-container>
+</entry></result></response>

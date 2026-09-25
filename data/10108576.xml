@@ -1,0 +1,50 @@
+<response status="success"><result><entry id="10108576" name="chatme-pro" minver="10.1.0" ori_country="USA" ori_language="English">
+    <category>general-internet</category>
+    <new-category>business-systems</new-category>
+    <subcategory>security</subcategory>
+    <technology>browser-based</technology>
+    <description>The Kaspersky Threat Intelligence Portal, developed by Kaspersky, is a cybersecurity application designed to analyze and identify potential threats. Users can scan files, domains, IP addresses, and web addresses to detect malware, viruses, and other security risks. The platform leverages advanced threat intelligence technologies to provide detailed insights into scanned items, aiding in proactive threat management.</description>
+    <appident>yes</appident>
+    <vulnerability-ident>yes</vulnerability-ident>
+    <evasive-behavior>no</evasive-behavior>
+    <consume-big-bandwidth>no</consume-big-bandwidth>
+    <used-by-malware>no</used-by-malware>
+    <able-to-transfer-file>no</able-to-transfer-file>
+    <has-known-vulnerability>yes</has-known-vulnerability>
+    <tunnel-other-application>no</tunnel-other-application>
+    <prone-to-misuse>no</prone-to-misuse>
+    <pervasive-use>no</pervasive-use>
+    <per-direction-regex>no</per-direction-regex>
+    <deny-action>drop-reset</deny-action>
+    <cachable>no</cachable>
+    <source-type>se-saas</source-type>
+    <cloud-move-to-predefined>no</cloud-move-to-predefined>
+    <is-saas>yes</is-saas>
+    <saas minver="8.1.0">
+        <is-data-breaches>no</is-data-breaches>
+        <is-ip-based-restrictions>no</is-ip-based-restrictions>
+        <is-poor-financial-viability>no</is-poor-financial-viability>
+        <is-poor-terms-of-service>no</is-poor-terms-of-service>
+    </saas>
+    <tag minver="9.1.0">
+        <member>[App-ID Cloud Engine]</member>
+        <member>[Web App]</member>
+    </tag>
+    <references>
+        <entry name="HomePage">
+            <link>https://ichatme.pro</link>
+        </entry>
+    </references>
+    <default>
+        <port>
+            <member>tcp/80,443</member>
+        </port>
+    </default>
+    <use-applications>
+        <member>ssl</member>
+        <member>web-browsing</member>
+    </use-applications>
+    <risk>3</risk>
+    <create-date>2026-07-02</create-date>
+    <last-update-date>2026-07-02</last-update-date>
+</entry></result></response>
