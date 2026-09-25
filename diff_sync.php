@@ -14,7 +14,6 @@ PH::print_stdout();
 
 PH::print_stdout("PAN-OS-PHP version: " . PH::frameworkVersion());
 
-// 1. Argumente nach Vorbild deines Referenzskripts definieren
 $supportedArguments = Array();
 $supportedArguments['in'] = Array('niceName' => 'in', 'shortHelp' => 'api target. ie: in=api://192.168.1.1 or in=api://serial@IP', 'argDesc' => '[api://IP]|[api://serial@IP]');
 $supportedArguments['debugapi'] = Array('niceName' => 'DebugAPI', 'shortHelp' => 'prints API calls when they happen');
@@ -35,9 +34,8 @@ if ($util->configInput['type'] != 'api') {
     derr("This script works ONLY in API mode (e.g. in=api://192.168.1.1)\n");
 }
 
-// 2. Pfade & Optionen vorbereiten
-$oldTxtFile  = 'cloud-appid.txt';
-$newTxtFile  = isset($util->arguments['newfile']) ? $util->arguments['newfile'] : 'cloud-appid_neu.txt';
+$oldTxtFile   = 'cloud-appid.txt';
+$newTxtFile   = isset($util->arguments['newfile']) ? $util->arguments['newfile'] : 'cloud-appid_neu.txt';
 $outputFolder = isset($util->arguments['folder']) ? $util->arguments['folder'] : 'data';
 $forceDownload = isset($util->arguments['force']);
 
@@ -51,7 +49,6 @@ if (!file_exists($newTxtFile)) {
     derr("Fehler: Neue Index-Datei '$newTxtFile' nicht gefunden.\n");
 }
 
-// 3. Parser-Funktion für cloud-appid Index-Dateien
 function parseCloudAppIndex($filePath) {
     $indexMap = [];
     if (!file_exists($filePath)) return $indexMap;
@@ -79,55 +76,83 @@ PH::print_stdout("Lese vorhandene Index-Dateien ein...");
 $oldIndex = parseCloudAppIndex($oldTxtFile);
 $newIndex = parseCloudAppIndex($newTxtFile);
 
-// 4. Differential-Analyse (Diff-Logik)
+// -------------------------------------------------------------------------
+// Differenzierte Analyse (Drei Kategorien)
+// -------------------------------------------------------------------------
 $toDownload = [];
+$countNew     = 0;
+$countChanged = 0;
+$countMissing = 0;
 
 foreach ($newIndex as $id => $newItem) {
     $filePath = $outputFolder . '/' . $id . '.xml';
 
     if ($forceDownload) {
-        $toDownload[$id] = $newItem;
+        $toDownload[$id] = ['item' => $newItem, 'type' => 'FORCED'];
+        $countChanged++;
         continue;
     }
 
-    // Neu/Fehlt lokal?
-    if (!isset($oldIndex[$id]) || !file_exists($filePath)) {
-        $toDownload[$id] = $newItem;
+    // 1. NEU: Die ID ist in cloud-appid.txt noch gar nicht enthalten
+    if (!isset($oldIndex[$id])) {
+        $toDownload[$id] = ['item' => $newItem, 'type' => 'NEW'];
+        $countNew++;
         continue;
     }
 
-    // Hashcode abweichend?
+    // 2. FEHLEND: ID stand im alten Index, aber die Datei data/<ID>.xml fehlt auf der Festplatte
+    if (!file_exists($filePath)) {
+        $toDownload[$id] = ['item' => $newItem, 'type' => 'MISSING'];
+        $countMissing++;
+        continue;
+    }
+
+    // 3. GEÄNDERT: ID existiert und Datei ist da, aber der xml_hashcode unterscheidet sich
     if ($oldIndex[$id]['xml_hashcode'] !== $newItem['xml_hashcode']) {
-        $toDownload[$id] = $newItem;
+        $toDownload[$id] = ['item' => $newItem, 'type' => 'CHANGED'];
+        $countChanged++;
     }
 }
 
-PH::print_stdout("Analyse beendet:");
-PH::print_stdout(" - Gesamt in neuer Index-Datei: " . count($newIndex));
-PH::print_stdout(" - Herunterzuladen (Neu/Geändert/Fehlend): " . count($toDownload));
+$totalToDownload = count($toDownload);
 
-if (count($toDownload) === 0) {
+// -------------------------------------------------------------------------
+// Neue, detaillierte Konsolenausgabe
+// -------------------------------------------------------------------------
+PH::print_stdout();
+PH::print_stdout("Analyse beendet:");
+PH::print_stdout(" - Gesamt-Einträge in neuer Index-Datei: " . count($newIndex));
+PH::print_stdout(" - Herunterzuladen (Gesamt)             : " . $totalToDownload);
+PH::print_stdout("   ├─ Neue App-IDs (noch nicht im Index): " . $countNew);
+PH::print_stdout("   ├─ Geänderte App-IDs (Hash-Abweichung): " . $countChanged);
+PH::print_stdout("   └─ Fehlende Dateien (lokal nicht da) : " . $countMissing);
+PH::print_stdout();
+
+if ($totalToDownload === 0) {
     PH::print_stdout("Keine Änderungen vorhanden. Ersetze Index-Datei...");
     rename($newTxtFile, $oldTxtFile);
     PH::print_stdout("************* END OF SCRIPT " . basename(__FILE__) . " ************");
     exit(0);
 }
 
-// 5. Download-Schleife über Connector
+// -------------------------------------------------------------------------
+// Download-Schleife mit Angabe des Typs
+// -------------------------------------------------------------------------
 $successCount = 0;
 
-foreach ($toDownload as $id => $item) {
-    $name = $item['name'];
+foreach ($toDownload as $id => $entry) {
+    $item     = $entry['item'];
+    $type     = $entry['type'];
+    $name     = $item['name'];
     $filePath = $outputFolder . '/' . $id . '.xml';
 
-    PH::print_stdout("Lade App-ID $id ($name) herunter...");
+    PH::print_stdout("[$type] Lade App-ID $id ($name) herunter...");
 
     $apiArgs = Array();
     $apiArgs['type'] = 'op';
     $apiArgs['cmd'] = '<show><cloud-appid><application>' . $name . '</application></cloud-appid></show>';
 
     try {
-        // Aufruf über das pan-os-php Framework
         $response = $pan->connector->sendRequest($apiArgs);
         $xmlString = $response->saveXML($response->documentElement);
 
@@ -142,11 +167,12 @@ foreach ($toDownload as $id => $item) {
     }
 }
 
-// 6. Index nach erfolgreichem Durchlauf ersetzen
-if ($successCount === count($toDownload)) {
-    PH::print_stdout("Alle $successCount geänderten Dateien heruntergeladen. Aktualisiere $oldTxtFile...");
+if ($successCount === $totalToDownload) {
+    PH::print_stdout();
+    PH::print_stdout("Alle $successCount Dateien erfolgreich heruntergeladen. Aktualisiere $oldTxtFile...");
     rename($newTxtFile, $oldTxtFile);
 } else {
+    PH::print_stdout();
     PH::print_stdout("WARNUNG: Es gab Fehler. '$newTxtFile' bleibt für erneute Versuche bestehen.");
 }
 

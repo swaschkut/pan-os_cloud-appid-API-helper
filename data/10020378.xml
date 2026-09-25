@@ -1,0 +1,51 @@
+<response status="success"><result><entry id="10020378" name="ibm-control-desk-on-logout" minver="10.1.0" ori_country="USA" ori_language="English">
+    <category>general-internet</category>
+    <new-category>saas</new-category>
+    <subcategory>it-management</subcategory>
+    <technology>browser-based</technology>
+    <description>Rapid expansion of information technology has transformed the way organizations create value. Yet as users and the infrastructure grow to take advantage of the automation and insights IT delivers, managing the resulting multivendor, multiplatform environment becomes an increasingly complex task. IBM Control Desk provides the IT service management (ITSM) needed to simplify support of users and infrastructure. It reduces costs and increases satisfaction through user friendly self-service, automated service management and seamlessly-integrated, best-practice based service desk capabilities. This App-ID covers the traffic for ibm-control-desk-on-logout application.</description>
+    <appident>yes</appident>
+    <vulnerability-ident>yes</vulnerability-ident>
+    <evasive-behavior>no</evasive-behavior>
+    <consume-big-bandwidth>no</consume-big-bandwidth>
+    <used-by-malware>no</used-by-malware>
+    <able-to-transfer-file>no</able-to-transfer-file>
+    <has-known-vulnerability>yes</has-known-vulnerability>
+    <tunnel-other-application>no</tunnel-other-application>
+    <prone-to-misuse>no</prone-to-misuse>
+    <pervasive-use>no</pervasive-use>
+    <per-direction-regex>no</per-direction-regex>
+    <deny-action>drop-reset</deny-action>
+    <cachable>no</cachable>
+    <parent-app>ibm-control-desk-on-base</parent-app>
+    <source-type>saas</source-type>
+    <cloud-move-to-predefined>no</cloud-move-to-predefined>
+    <is-saas>yes</is-saas>
+    <saas minver="8.1.0">
+        <is-data-breaches>no</is-data-breaches>
+        <is-ip-based-restrictions>no</is-ip-based-restrictions>
+        <is-poor-financial-viability>no</is-poor-financial-viability>
+        <is-poor-terms-of-service>no</is-poor-terms-of-service>
+    </saas>
+    <tag minver="9.1.0">
+        <member>[App-ID Cloud Engine]</member>
+        <member>[Web App]</member>
+    </tag>
+    <references>
+        <entry name="ibm-control-desk-on">
+            <link>https://www.ibm.com/us-en/marketplace/it-service-management</link>
+        </entry>
+    </references>
+    <default>
+        <port>
+            <member>tcp/80,443</member>
+        </port>
+    </default>
+    <use-applications>
+        <member>ibm-control-desk-on-base</member>
+    </use-applications>
+    <risk>1</risk>
+    <create-date>2021-10-06</create-date>
+    <last-update-date>2022-01-26</last-update-date>
+    <application-container>ibm-control-desk-on</application-container>
+</entry></result></response>

@@ -1,0 +1,52 @@
+<response status="success"><result><entry id="10021784" name="focusvision-decipher-logout" minver="10.1.0" ori_country="USA" ori_language="English">
+    <category>general-internet</category>
+    <new-category>saas</new-category>
+    <subcategory>customer-service</subcategory>
+    <technology>browser-based</technology>
+    <description>[Obsolete] FocusVision Decipher is the most comprehensive, yet easy to use, professional survey and reporting solution. Run a just-in-time quick poll, undertake a large-scale multi-country, multi-language study or anything in-between to get close enough to your customers to understand their thoughts and feelings and ensure their voice comes through in your data insights without being limited to prefabricated templates. This App-ID covers the traffic for focusvision-decipher-logout application.</description>
+    <appident>yes</appident>
+    <vulnerability-ident>yes</vulnerability-ident>
+    <evasive-behavior>no</evasive-behavior>
+    <consume-big-bandwidth>no</consume-big-bandwidth>
+    <used-by-malware>no</used-by-malware>
+    <able-to-transfer-file>no</able-to-transfer-file>
+    <has-known-vulnerability>yes</has-known-vulnerability>
+    <tunnel-other-application>no</tunnel-other-application>
+    <prone-to-misuse>no</prone-to-misuse>
+    <pervasive-use>no</pervasive-use>
+    <per-direction-regex>no</per-direction-regex>
+    <deny-action>drop-reset</deny-action>
+    <cachable>no</cachable>
+    <obsolete>yes</obsolete>
+    <parent-app>focusvision-decipher-base</parent-app>
+    <source-type>saas</source-type>
+    <cloud-move-to-predefined>no</cloud-move-to-predefined>
+    <is-saas>yes</is-saas>
+    <saas minver="8.1.0">
+        <is-data-breaches>no</is-data-breaches>
+        <is-ip-based-restrictions>no</is-ip-based-restrictions>
+        <is-poor-financial-viability>no</is-poor-financial-viability>
+        <is-poor-terms-of-service>no</is-poor-terms-of-service>
+    </saas>
+    <tag minver="9.1.0">
+        <member>[App-ID Cloud Engine]</member>
+        <member>[Web App]</member>
+    </tag>
+    <references>
+        <entry name="focusvision-decipher">
+            <link>https://www.focusvision.com/products/decipher/</link>
+        </entry>
+    </references>
+    <default>
+        <port>
+            <member>tcp/80,443</member>
+        </port>
+    </default>
+    <use-applications>
+        <member>focusvision-decipher-base</member>
+    </use-applications>
+    <risk>5</risk>
+    <create-date>2022-01-06</create-date>
+    <last-update-date>2025-04-01</last-update-date>
+    <application-container>focusvision-decipher</application-container>
+</entry></result></response>

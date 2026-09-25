@@ -1,0 +1,50 @@
+<response status="success"><result><entry id="10083403" name="rakuraku-kensuke" minver="10.1.0" ori_country="USA" ori_language="English">
+    <category>general-internet</category>
+    <new-category>business-systems</new-category>
+    <subcategory>medical</subcategory>
+    <technology>browser-based</technology>
+    <description>Rakuraku Kensuke is a web-based support tool for smoothly promoting PDCA in health care projects. It is designed with the concept of reducing the work burden on health insurance personnel. It is a service that covers a wide range of fields, including creating analytical reports required for data health plans, analyzing insurer issues, creating graphs, verifying the effectiveness of health projects, and identifying participants for individual intervention.</description>
+    <appident>yes</appident>
+    <vulnerability-ident>yes</vulnerability-ident>
+    <evasive-behavior>no</evasive-behavior>
+    <consume-big-bandwidth>no</consume-big-bandwidth>
+    <used-by-malware>no</used-by-malware>
+    <able-to-transfer-file>no</able-to-transfer-file>
+    <has-known-vulnerability>yes</has-known-vulnerability>
+    <tunnel-other-application>no</tunnel-other-application>
+    <prone-to-misuse>no</prone-to-misuse>
+    <pervasive-use>no</pervasive-use>
+    <per-direction-regex>no</per-direction-regex>
+    <deny-action>drop-reset</deny-action>
+    <cachable>no</cachable>
+    <source-type>saas</source-type>
+    <cloud-move-to-predefined>no</cloud-move-to-predefined>
+    <is-saas>yes</is-saas>
+    <saas minver="8.1.0">
+        <is-data-breaches>no</is-data-breaches>
+        <is-ip-based-restrictions>no</is-ip-based-restrictions>
+        <is-poor-financial-viability>no</is-poor-financial-viability>
+        <is-poor-terms-of-service>no</is-poor-terms-of-service>
+    </saas>
+    <tag minver="9.1.0">
+        <member>[App-ID Cloud Engine]</member>
+        <member>[Web App]</member>
+    </tag>
+    <references>
+        <entry name="rakuraku-kensuke">
+            <link>https://stories.jmdc.co.jp/service/kensuke</link>
+        </entry>
+    </references>
+    <default>
+        <port>
+            <member>tcp/80,443</member>
+        </port>
+    </default>
+    <use-applications>
+        <member>ssl</member>
+        <member>web-browsing</member>
+    </use-applications>
+    <risk>3</risk>
+    <create-date>2024-05-07</create-date>
+    <last-update-date>2025-03-09</last-update-date>
+</entry></result></response>

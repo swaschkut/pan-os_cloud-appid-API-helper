@@ -1,0 +1,55 @@
+<response status="success"><result><entry id="10022370" name="revv-download" minver="10.1.0" ori_country="USA" ori_language="English">
+    <category>general-internet</category>
+    <new-category>business-systems</new-category>
+    <subcategory>sales</subcategory>
+    <technology>browser-based</technology>
+    <description>Revv is an all-in-one document management system to help individuals and teams run their business. Trust is the keystone of any business relationship. Trustworthy documents are the bricks on which the foundation of trust is laid. Revv is a superior alternative to Google docs or Microsoft word. Over a 1000 businesses trust us with their document management. It brings in easier to use templates, approvals, workflows, and data from systems of records. The intuitive user interface and out of the box abilities encourage users to be self powered, requiring no code or special skills to set up and manage. Teams anywhere can collaborate efficiently with every document being created, reviewed and signed in one central place. Running your business, one document at a time, is our business!. This App-ID covers the traffic for revv-download application.</description>
+    <appident>yes</appident>
+    <vulnerability-ident>yes</vulnerability-ident>
+    <evasive-behavior>no</evasive-behavior>
+    <consume-big-bandwidth>no</consume-big-bandwidth>
+    <used-by-malware>no</used-by-malware>
+    <able-to-transfer-file>no</able-to-transfer-file>
+    <has-known-vulnerability>yes</has-known-vulnerability>
+    <tunnel-other-application>no</tunnel-other-application>
+    <prone-to-misuse>no</prone-to-misuse>
+    <pervasive-use>no</pervasive-use>
+    <per-direction-regex>no</per-direction-regex>
+    <deny-action>drop-reset</deny-action>
+    <cachable>no</cachable>
+    <parent-app>revv-base</parent-app>
+    <source-type>saas</source-type>
+    <cloud-move-to-predefined>no</cloud-move-to-predefined>
+    <is-saas>yes</is-saas>
+    <saas minver="8.1.0">
+        <certifications>
+            <is-soc2>yes</is-soc2>
+        </certifications>
+        <is-data-breaches>no</is-data-breaches>
+        <is-ip-based-restrictions>no</is-ip-based-restrictions>
+        <is-poor-financial-viability>no</is-poor-financial-viability>
+        <is-poor-terms-of-service>no</is-poor-terms-of-service>
+    </saas>
+    <tag minver="9.1.0">
+        <member>[App-ID Cloud Engine]</member>
+        <member>[Downloading]</member>
+        <member>[Web App]</member>
+    </tag>
+    <references>
+        <entry name="revv">
+            <link>https://revv.so/</link>
+        </entry>
+    </references>
+    <default>
+        <port>
+            <member>tcp/80,443</member>
+        </port>
+    </default>
+    <use-applications>
+        <member>revv-base</member>
+    </use-applications>
+    <risk>3</risk>
+    <create-date>2022-01-26</create-date>
+    <last-update-date>2025-03-27</last-update-date>
+    <application-container>revv</application-container>
+</entry></result></response>
