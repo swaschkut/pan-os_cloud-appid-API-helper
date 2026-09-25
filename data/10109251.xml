@@ -1,0 +1,52 @@
+<response status="success"><result><entry id="10109251" name="greenfeet-warhall-download" minver="10.1.0" ori_country="USA" ori_language="English">
+    <category>general-internet</category>
+    <new-category>media</new-category>
+    <subcategory>gaming</subcategory>
+    <technology>browser-based</technology>
+    <description>Warhall is an online wargaming simulator that offers a free-to-play experience. It provides a rich 3D environment designed to replicate tabletop gaming battles, allowing users to immerse themselves in strategic gameplay. Accessible via its official website, Warhall caters to enthusiasts of wargaming by delivering a virtual platform for engaging combat scenarios.</description>
+    <appident>yes</appident>
+    <vulnerability-ident>yes</vulnerability-ident>
+    <evasive-behavior>no</evasive-behavior>
+    <consume-big-bandwidth>no</consume-big-bandwidth>
+    <used-by-malware>no</used-by-malware>
+    <able-to-transfer-file>no</able-to-transfer-file>
+    <has-known-vulnerability>yes</has-known-vulnerability>
+    <tunnel-other-application>no</tunnel-other-application>
+    <prone-to-misuse>no</prone-to-misuse>
+    <pervasive-use>no</pervasive-use>
+    <per-direction-regex>no</per-direction-regex>
+    <deny-action>drop-reset</deny-action>
+    <cachable>no</cachable>
+    <parent-app>greenfeet-warhall-base</parent-app>
+    <source-type>se-saas</source-type>
+    <cloud-move-to-predefined>no</cloud-move-to-predefined>
+    <is-saas>yes</is-saas>
+    <saas minver="8.1.0">
+        <is-data-breaches>no</is-data-breaches>
+        <is-ip-based-restrictions>no</is-ip-based-restrictions>
+        <is-poor-financial-viability>no</is-poor-financial-viability>
+        <is-poor-terms-of-service>no</is-poor-terms-of-service>
+    </saas>
+    <tag minver="9.1.0">
+        <member>[App-ID Cloud Engine]</member>
+        <member>[Downloading]</member>
+        <member>[Web App]</member>
+    </tag>
+    <references>
+        <entry name="HomePage">
+            <link>https://www.warhall.eu</link>
+        </entry>
+    </references>
+    <default>
+        <port>
+            <member>tcp/80,443</member>
+        </port>
+    </default>
+    <use-applications>
+        <member>greenfeet-warhall-base</member>
+    </use-applications>
+    <risk>3</risk>
+    <create-date>2026-07-15</create-date>
+    <last-update-date>2026-07-15</last-update-date>
+    <application-container>greenfeet-warhall</application-container>
+</entry></result></response>
