@@ -1,0 +1,54 @@
+<response status="success"><result><entry id="10084624" name="aws-application-disc-logout" minver="10.1.0" ori_country="USA" ori_language="English">
+    <category>general-internet</category>
+    <new-category>networking</new-category>
+    <subcategory>it-infrastructure</subcategory>
+    <technology>browser-based</technology>
+    <description>AWS Application Discovery Service helps you plan migrations to the cloud by collecting usage and configuration data about your on-premises servers. This App-ID covers the traffic for aws-application-disc-logout application.</description>
+    <appident>yes</appident>
+    <vulnerability-ident>yes</vulnerability-ident>
+    <evasive-behavior>no</evasive-behavior>
+    <consume-big-bandwidth>no</consume-big-bandwidth>
+    <used-by-malware>no</used-by-malware>
+    <able-to-transfer-file>no</able-to-transfer-file>
+    <has-known-vulnerability>yes</has-known-vulnerability>
+    <tunnel-other-application>no</tunnel-other-application>
+    <prone-to-misuse>no</prone-to-misuse>
+    <pervasive-use>no</pervasive-use>
+    <per-direction-regex>no</per-direction-regex>
+    <deny-action>drop-reset</deny-action>
+    <cachable>no</cachable>
+    <parent-app>aws-application-disc-base</parent-app>
+    <source-type>saas</source-type>
+    <cloud-move-to-predefined>no</cloud-move-to-predefined>
+    <is-saas>yes</is-saas>
+    <saas minver="8.1.0">
+        <certifications>
+            <is-fedramp>yes</is-fedramp>
+        </certifications>
+        <is-data-breaches>no</is-data-breaches>
+        <is-ip-based-restrictions>yes</is-ip-based-restrictions>
+        <is-poor-financial-viability>no</is-poor-financial-viability>
+        <is-poor-terms-of-service>no</is-poor-terms-of-service>
+    </saas>
+    <tag minver="9.1.0">
+        <member>[App-ID Cloud Engine]</member>
+        <member>[Web App]</member>
+    </tag>
+    <references>
+        <entry name="aws-application-disc">
+            <link>https://aws.amazon.com/application-discovery/</link>
+        </entry>
+    </references>
+    <default>
+        <port>
+            <member>tcp/80,443</member>
+        </port>
+    </default>
+    <use-applications>
+        <member>aws-application-disc-base</member>
+    </use-applications>
+    <risk>3</risk>
+    <create-date>2024-07-20</create-date>
+    <last-update-date>2024-09-10</last-update-date>
+    <application-container>aws-application-disc</application-container>
+</entry></result></response>
