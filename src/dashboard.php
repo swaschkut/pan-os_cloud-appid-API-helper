@@ -9,55 +9,85 @@ if (!file_exists($dbPath)) {
 $pdo = new PDO("sqlite:$dbPath");
 $pdo->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
 
+// 1. Paginierungskonfiguration
+$perPage = 50; // Anzahl der Objekte pro Seite
+$page = isset($_GET['page']) && is_numeric($_GET['page']) ? (int)$_GET['page'] : 1;
+if ($page < 1) $page = 1;
+
+// 2. Filter-Parameter verarbeiten
+$searchName   = trim($_GET['name'] ?? '');
+$selectedCat  = $_GET['category'] ?? '';
+$selectedTech = $_GET['technology'] ?? '';
+$selectedRisk = $_GET['risk'] ?? '';
+$selectedSaas = $_GET['is_saas'] ?? '';
+
+// Filtermöglichkeiten für Dropdowns auslesen
+$categories = $pdo->query("SELECT DISTINCT category FROM cloud_appids WHERE category IS NOT NULL AND category != '' ORDER BY category")->fetchAll(PDO::FETCH_COLUMN);
+$technologies = $pdo->query("SELECT DISTINCT technology FROM cloud_appids WHERE technology IS NOT NULL AND technology != '' ORDER BY technology")->fetchAll(PDO::FETCH_COLUMN);
+
 // Gesamtzahl aller Objekte in der DB (ohne Filter)
-$totalObjects =$pdo->query("SELECT COUNT(*) FROM cloud_appids")->fetchColumn();
+$totalObjects = $pdo->query("SELECT COUNT(*) FROM cloud_appids")->fetchColumn();
 
-// Filtermöglichkeiten auslesen
-$categories =$pdo->query("SELECT DISTINCT category FROM cloud_appids WHERE category IS NOT NULL AND category != '' ORDER BY category")->fetchAll(PDO::FETCH_COLUMN);
-$technologies =$pdo->query("SELECT DISTINCT technology FROM cloud_appids WHERE technology IS NOT NULL AND technology != '' ORDER BY technology")->fetchAll(PDO::FETCH_COLUMN);
+// 3. SQL-WHERE-Bedingungen aufbauen
+$where = [];
+$params = [];
 
-// Filter-Parameter verarbeiten
-$searchName   =$_GET['name'] ?? '';
-$selectedCat  =$_GET['category'] ?? '';
-$selectedTech =$_GET['technology'] ?? '';
-$selectedRisk =$_GET['risk'] ?? '';
-$selectedSaas =$_GET['is_saas'] ?? '';
-
-// SQL Query aufbauen
-$where = [];$params = [];
-
-if ($searchName !== '') {$where[] = "(name LIKE :name OR ottawa_name LIKE :name)";
-    $params[':name'] = '\%' .$searchName . '%';
+if ($searchName !== '') {
+    $where[] = "LOWER(name) LIKE LOWER(:name)";
+    $params[':name'] = '%' . $searchName . '%';
 }
-if ($selectedCat !== '') {$where[] = "category = :category";
-    $params[':category'] =$selectedCat;
+if ($selectedCat !== '') {
+    $where[] = "category = :category";
+    $params[':category'] = $selectedCat;
 }
-if ($selectedTech !== '') {$where[] = "technology = :technology";
-    $params[':technology'] =$selectedTech;
+if ($selectedTech !== '') {
+    $where[] = "technology = :technology";
+    $params[':technology'] = $selectedTech;
 }
-if ($selectedRisk !== '') {$where[] = "risk = :risk";
+if ($selectedRisk !== '') {
+    $where[] = "risk = :risk";
     $params[':risk'] = (int)$selectedRisk;
 }
-if ($selectedSaas !== '') {$where[] = "is_saas = :is_saas";
+if ($selectedSaas !== '') {
+    $where[] = "is_saas = :is_saas";
     $params[':is_saas'] = (int)$selectedSaas;
 }
 
 $whereClause = !empty($where) ? 'WHERE ' . implode(' AND ', $where) : '';
 
-// Gefilterte Anzahl abfragen
-$stmtCount =$pdo->prepare("SELECT COUNT(*) FROM cloud_appids $whereClause");
+// 4. Gefilterte Gesamtzahl ermitteln
+$stmtCount = $pdo->prepare("SELECT COUNT(*) FROM cloud_appids $whereClause");
 $stmtCount->execute($params);
-$filteredObjects =$stmtCount->fetchColumn();
+$filteredObjects = (int)$stmtCount->fetchColumn();
 
-// Daten abfragen
-$sql = "SELECT id, name, ottawa_name, category, new_category, subcategory, technology, risk, is_saas, 
+// 5. Seitenberechnung (OFFSET & LIMIT)
+$totalPages = max(1, ceil($filteredObjects / $perPage));
+if ($page > $totalPages) $page = $totalPages;
+$offset = ($page - 1) * $perPage;
+
+// 6. Nur die 50 Datensätze für die aktuelle Seite abfragen
+$sql = "SELECT id, name, category, new_category, subcategory, technology, risk, is_saas, 
                tags, default_ports, use_applications, tunnel_applications, 
-               create_date, last_update_date, application_container, xml_content 
-        FROM cloud_appids $whereClause ORDER BY name ASC LIMIT 2000";
+               create_date, last_update_date, application_container 
+        FROM cloud_appids $whereClause 
+        ORDER BY name ASC 
+        LIMIT :limit OFFSET :offset";
 
 $stmt = $pdo->prepare($sql);
-$stmt->execute($params);
-$appids =$stmt->fetchAll(PDO::FETCH_ASSOC);
+foreach ($params as $key => $val) {
+    $stmt->bindValue($key, $val);
+}
+$stmt->bindValue(':limit', $perPage, PDO::PARAM_INT);
+$stmt->bindValue(':offset', $offset, PDO::PARAM_INT);
+$stmt->execute();
+$appids = $stmt->fetchAll(PDO::FETCH_ASSOC);
+
+// Helper-Funktion für URL-Parameter bei der Seitennavigation
+function buildUrl($newPage) {
+    $queryParams = $_GET;
+    $queryParams['page'] = $newPage;
+    return '?' . http_build_query($queryParams);
+}
 ?>
 <!DOCTYPE html>
 <html lang="de">
@@ -74,11 +104,11 @@ $appids =$stmt->fetchAll(PDO::FETCH_ASSOC);
 <body class="bg-light p-4">
 
 <div class="container-fluid">
-    <!-- Header mit Objekt-Zähler oben rechts -->
+    <!-- Header mit Zähler -->
     <div class="d-flex justify-content-between align-items-center mb-4">
         <h1 class="h2 m-0">Cloud App-ID Dashboard</h1>
         <div class="bg-white border rounded p-2 px-3 shadow-sm">
-            <span class="fw-bold">Anzeige:</span>
+            <span class="fw-bold">Gefiltert:</span>
             <span class="badge bg-primary fs-6"><?= number_format($filteredObjects, 0, ',', '.') ?></span>
             <span class="text-muted">von insgesamt <?= number_format($totalObjects, 0, ',', '.') ?> Objekten</span>
         </div>
@@ -90,14 +120,14 @@ $appids =$stmt->fetchAll(PDO::FETCH_ASSOC);
         <div class="card-body">
             <form method="GET" class="row g-3">
                 <div class="col-md-2">
-                    <label class="form-label fw-semibold">Name / Ottawa Name</label>
+                    <label class="form-label fw-semibold">Name</label>
                     <input type="text" name="name" class="form-control" placeholder="z.B. oracle..." value="<?= htmlspecialchars($searchName) ?>">
                 </div>
                 <div class="col-md-2">
                     <label class="form-label fw-semibold">Kategorie</label>
                     <select name="category" class="form-select">
                         <option value="">Alle Kategorien</option>
-                        <?php foreach ($categories as$cat): ?>
+                        <?php foreach ($categories as $cat): ?>
                             <option value="<?= htmlspecialchars($cat) ?>" <?= $selectedCat === $cat ? 'selected' : '' ?>><?= htmlspecialchars($cat) ?></option>
                         <?php endforeach; ?>
                     </select>
@@ -106,7 +136,7 @@ $appids =$stmt->fetchAll(PDO::FETCH_ASSOC);
                     <label class="form-label fw-semibold">Technologie</label>
                     <select name="technology" class="form-select">
                         <option value="">Alle Technologien</option>
-                        <?php foreach ($technologies as$tech): ?>
+                        <?php foreach ($technologies as $tech): ?>
                             <option value="<?= htmlspecialchars($tech) ?>" <?= $selectedTech === $tech ? 'selected' : '' ?>><?= htmlspecialchars($tech) ?></option>
                         <?php endforeach; ?>
                     </select>
@@ -137,14 +167,13 @@ $appids =$stmt->fetchAll(PDO::FETCH_ASSOC);
     </div>
 
     <!-- Ergebnistabelle -->
-    <div class="card shadow-sm">
+    <div class="card shadow-sm mb-4">
         <div class="card-body">
             <div class="table-responsive">
                 <table id="appidTable" class="table table-striped table-hover align-middle text-small">
                     <thead class="table-dark">
                     <tr>
                         <th>Name</th>
-                        <th>Ottawa Name</th>
                         <th>Kategorie</th>
                         <th>Neue Kat.</th>
                         <th>Subkategorie</th>
@@ -161,100 +190,126 @@ $appids =$stmt->fetchAll(PDO::FETCH_ASSOC);
                     </tr>
                     </thead>
                     <tbody>
-                    <?php foreach ($appids as$row): ?>
+                    <?php if (empty($appids)): ?>
                         <tr>
-                            <td class="fw-bold text-primary"><?= htmlspecialchars($row['name'] ?? '') ?></td>
-                            <td><?= htmlspecialchars($row['ottawa_name'] ?? '-') ?></td>
-                            <td><?= htmlspecialchars($row['category'] ?? '-') ?></td>
-                            <td><?= htmlspecialchars($row['new_category'] ?? '-') ?></td>
-                            <td><?= htmlspecialchars($row['subcategory'] ?? '-') ?></td>
-                            <td><?= htmlspecialchars($row['technology'] ?? '-') ?></td>
-
-                            <!-- Tags -->
-                            <td class="badge-list">
-                                <?php
-                                $tags = json_decode($row['tags'] ?? '[]', true);
-                                if (!empty($tags) && is_array($tags)):
-                                    foreach ($tags as$tag): ?>
-                                        <span class="badge bg-secondary"><?= htmlspecialchars($tag) ?></span>
-                                    <?php endforeach;
-                                else: echo '-'; endif;
-                                ?>
-                            </td>
-
-                            <!-- Ports -->
-                            <td>
-                                <?php
-                                $ports = json_decode($row['default_ports'] ?? '[]', true);
-                                echo htmlspecialchars(is_array($ports) ? implode(', ', $ports) : '-');
-                                ?>
-                            </td>
-
-                            <!-- Use Applications -->
-                            <td class="badge-list">
-                                <?php
-                                $useApps = json_decode($row['use_applications'] ?? '[]', true);
-                                if (!empty($useApps) && is_array($useApps)):
-                                    foreach ($useApps as$app): ?>
-                                        <span class="badge bg-info text-dark"><?= htmlspecialchars($app) ?></span>
-                                    <?php endforeach;
-                                else: echo '-'; endif;
-                                ?>
-                            </td>
-
-                            <!-- Tunnel Applications -->
-                            <td class="badge-list">
-                                <?php
-                                $tunnelApps = json_decode($row['tunnel_applications'] ?? '[]', true);
-                                if (!empty($tunnelApps) && is_array($tunnelApps)):
-                                    foreach ($tunnelApps as$app): ?>
-                                        <span class="badge bg-warning text-dark"><?= htmlspecialchars($app) ?></span>
-                                    <?php endforeach;
-                                else: echo '-'; endif;
-                                ?>
-                            </td>
-
-                            <td><?= htmlspecialchars($row['application_container'] ?? '-') ?></td>
-
-                            <!-- Datumsangaben -->
-                            <td>
-                                <div class="text-nowrap"><strong>C:</strong> <?= htmlspecialchars($row['create_date'] ?? '-') ?></div>
-                                <div class="text-nowrap"><strong>U:</strong> <?= htmlspecialchars($row['last_update_date'] ?? '-') ?></div>
-                            </td>
-
-                            <td>
-                                <span class="badge bg-<?= $row['risk'] >= 4 ? 'danger' : ($row['risk'] >= 3 ? 'warning' : 'success') ?>">
-                                    Risiko <?= $row['risk'] ?>
-                                </span>
-                            </td>
-                            <td><?= $row['is_saas'] ? '<span class="badge bg-success">SaaS</span>' : '-' ?></td>
-                            <td>
-                                <button type="button"
-                                        class="btn btn-sm btn-outline-primary view-xml-api text-nowrap"
-                                        data-appname="<?= htmlspecialchars($row['name'] ?? '') ?>">
-                                    XML API
-                                </button>
-                            </td>
+                            <td colspan="14" class="text-center py-4 text-muted">Keine Objekte gefunden.</td>
                         </tr>
-                    <?php endforeach; ?>
+                    <?php else: ?>
+                        <?php foreach ($appids as $row): ?>
+                            <tr>
+                                <td class="fw-bold text-primary"><?= htmlspecialchars($row['name'] ?? '') ?></td>
+                                <td><?= htmlspecialchars($row['category'] ?? '-') ?></td>
+                                <td><?= htmlspecialchars($row['new_category'] ?? '-') ?></td>
+                                <td><?= htmlspecialchars($row['subcategory'] ?? '-') ?></td>
+                                <td><?= htmlspecialchars($row['technology'] ?? '-') ?></td>
+
+                                <td class="badge-list">
+                                    <?php
+                                    $tags = json_decode($row['tags'] ?? '[]', true);
+                                    if (!empty($tags) && is_array($tags)):
+                                        foreach ($tags as $tag): ?>
+                                            <span class="badge bg-secondary"><?= htmlspecialchars($tag) ?></span>
+                                        <?php endforeach;
+                                    else: echo '-'; endif;
+                                    ?>
+                                </td>
+
+                                <td>
+                                    <?php
+                                    $ports = json_decode($row['default_ports'] ?? '[]', true);
+                                    echo htmlspecialchars(is_array($ports) ? implode(', ', $ports) : '-');
+                                    ?>
+                                </td>
+
+                                <td class="badge-list">
+                                    <?php
+                                    $useApps = json_decode($row['use_applications'] ?? '[]', true);
+                                    if (!empty($useApps) && is_array($useApps)):
+                                        foreach ($useApps as $app): ?>
+                                            <span class="badge bg-info text-dark"><?= htmlspecialchars($app) ?></span>
+                                        <?php endforeach;
+                                    else: echo '-'; endif;
+                                    ?>
+                                </td>
+
+                                <td class="badge-list">
+                                    <?php
+                                    $tunnelApps = json_decode($row['tunnel_applications'] ?? '[]', true);
+                                    if (!empty($tunnelApps) && is_array($tunnelApps)):
+                                        foreach ($tunnelApps as $app): ?>
+                                            <span class="badge bg-warning text-dark"><?= htmlspecialchars($app) ?></span>
+                                        <?php endforeach;
+                                    else: echo '-'; endif;
+                                    ?>
+                                </td>
+
+                                <td><?= htmlspecialchars($row['application_container'] ?? '-') ?></td>
+
+                                <td>
+                                    <div class="text-nowrap"><strong>C:</strong> <?= htmlspecialchars($row['create_date'] ?? '-') ?></div>
+                                    <div class="text-nowrap"><strong>U:</strong> <?= htmlspecialchars($row['last_update_date'] ?? '-') ?></div>
+                                </td>
+
+                                <td>
+                                    <span class="badge bg-<?= $row['risk'] >= 4 ? 'danger' : ($row['risk'] >= 3 ? 'warning' : 'success') ?>">
+                                        Risiko <?= $row['risk'] ?>
+                                    </span>
+                                </td>
+                                <td><?= $row['is_saas'] ? '<span class="badge bg-success">SaaS</span>' : '-' ?></td>
+
+                                <td>
+                                    <a href="index.php?cmd=<?= urlencode('<show><cloud-appid><application>' . ($row['name'] ?? '') . '</application></cloud-appid></show>') ?>"
+                                       target="_blank"
+                                       class="btn btn-sm btn-outline-primary text-nowrap">
+                                        XML API
+                                    </a>
+                                </td>
+                            </tr>
+                        <?php endforeach; ?>
+                    <?php endif; ?>
                     </tbody>
                 </table>
             </div>
-        </div>
-    </div>
-</div>
 
-<!-- Modal zur XML-Anzeige -->
-<div class="modal fade" id="xmlModal" tabindex="-1">
-    <div class="modal-dialog modal-lg">
-        <div class="modal-content">
-            <div class="modal-header">
-                <h5 class="modal-title" id="xmlModalTitle">XML Details</h5>
-                <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
-            </div>
-            <div class="modal-body">
-                <pre class="bg-dark text-light p-3 rounded"><code id="xmlContent"></code></pre>
-            </div>
+            <!-- Paginierungs-Navigation -->
+            <?php if ($totalPages > 1): ?>
+                <div class="d-flex justify-content-between align-items-center mt-3">
+                    <div class="text-muted text-small">
+                        Zeige <?= $offset + 1 ?> bis <?= min($offset + $perPage, $filteredObjects) ?> von <?= number_format($filteredObjects, 0, ',', '.') ?> Einträgen
+                    </div>
+                    <nav>
+                        <ul class="pagination pagination-sm m-0">
+                            <!-- Erste Seite & Zurück -->
+                            <li class="page-item <?= ($page <= 1) ? 'disabled' : '' ?>">
+                                <a class="page-link" href="<?= buildUrl(1) ?>">&laquo; Erste</a>
+                            </li>
+                            <li class="page-item <?= ($page <= 1) ? 'disabled' : '' ?>">
+                                <a class="page-link" href="<?= buildUrl($page - 1) ?>">Zurück</a>
+                            </li>
+
+                            <!-- Dynamische Seitennummern (max 5 sichtbare Buttons) -->
+                            <?php
+                            $startPage = max(1, $page - 2);
+                            $endPage   = min($totalPages, $page + 2);
+
+                            for ($i = $startPage; $i <= $endPage; $i++): ?>
+                                <li class="page-item <?= ($i === $page) ? 'active' : '' ?>">
+                                    <a class="page-link" href="<?= buildUrl($i) ?>"><?= $i ?></a>
+                                </li>
+                            <?php endfor; ?>
+
+                            <!-- Vor & Letzte Seite -->
+                            <li class="page-item <?= ($page >= $totalPages) ? 'disabled' : '' ?>">
+                                <a class="page-link" href="<?= buildUrl($page + 1) ?>">Weiter</a>
+                            </li>
+                            <li class="page-item <?= ($page >= $totalPages) ? 'disabled' : '' ?>">
+                                <a class="page-link" href="<?= buildUrl($totalPages) ?>">Letzte &raquo;</a>
+                            </li>
+                        </ul>
+                    </nav>
+                </div>
+            <?php endif; ?>
+
         </div>
     </div>
 </div>
@@ -265,38 +320,12 @@ $appids =$stmt->fetchAll(PDO::FETCH_ASSOC);
 <script src="https://cdn.datatables.net/1.13.6/js/dataTables.bootstrap5.min.js"></script>
 <script>
     $(document).ready(function() {
-        // DataTables-Initialisierung
+        // DataTables ohne clientseitiges Paging/Searching (da jetzt serverseitig gelöst)
         $('#appidTable').DataTable({
-            "pageLength": 25,
-            "scrollX": true,
-            "language": {
-                "search": "Schnellsuche in geladenen Daten:"
-            }
-        });
-
-        const xmlModal = new bootstrap.Modal(document.getElementById('xmlModal'));
-
-        // Klick-Event für den XML-Button
-        $('#appidTable').on('click', '.view-xml-api', function() {
-            const appName = $(this).data('appname');
-            const cmd = `<show><cloud-appid><application>${appName}</application></cloud-appid></show>`;
-
-            $('#xmlModalTitle').text('XML Details: ' + appName);
-            $('#xmlContent').text('Lade XML über API...');
-            xmlModal.show();
-
-            $.ajax({
-                url: 'index.php',
-                type: 'GET',
-                data: { cmd: cmd },
-                dataType: 'text',
-                success: function(response) {
-                    $('#xmlContent').text(response);
-                },
-                error: function() {
-                    $('#xmlContent').text('Fehler: XML konnte nicht über die API geladen werden.');
-                }
-            });
+            "paging": false,
+            "searching": false,
+            "info": false,
+            "scrollX": true
         });
     });
 </script>
