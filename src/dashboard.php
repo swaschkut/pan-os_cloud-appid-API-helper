@@ -142,10 +142,11 @@ $appids = $stmt->fetchAll(PDO::FETCH_ASSOC);
                             ?>
                         </td>
                         <td>
-                            <button class="btn btn-sm btn-outline-primary view-xml-api"
-                                    data-appname="<?= htmlspecialchars($row['name'] ?? '', ENT_QUOTES) ?>">
-                                XML anzeigen
-                            </button>
+                            <a href="index.php?cmd=<?= urlencode('<show><cloud-appid><application>' . ($row['name'] ?? '') . '</application></cloud-appid></show>') ?>"
+                               target="_blank"
+                               class="btn btn-sm btn-outline-primary">
+                                XML API
+                            </a>
                         </td>
                     </tr>
                 <?php endforeach; ?>
