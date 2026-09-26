@@ -125,10 +125,10 @@ $appids = $stmt->fetchAll(PDO::FETCH_ASSOC);
                 <tbody>
                 <?php foreach ($appids as $row): ?>
                     <tr>
-                        <td class="fw-bold"><?= htmlspecialchars($row['name']) ?></td>
-                        <td><?= htmlspecialchars($row['category']) ?></td>
-                        <td><?= htmlspecialchars($row['subcategory']) ?></td>
-                        <td><?= htmlspecialchars($row['technology']) ?></td>
+                        <td class="fw-bold"><?= htmlspecialchars($row['name'] ?? '') ?></td>
+                        <td><?= htmlspecialchars($row['category'] ?? '') ?></td>
+                        <td><?= htmlspecialchars($row['subcategory'] ?? '') ?></td>
+                        <td><?= htmlspecialchars($row['technology'] ?? '') ?></td>
                         <td>
                                 <span class="badge bg-<?= $row['risk'] >= 4 ? 'danger' : ($row['risk'] >= 3 ? 'warning' : 'success') ?>">
                                     Risiko <?= $row['risk'] ?>
@@ -142,7 +142,10 @@ $appids = $stmt->fetchAll(PDO::FETCH_ASSOC);
                             ?>
                         </td>
                         <td>
-                            <button class="btn btn-sm btn-outline-primary view-xml" data-xml="<?= htmlspecialchars($row['xml_content']) ?>">XML anzeigen</button>
+                            <button class="btn btn-sm btn-outline-primary view-xml"
+                                    data-xml="<?= base64_encode($row['xml_content'] ?? '') ?>">
+                                XML anzeigen
+                            </button>
                         </td>
                     </tr>
                 <?php endforeach; ?>
@@ -173,7 +176,8 @@ $appids = $stmt->fetchAll(PDO::FETCH_ASSOC);
 <script src="https://cdn.datatables.net/1.13.6/js/dataTables.bootstrap5.min.js"></script>
 <script>
     $(document).ready(function() {
-        $('#appidTable').DataTable({
+        // DataTables Initialisierung
+        const table = $('#appidTable').DataTable({
             "pageLength": 25,
             "language": {
                 "search": "Schnellsuche in Tabelle:"
@@ -181,8 +185,27 @@ $appids = $stmt->fetchAll(PDO::FETCH_ASSOC);
         });
 
         const xmlModal = new bootstrap.Modal(document.getElementById('xmlModal'));
-        $('.view-xml').on('click', function() {
-            $('#xmlContent').text($(this).data('xml'));
+
+        // Event-Delegation über die Tabelle (funktioniert auch nach Sortierung/Seitenwechsel)
+        $('#appidTable').on('click', '.view-xml', function() {
+            const b64Data = $(this).data('xml');
+
+            if (!b64Data) {
+                $('#xmlContent').text('Kein XML-Inhalt vorhanden.');
+            } else {
+                try {
+                    // Base64 sicher zu UTF-8 String dekodieren
+                    const decodedXml = decodeURIComponent(atob(b64Data).split('').map(function(c) {
+                        return '%' + ('00' + c.charCodeAt(0).toString(16)).slice(-2);
+                    }).join(''));
+
+                    $('#xmlContent').text(decodedXml);
+                } catch (e) {
+                    // Fallback für einfache Strings
+                    $('#xmlContent').text(atob(b64Data));
+                }
+            }
+
             xmlModal.show();
         });
     });

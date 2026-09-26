@@ -16,7 +16,7 @@ COPY . /build
 
 # Erstelle die cloud_appid.db aus den vorhanden XML-Dateien
 # Speicherlimit für den Builder auf unbegrenzt (-1) oder 2G setzen
-RUN php -d memory_limit=-1 import_existing.php
+#RUN php -d memory_limit=-1 import_existing.php
 
 
 # ==========================================

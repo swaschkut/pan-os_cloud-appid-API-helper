@@ -1,0 +1,55 @@
+<response status="success"><result><entry id="10110089" name="cozweat-base" minver="10.1.0" ori_country="USA" ori_language="English">
+    <ottawa-name>cozweat</ottawa-name>
+    <category>general-internet</category>
+    <new-category>business-systems</new-category>
+    <subcategory>vertical-industry</subcategory>
+    <technology>browser-based</technology>
+    <description>Cozweat is an application tailored for rowing enthusiasts globally, aiming to enhance the indoor rowing experience. It simulates water training environments indoors, providing features such as realistic routes, precise data tracking, stroke recording, and options for competitive activities like regattas. Compatible with Concept2 rowing machines, Cozweat offers users an engaging and immersive rowing experience.</description>
+    <appident>yes</appident>
+    <vulnerability-ident>yes</vulnerability-ident>
+    <evasive-behavior>no</evasive-behavior>
+    <consume-big-bandwidth>no</consume-big-bandwidth>
+    <used-by-malware>no</used-by-malware>
+    <able-to-transfer-file>no</able-to-transfer-file>
+    <has-known-vulnerability>yes</has-known-vulnerability>
+    <tunnel-other-application>no</tunnel-other-application>
+    <prone-to-misuse>no</prone-to-misuse>
+    <pervasive-use>no</pervasive-use>
+    <per-direction-regex>no</per-direction-regex>
+    <deny-action>drop-reset</deny-action>
+    <cachable>no</cachable>
+    <source-type>se-saas</source-type>
+    <cloud-move-to-predefined>no</cloud-move-to-predefined>
+    <is-saas>yes</is-saas>
+    <saas minver="8.1.0">
+        <is-data-breaches>no</is-data-breaches>
+        <is-ip-based-restrictions>no</is-ip-based-restrictions>
+        <is-poor-financial-viability>no</is-poor-financial-viability>
+        <is-poor-terms-of-service>no</is-poor-terms-of-service>
+    </saas>
+    <tag minver="9.1.0">
+        <member>[App-ID Cloud Engine]</member>
+        <member>[Web App]</member>
+    </tag>
+    <references>
+        <entry name="HomePage">
+            <link>https://cozweat.com</link>
+        </entry>
+    </references>
+    <default>
+        <port>
+            <member>tcp/80,443</member>
+        </port>
+    </default>
+    <use-applications>
+        <member>ssl</member>
+        <member>web-browsing</member>
+    </use-applications>
+    <tunnel-applications>
+        <member>cozweat-download</member>
+    </tunnel-applications>
+    <risk>4</risk>
+    <create-date>2026-07-31</create-date>
+    <last-update-date>2026-07-31</last-update-date>
+    <application-container>cozweat</application-container>
+</entry></result></response>
