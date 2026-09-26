@@ -1,0 +1,56 @@
+<response status="success"><result><entry id="10111090" name="hpe-hprc-file-transfer-base" minver="10.1.0" ori_country="USA" ori_language="English">
+    <ottawa-name>hpe-hprc-file-transfer</ottawa-name>
+    <category>general-internet</category>
+    <new-category>general-internet</new-category>
+    <subcategory>file-sharing</subcategory>
+    <technology>browser-based</technology>
+    <description>HPRC, developed by Hewlett Packard Enterprise, is a secure file transfer service designed for the exchange of large documents between the company and its customers or partners. Utilizing the SFTP protocol, HPRC ensures secure and efficient data transport, exclusively for official HP business purposes.</description>
+    <appident>yes</appident>
+    <vulnerability-ident>yes</vulnerability-ident>
+    <evasive-behavior>no</evasive-behavior>
+    <consume-big-bandwidth>no</consume-big-bandwidth>
+    <used-by-malware>no</used-by-malware>
+    <able-to-transfer-file>no</able-to-transfer-file>
+    <has-known-vulnerability>yes</has-known-vulnerability>
+    <tunnel-other-application>no</tunnel-other-application>
+    <prone-to-misuse>no</prone-to-misuse>
+    <pervasive-use>no</pervasive-use>
+    <per-direction-regex>no</per-direction-regex>
+    <deny-action>drop-reset</deny-action>
+    <cachable>no</cachable>
+    <source-type>se-saas</source-type>
+    <cloud-move-to-predefined>no</cloud-move-to-predefined>
+    <is-saas>yes</is-saas>
+    <saas minver="8.1.0">
+        <is-data-breaches>no</is-data-breaches>
+        <is-ip-based-restrictions>no</is-ip-based-restrictions>
+        <is-poor-financial-viability>no</is-poor-financial-viability>
+        <is-poor-terms-of-service>no</is-poor-terms-of-service>
+    </saas>
+    <tag minver="9.1.0">
+        <member>[App-ID Cloud Engine]</member>
+        <member>[Web App]</member>
+    </tag>
+    <references>
+        <entry name="HomePage">
+            <link>https://hprc-h3.it.hpe.com</link>
+        </entry>
+    </references>
+    <default>
+        <port>
+            <member>tcp/80,443</member>
+        </port>
+    </default>
+    <use-applications>
+        <member>ssl</member>
+        <member>web-browsing</member>
+    </use-applications>
+    <tunnel-applications>
+        <member>hpe-hprc-file-transfer-logout</member>
+        <member>hpe-hprc-file-transfer-upload</member>
+    </tunnel-applications>
+    <risk>3</risk>
+    <create-date>2026-08-19</create-date>
+    <last-update-date>2026-08-19</last-update-date>
+    <application-container>hpe-hprc-file-transfer</application-container>
+</entry></result></response>
