@@ -19,3 +19,12 @@ Ask for all available application ID to Name:
 ```php
 curl -i "http://localhost:8080/?type=op&cmd=<show><cloud-appid><cloud-app-data><application><all></all></application></cloud-app-data></cloud-appid></show>"
 ```
+
+
+
+GUI Dashboard
+---
+```php
+http://localhost:8080/dashboard.php
+```
+
