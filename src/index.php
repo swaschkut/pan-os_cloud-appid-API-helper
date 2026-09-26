@@ -53,10 +53,9 @@ if (preg_match('/<position>(\d+)<\/position>/i', $cmd, $posMatches)) {
 }
 
 $limit = 2000; // Standard Limit
-if (preg_match('/<limit>(\d+)<\/limit>/i', $limMatches)) {
-    $limit = min(10000, max(1, (int)$limMatches[1])); // Absicherung: max 10.000
+if (preg_match('/<limit>(\d+)<\/limit>/i', $cmd, $limMatches)) {
+    $limit = min(10000, max(1, (int)$limMatches[1]));
 }
-
 // SQLite OFFSET berechnen (Position 1 -> Offset 0)
 $offset = $position - 1;
 
