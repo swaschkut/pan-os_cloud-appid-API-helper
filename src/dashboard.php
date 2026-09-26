@@ -1,130 +1,191 @@
 <?php
-$dbFile = __DIR__ . '/../cloud_appid.db';
 
-if (!file_exists($dbFile)) {
+$dbPath = __DIR__ . '/../cloud_appid.db';
+
+if (!file_exists($dbPath)) {
     die("Datenbank cloud_appid.db nicht gefunden!");
 }
 
-$db = new PDO('sqlite:' . $dbFile);
-$db->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
+$pdo = new PDO("sqlite:$dbPath");
+$pdo->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
 
-// Suchparameter aus der URL auslesen
-$search   = $_GET['q'] ?? '';
-$category = $_GET['category'] ?? '';
-$page     = max(1, (int)($_GET['page'] ?? 1));
-$limit    = 50; // Einträge pro Seite
-$offset   = ($page - 1) * $limit;
+// Filtermöglichkeiten auslesen
+$categories = $pdo->query("SELECT DISTINCT category FROM cloud_appids WHERE category IS NOT NULL AND category != '' ORDER BY category")->fetchAll(PDO::FETCH_COLUMN);
+$technologies = $pdo->query("SELECT DISTINCT technology FROM cloud_appids WHERE technology IS NOT NULL AND technology != '' ORDER BY technology")->fetchAll(PDO::FETCH_COLUMN);
 
-// Dynamische SQL-Query aufbauen
+// Filter-Parameter verarbeiten
+$selectedCategory = $_GET['category'] ?? '';
+$selectedTech = $_GET['technology'] ?? '';
+$selectedRisk = $_GET['risk'] ?? '';
+$selectedSaas = $_GET['is_saas'] ?? '';
+
+// SQL Query aufbauen
 $where = [];
 $params = [];
 
-if (!empty($search)) {
-    $where[] = "name LIKE :search";
-    $params[':search'] = '%' . $search . '%';
-}
-
-if (!empty($category)) {
+if ($selectedCategory !== '') {
     $where[] = "category = :category";
-    $params[':category'] = $category;
+    $params[':category'] = $selectedCategory;
+}
+if ($selectedTech !== '') {
+    $where[] = "technology = :technology";
+    $params[':technology'] = $selectedTech;
+}
+if ($selectedRisk !== '') {
+    $where[] = "risk = :risk";
+    $params[':risk'] = (int)$selectedRisk;
+}
+if ($selectedSaas !== '') {
+    $where[] = "is_saas = :is_saas";
+    $params[':is_saas'] = (int)$selectedSaas;
 }
 
-$whereSql = !empty($where) ? 'WHERE ' . implode(' AND ', $where) : '';
-
-// Daten & Gesamtzahl abfragen
-$stmt = $db->prepare("SELECT id, name, category, subcategory, technology, risk, last_update_date FROM cloud_appids $whereSql LIMIT $limit OFFSET $offset");
+$whereClause = !empty($where) ? 'WHERE ' . implode(' AND ', $where) : '';
+$stmt = $pdo->prepare("SELECT id, name, category, subcategory, technology, risk, is_saas, default_ports, xml_content FROM cloud_appids $whereClause ORDER BY name ASC LIMIT 1000");
 $stmt->execute($params);
-$apps = $stmt->fetchAll(PDO::FETCH_ASSOC);
-
-$countStmt = $db->prepare("SELECT COUNT(*) FROM cloud_appids $whereSql");
-$countStmt->execute($params);
-$totalRows = $countStmt->fetchColumn();
-$totalPages = ceil($totalRows / $limit);
+$appids = $stmt->fetchAll(PDO::FETCH_ASSOC);
 ?>
 <!DOCTYPE html>
 <html lang="de">
 <head>
     <meta charset="UTF-8">
-    <title>Cloud-AppID Dashboard</title>
-    <style>
-        body { font-family: Arial, sans-serif; margin: 20px; background: #f4f6f9; }
-        h1 { color: #333; }
-        .filter-box { background: #fff; padding: 15px; border-radius: 5px; margin-bottom: 20px; box-shadow: 0 2px 4px rgba(0,0,0,0.1); }
-        input, button { padding: 8px 12px; margin-right: 10px; }
-        table { width: 100%; border-collapse: collapse; background: #fff; box-shadow: 0 2px 4px rgba(0,0,0,0.1); }
-        th, td { padding: 10px; border-bottom: 1px solid #ddd; text-align: left; }
-        th { background: #007bff; color: white; }
-        tr:hover { background: #f1f1f1; }
-        .badge { padding: 3px 7px; border-radius: 3px; font-weight: bold; color: #fff; }
-        .risk-1 { background: green; } .risk-3 { background: orange; } .risk-5 { background: red; }
-        .pagination { margin-top: 15px; }
-        .pagination a { padding: 5px 10px; border: 1px solid #ccc; background: #fff; text-decoration: none; color: #333; }
-        .pagination strong { padding: 5px 10px; background: #007bff; color: white; }
-    </style>
+    <title>Cloud App-ID Dashboard</title>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css">
+    <link rel="stylesheet" href="https://cdn.datatables.net/1.13.6/css/dataTables.bootstrap5.min.css">
 </head>
-<body>
+<body class="bg-light p-4">
 
-<h1>PAN-OS Cloud-AppID Mock Dashboard</h1>
+<div class="container-fluid">
+    <h1 class="mb-4">Cloud App-ID Dashboard</h1>
 
-<div class="filter-box">
-    <form method="GET">
-        <input type="text" name="q" placeholder="App-Name suchen..." value="<?= htmlspecialchars($search) ?>">
-        <button type="submit">Suchen</button>
-        <a href="dashboard.php">Reset</a>
-        <span style="float:right; font-weight:bold;">Treffer: <?= number_format($totalRows, 0, ',', '.') ?> Apps</span>
-    </form>
+    <!-- Filter Formular -->
+    <div class="card mb-4">
+        <div class="card-header fw-bold">Filter & Suche</div>
+        <div class="card-body">
+            <form method="GET" class="row g-3">
+                <div class="col-md-3">
+                    <label class="form-label">Kategorie</label>
+                    <select name="category" class="form-select">
+                        <option value="">Alle Kategorien</option>
+                        <?php foreach ($categories as $cat): ?>
+                            <option value="<?= htmlspecialchars($cat) ?>" <?= $selectedCategory === $cat ? 'selected' : '' ?>><?= htmlspecialchars($cat) ?></option>
+                        <?php endforeach; ?>
+                    </select>
+                </div>
+                <div class="col-md-3">
+                    <label class="form-label">Technologie</label>
+                    <select name="technology" class="form-select">
+                        <option value="">Alle Technologien</option>
+                        <?php foreach ($technologies as $tech): ?>
+                            <option value="<?= htmlspecialchars($tech) ?>" <?= $selectedTech === $tech ? 'selected' : '' ?>><?= htmlspecialchars($tech) ?></option>
+                        <?php endforeach; ?>
+                    </select>
+                </div>
+                <div class="col-md-2">
+                    <label class="form-label">Risiko (1-5)</label>
+                    <select name="risk" class="form-select">
+                        <option value="">Alle</option>
+                        <?php for ($r = 1; $r <= 5; $r++): ?>
+                            <option value="<?= $r ?>" <?= $selectedRisk === (string)$r ? 'selected' : '' ?>><?= $r ?></option>
+                        <?php endfor; ?>
+                    </select>
+                </div>
+                <div class="col-md-2">
+                    <label class="form-label">SaaS App</label>
+                    <select name="is_saas" class="form-select">
+                        <option value="">Alle</option>
+                        <option value="1" <?= $selectedSaas === '1' ? 'selected' : '' ?>>Ja</option>
+                        <option value="0" <?= $selectedSaas === '0' ? 'selected' : '' ?>>Nein</option>
+                    </select>
+                </div>
+                <div class="col-md-2 d-flex align-items-end">
+                    <button type="submit" class="btn btn-primary w-100 me-2">Filtern</button>
+                    <a href="dashboard.php" class="btn btn-outline-secondary">Reset</a>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- Ergebnistabelle -->
+    <div class="card">
+        <div class="card-body">
+            <table id="appidTable" class="table table-striped table-hover">
+                <thead>
+                <tr>
+                    <th>Name</th>
+                    <th>Kategorie</th>
+                    <th>Subkategorie</th>
+                    <th>Technologie</th>
+                    <th>Risiko</th>
+                    <th>SaaS</th>
+                    <th>Standard Ports</th>
+                    <th>Aktionen</th>
+                </tr>
+                </thead>
+                <tbody>
+                <?php foreach ($appids as $row): ?>
+                    <tr>
+                        <td class="fw-bold"><?= htmlspecialchars($row['name']) ?></td>
+                        <td><?= htmlspecialchars($row['category']) ?></td>
+                        <td><?= htmlspecialchars($row['subcategory']) ?></td>
+                        <td><?= htmlspecialchars($row['technology']) ?></td>
+                        <td>
+                                <span class="badge bg-<?= $row['risk'] >= 4 ? 'danger' : ($row['risk'] >= 3 ? 'warning' : 'success') ?>">
+                                    Risiko <?= $row['risk'] ?>
+                                </span>
+                        </td>
+                        <td><?= $row['is_saas'] ? '<span class="badge bg-info">SaaS</span>' : '-' ?></td>
+                        <td>
+                            <?php
+                            $ports = json_decode($row['default_ports'] ?? '[]', true);
+                            echo htmlspecialchars(implode(', ', $ports));
+                            ?>
+                        </td>
+                        <td>
+                            <button class="btn btn-sm btn-outline-primary view-xml" data-xml="<?= htmlspecialchars($row['xml_content']) ?>">XML anzeigen</button>
+                        </td>
+                    </tr>
+                <?php endforeach; ?>
+                </tbody>
+            </table>
+        </div>
+    </div>
 </div>
 
-<table>
-    <thead>
-    <tr>
-        <th>ID</th>
-        <th>Name</th>
-        <th>Kategorie</th>
-        <th>Subkategorie</th>
-        <th>Technologie</th>
-        <th>Risiko</th>
-        <th>Letztes Update</th>
-        <th>Aktion</th>
-    </tr>
-    </thead>
-    <tbody>
-    <?php foreach ($apps as $app): ?>
-        <tr>
-            <td><?= $app['id'] ?></td>
-            <td><strong><?= htmlspecialchars($app['name']) ?></strong></td>
-            <td><?= htmlspecialchars($app['category'] ?? '-') ?></td>
-            <td><?= htmlspecialchars($app['subcategory'] ?? '-') ?></td>
-            <td><?= htmlspecialchars($app['technology'] ?? '-') ?></td>
-            <td>
-                    <span class="badge risk-<?= $app['risk'] ?? 3 ?>">
-                        Risk <?= $app['risk'] ?? '?' ?>
-                    </span>
-            </td>
-            <td><?= $app['last_update_date'] ?? '-' ?></td>
-            <td>
-                <a href="index.php?cmd=%3Cshow%3E%3Ccloud-appid%3E%3Capplication%3E<?= urlencode($app['name']) ?>%3C/application%3E%3C/cloud-appid%3E%3C/show%3E" target="_blank">XML API</a>
-            </td>
-        </tr>
-    <?php endforeach; ?>
-    <?php if (empty($apps)): ?>
-        <tr><td colspan="8">Keine Apps gefunden.</td></tr>
-    <?php endif; ?>
-    </tbody>
-</table>
-
-<!-- Pagination -->
-<div class="pagination">
-    <?php if ($page > 1): ?>
-        <a href="?q=<?= urlencode($search) ?>&page=<?= $page - 1 ?>">&laquo; Zurück</a>
-    <?php endif; ?>
-
-    <span>Seite <?= $page ?> von <?= $totalPages ?></span>
-
-    <?php if ($page < $totalPages): ?>
-        <a href="?q=<?= urlencode($search) ?>&page=<?= $page + 1 ?>">Weiter &raquo;</a>
-    <?php endif; ?>
+<!-- Modal zur XML-Anzeige -->
+<div class="modal fade" id="xmlModal" tabindex="-1">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">XML Details</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+            </div>
+            <div class="modal-body">
+                <pre><code id="xmlContent"></code></pre>
+            </div>
+        </div>
+    </div>
 </div>
 
+<script src="https://code.jquery.com/jquery-3.7.0.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+<script src="https://cdn.datatables.net/1.13.6/js/jquery.dataTables.min.min.js"></script>
+<script src="https://cdn.datatables.net/1.13.6/js/dataTables.bootstrap5.min.js"></script>
+<script>
+    $(document).ready(function() {
+        $('#appidTable').DataTable({
+            "pageLength": 25,
+            "language": {
+                "search": "Schnellsuche in Tabelle:"
+            }
+        });
+
+        const xmlModal = new bootstrap.Modal(document.getElementById('xmlModal'));
+        $('.view-xml').on('click', function() {
+            $('#xmlContent').text($(this).data('xml'));
+            xmlModal.show();
+        });
+    });
+</script>
 </body>
 </html>
