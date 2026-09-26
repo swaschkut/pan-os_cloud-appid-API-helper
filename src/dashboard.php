@@ -142,8 +142,8 @@ $appids = $stmt->fetchAll(PDO::FETCH_ASSOC);
                             ?>
                         </td>
                         <td>
-                            <button class="btn btn-sm btn-outline-primary view-xml"
-                                    data-xml="<?= base64_encode($row['xml_content'] ?? '') ?>">
+                            <button class="btn btn-sm btn-outline-primary view-xml-api"
+                                    data-appname="<?= htmlspecialchars($row['name'] ?? '', ENT_QUOTES) ?>">
                                 XML anzeigen
                             </button>
                         </td>
@@ -176,7 +176,7 @@ $appids = $stmt->fetchAll(PDO::FETCH_ASSOC);
 <script src="https://cdn.datatables.net/1.13.6/js/dataTables.bootstrap5.min.js"></script>
 <script>
     $(document).ready(function() {
-        // DataTables Initialisierung
+        // DataTables-Initialisierung
         const table = $('#appidTable').DataTable({
             "pageLength": 25,
             "language": {
@@ -186,27 +186,30 @@ $appids = $stmt->fetchAll(PDO::FETCH_ASSOC);
 
         const xmlModal = new bootstrap.Modal(document.getElementById('xmlModal'));
 
-        // Event-Delegation über die Tabelle (funktioniert auch nach Sortierung/Seitenwechsel)
-        $('#appidTable').on('click', '.view-xml', function() {
-            const b64Data = $(this).data('xml');
+        // Klick-Event für den XML-Button
+        $('#appidTable').on('click', '.view-xml-api', function() {
+            const appName = $(this).data('appname');
 
-            if (!b64Data) {
-                $('#xmlContent').text('Kein XML-Inhalt vorhanden.');
-            } else {
-                try {
-                    // Base64 sicher zu UTF-8 String dekodieren
-                    const decodedXml = decodeURIComponent(atob(b64Data).split('').map(function(c) {
-                        return '%' + ('00' + c.charCodeAt(0).toString(16)).slice(-2);
-                    }).join(''));
+            // Genau der Befehl, den deine index.php erwartet
+            const cmd = `<show><cloud-appid><application>${appName}</application></cloud-appid></show>`;
 
-                    $('#xmlContent').text(decodedXml);
-                } catch (e) {
-                    // Fallback für einfache Strings
-                    $('#xmlContent').text(atob(b64Data));
-                }
-            }
-
+            // Platzhalter anzeigen, während die API antwortet
+            $('#xmlContent').text('Lade XML über API...');
             xmlModal.show();
+
+            // API-Aufruf an deine index.php
+            $.ajax({
+                url: 'index.php',
+                type: 'GET',
+                data: { cmd: cmd },
+                dataType: 'text',
+                success: function(response) {
+                    $('#xmlContent').text(response);
+                },
+                error: function() {
+                    $('#xmlContent').text('Fehler: XML konnte nicht über die API geladen werden.');
+                }
+            });
         });
     });
 </script>

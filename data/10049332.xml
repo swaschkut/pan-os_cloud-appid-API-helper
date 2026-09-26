@@ -1,0 +1,53 @@
+<response status="success"><result><entry id="10049332" name="veritext" minver="10.1.0" ori_country="USA" ori_language="English">
+    <category>saas</category>
+    <new-category>saas</new-category>
+    <subcategory>vertical-industry</subcategory>
+    <technology>browser-based</technology>
+    <description>Veritext is the leader in deposition and litigation support solutions with a proven track record of industry excellence. For law firms and corporations, we provide coverage across all of North America, state-of-the-art conference rooms, facilitate the connection with highly skilled reporters and videographers, advanced technology, remote services, unparalleled client service, and on-time delivery. Our solutions utilize the latest easy-to-use technologies to streamline the deposition process, and reliably handle the most complex cases. All of this combined with unmatched data security (including HIPAA and PII compliance) ensure that Veritext clients have the best tools available and the confidence of working with the market leader.</description>
+    <appident>yes</appident>
+    <vulnerability-ident>yes</vulnerability-ident>
+    <evasive-behavior>no</evasive-behavior>
+    <consume-big-bandwidth>no</consume-big-bandwidth>
+    <used-by-malware>no</used-by-malware>
+    <able-to-transfer-file>no</able-to-transfer-file>
+    <has-known-vulnerability>yes</has-known-vulnerability>
+    <tunnel-other-application>no</tunnel-other-application>
+    <prone-to-misuse>no</prone-to-misuse>
+    <pervasive-use>no</pervasive-use>
+    <per-direction-regex>no</per-direction-regex>
+    <deny-action>drop-reset</deny-action>
+    <cachable>no</cachable>
+    <source-type>se-saas</source-type>
+    <cloud-move-to-predefined>no</cloud-move-to-predefined>
+    <is-saas>yes</is-saas>
+    <saas minver="8.1.0">
+        <certifications>
+            <is-hipaa>yes</is-hipaa>
+            <is-soc2>yes</is-soc2>
+        </certifications>
+        <is-data-breaches>no</is-data-breaches>
+        <is-ip-based-restrictions>no</is-ip-based-restrictions>
+        <is-poor-financial-viability>no</is-poor-financial-viability>
+        <is-poor-terms-of-service>no</is-poor-terms-of-service>
+    </saas>
+    <tag minver="9.1.0">
+        <member>[App-ID Cloud Engine]</member>
+        <member>[Web App]</member>
+    </tag>
+    <references>
+        <entry name="veritext">
+            <link>https://www.veritext.com/</link>
+        </entry>
+    </references>
+    <default>
+        <port>
+            <member>tcp/443</member>
+        </port>
+    </default>
+    <use-applications>
+        <member>ssl</member>
+    </use-applications>
+    <risk>3</risk>
+    <create-date>2022-07-20</create-date>
+    <last-update-date>2024-08-07</last-update-date>
+</entry></result></response>
