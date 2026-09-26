@@ -1,0 +1,37 @@
+<response status="success"><result><entry id="10099798" name="test-minimal-app" minver="7.1.0" ori_country="USA" ori_language="English">
+    <able-to-transfer-file>no</able-to-transfer-file>
+    <appident>yes</appident>
+    <cachable>no</cachable>
+    <category>general-internet</category>
+    <cloud-move-to-predefined>no</cloud-move-to-predefined>
+    <consume-big-bandwidth>no</consume-big-bandwidth>
+    <deny-action>drop-reset</deny-action>
+    <description>Minimal test application with only required fields for validation</description>
+    <evasive-behavior>no</evasive-behavior>
+    <has-known-vulnerability>yes</has-known-vulnerability>
+    <new-category>general-internet</new-category>
+    <per-direction-regex>no</per-direction-regex>
+    <pervasive-use>no</pervasive-use>
+    <prone-to-misuse>no</prone-to-misuse>
+    <source-type>saas</source-type>
+    <subcategory>internet-utility</subcategory>
+    <technology>client-server</technology>
+    <tunnel-other-application>no</tunnel-other-application>
+    <used-by-malware>no</used-by-malware>
+    <vulnerability-ident>yes</vulnerability-ident>
+    <is-saas>yes</is-saas>
+    <saas minver="8.1.0">
+        <is-data-breaches>no</is-data-breaches>
+        <is-ip-based-restrictions>no</is-ip-based-restrictions>
+        <is-poor-financial-viability>no</is-poor-financial-viability>
+        <is-poor-terms-of-service>no</is-poor-terms-of-service>
+    </saas>
+    <references>
+        <entry name="vendor">
+            <link>https://example.com/test-minimal-app</link>
+        </entry>
+    </references>
+    <risk>2</risk>
+    <create-date>2026-05-15</create-date>
+    <last-update-date>2026-05-15</last-update-date>
+</entry></result></response>
