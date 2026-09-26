@@ -1,10 +1,8 @@
 <?php
 ini_set('memory_limit', '-1');
 
-$dbPath     = __DIR__ . '/cloud_appid.db';
-$schemaPath = __DIR__ . '/schema.sql';
-$txtFile    = __DIR__ . '/cloud-appid.txt';
-$xmlDir     = __DIR__ . '/data';
+$dbPath = __DIR__ . '/cloud_appid.db';
+$schemaPath = __DIR__ . '/schema.sql';$xmlDir = __DIR__ . '/data';
 
 // 1. Verbindung herstellen & Schema aus schema.sql laden
 $pdo = new PDO("sqlite:$dbPath");
@@ -17,34 +15,9 @@ if (!file_exists($schemaPath)) {
 $schemaSql = file_get_contents($schemaPath);
 $pdo->exec($schemaSql);
 
-// 2. Metadaten & IDs aus cloud-appid.txt vorab einlesen
-$metaData = [];
-if (file_exists($txtFile)) {
-    $handle = fopen($txtFile, 'r');
-    if ($handle) {
-        while (($line = fgets($handle)) !== false) {
-            $line = trim($line);
-            if (empty($line) || strpos($line, 'Id') === 0 || strpos($line, '---') === 0) {
-                continue;
-            }
-            $cols = preg_split('/\s{2,}/', $line);
-            if (count($cols) >= 5) {
-                $metaData[trim($cols[1])] = [
-                    'id'             => (int)trim($cols[0]),
-                    'receiving_time' => trim($cols[2]),
-                    'task_id'        => trim($cols[3]),
-                    'xml_hashcode'   => trim($cols[4])
-                ];
-            }
-        }
-        fclose($handle);
-    }
-}
-
-// 3. XML-Dateien suchen
+// 2. XML-Dateien suchen
 $files = glob("$xmlDir/*.xml");
-if (empty($files) && file_exists(__DIR__ . '/*.xml')) {
-    $files = glob(__DIR__ . '/*.xml');
+if (empty($files) && file_exists(__DIR__ . '/*.xml')) {$files = glob(__DIR__ . '/*.xml');
 }
 
 echo "Gefundene XML-Dateien: " . count($files) . "\n";
@@ -65,24 +38,23 @@ function getXmlBool($node, $path = null) {
     return ($val === 'yes' || $val === 'true' || $val === '1') ? 1 : 0;
 }
 
-function getXmlArrayJson($node, $xpathExpr) {
+function getXmlArrayJson($node,$xpathExpr) {
     if (!$node) return json_encode([]);
-    $res = $node->xpath($xpathExpr);
-    $list = [];
+    $res =$node->xpath($xpathExpr);$list = [];
     if (!empty($res)) {
-        foreach ($res as $item) {
+        foreach ($res as$item) {
             $val = trim((string)$item);
             if ($val !== '') {
-                $list[] = $val;
+                $list[] =$val;
             }
         }
     }
     return json_encode($list, JSON_UNESCAPED_SLASHES | JSON_UNESCAPED_UNICODE);
 }
 
-// Prepared Statement
+// Prepared Statement basierend auf schema.sql
 $sql = "INSERT OR REPLACE INTO cloud_appids (
-    id, name, receiving_time, task_id, xml_hashcode,
+    name, receiving_time, task_id, xml_hashcode,
     minver, ori_country, ori_language,
     ottawa_name, category, new_category, subcategory, technology, description,
     deny_action, source_type, risk, create_date, last_update_date, application_container,
@@ -93,7 +65,7 @@ $sql = "INSERT OR REPLACE INTO cloud_appids (
     tags, references_json, default_ports, use_applications, tunnel_applications,
     xml_content
 ) VALUES (
-    :id, :name, :receiving_time, :task_id, :xml_hashcode,
+    :name, :receiving_time, :task_id, :xml_hashcode,
     :minver, :ori_country, :ori_language,
     :ottawa_name, :category, :new_category, :subcategory, :technology, :description,
     :deny_action, :source_type, :risk, :create_date, :last_update_date, :application_container,
@@ -105,11 +77,10 @@ $sql = "INSERT OR REPLACE INTO cloud_appids (
     :xml_content
 )";
 
-$stmt = $pdo->prepare($sql);
-$pdo->beginTransaction();
+$stmt =$pdo->prepare($sql);$pdo->beginTransaction();
 
 $imported = 0;
-foreach ($files as $file) {
+foreach ($files as$file) {
     $rawXml = file_get_contents($file);
     if (empty($rawXml)) continue;
 
@@ -117,39 +88,32 @@ foreach ($files as $file) {
     $xml = simplexml_load_string($rawXml);
     if ($xml === false) continue;
 
-    $entries = $xml->xpath('//result/entry') ?: $xml->xpath('//entry');
+    // Directen <entry>-Knoten aus /response/result/entry extrahieren
+    $entries = $xml->xpath('//result/entry') ?:$xml->xpath('//entry');
     if (empty($entries)) continue;
-    $entry = $entries[0];
+    $entry =$entries[0];
 
-    // App-Name ermitteln
+    // Name direkt aus Attribut `name` auslesen (z.B. "oracle-analytics-clo-base")
     $name = (string)($entry['name'] ?? basename($file, '.xml'));
 
-    // Metadaten & ID aus cloud-appid.txt zuweisen
-    $meta = $metaData[$name] ?? [];
-    $id = $meta['id'] ?? null;
-    $receivingTime = $meta['receiving_time'] ?? '';
-    $taskId = $meta['task_id'] ?? '';
-    $xmlHashcode = $meta['xml_hashcode'] ?? '';
-
-    // References extrahieren
+    // References extrahieren aus <references><entry name="...">
     $refs = [];
     if (isset($entry->references->entry)) {
-        foreach ($entry->references->entry as $refEntry) {
-            $refs[] = [
-                'name' => (string)($refEntry['name'] ?? ''),
-                'link' => (string)($refEntry->link ?? '')
-            ];
+        foreach ($entry->references->entry as $refEntry) {$refs[] = [
+            'name' => (string)($refEntry['name'] ?? ''),
+            'link' => (string)($refEntry->link ?? '')
+        ];
         }
     }
 
-    $saasNode = $entry->saas ?? null;
+    // SaaS-Knoten als Referenz für SaaS-Risiken
+    $saasNode =$entry->saas ?? null;
 
     $stmt->execute([
-        ':id' => $id,
         ':name' => $name,
-        ':receiving_time' => $receivingTime,
-        ':task_id' => $taskId,
-        ':xml_hashcode' => $xmlHashcode,
+        ':receiving_time' => (string)($xml->receiving_time ?? ''),
+        ':task_id' => (string)($xml->task_id ?? ''),
+        ':xml_hashcode' => (string)($xml->xml_hashcode ?? ''),
 
         ':minver' => (string)($entry['minver'] ?? ''),
         ':ori_country' => (string)($entry['ori_country'] ?? ''),
@@ -168,6 +132,7 @@ foreach ($files as $file) {
         ':last_update_date' => (string)($entry->{'last-update-date'} ?? ''),
         ':application_container' => (string)($entry->{'application-container'} ?? ''),
 
+        // Bools direct am Entry Node
         ':appident' => getXmlBool($entry->appident ?? null),
         ':vulnerability_ident' => getXmlBool($entry->{'vulnerability-ident'} ?? null),
         ':evasive_behavior' => getXmlBool($entry->{'evasive-behavior'} ?? null),
@@ -183,11 +148,13 @@ foreach ($files as $file) {
         ':cloud_move_to_predefined' => getXmlBool($entry->{'cloud-move-to-predefined'} ?? null),
         ':is_saas' => getXmlBool($entry->{'is-saas'} ?? null),
 
+        // SaaS Subknoten (<saas><is-data-breaches>...</saas>)
         ':saas_is_data_breaches' => getXmlBool($saasNode->{'is-data-breaches'} ?? null),
         ':saas_is_ip_based_restrictions' => getXmlBool($saasNode->{'is-ip-based-restrictions'} ?? null),
         ':saas_is_poor_financial_viability' => getXmlBool($saasNode->{'is-poor-financial-viability'} ?? null),
         ':saas_is_poor_terms_of_service' => getXmlBool($saasNode->{'is-poor-terms-of-service'} ?? null),
 
+        // JSON Arrays
         ':tags' => getXmlArrayJson($entry, './tag/member'),
         ':references_json' => json_encode($refs, JSON_UNESCAPED_SLASHES | JSON_UNESCAPED_UNICODE),
         ':default_ports' => getXmlArrayJson($entry, './default/port/member'),
@@ -201,4 +168,4 @@ foreach ($files as $file) {
 }
 
 $pdo->commit();
-echo "Import erfolgreich abgeschlossen! $imported Einträge mit korrekten Objekt-IDs in 'cloud_appids' gespeichert.\n";
+echo "Import erfolgreich abgeschlossen! $imported Einträge in 'cloud_appids' gespeichert.\n";
