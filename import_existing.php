@@ -2,8 +2,7 @@
 ini_set('memory_limit', '-1');
 
 $dbPath = __DIR__ . '/cloud_appid.db';
-$schemaPath = __DIR__ . '/schema.sql';
-$xmlDir = __DIR__ . '/data'; // Passe den Pfad an, falls deine XMLs woanders liegen (z.B. __DIR__)
+$schemaPath = __DIR__ . '/schema.sql';$xmlDir = __DIR__ . '/data';
 
 // 1. Verbindung herstellen & Schema aus schema.sql laden
 $pdo = new PDO("sqlite:$dbPath");
@@ -18,8 +17,7 @@ $pdo->exec($schemaSql);
 
 // 2. XML-Dateien suchen
 $files = glob("$xmlDir/*.xml");
-if (empty($files) && file_exists(__DIR__ . '/*.xml')) {
-    $files = glob(__DIR__ . '/*.xml');
+if (empty($files) && file_exists(__DIR__ . '/*.xml')) {$files = glob(__DIR__ . '/*.xml');
 }
 
 echo "Gefundene XML-Dateien: " . count($files) . "\n";
@@ -29,24 +27,25 @@ if (empty($files)) {
 }
 
 // Helper-Funktionen für XML Parsing
-function getXmlVal($xml, $path, $default = null) {
-    $res = $xml->xpath($path);
-    return (!empty($res) && isset($res[0])) ? (string)$res[0] : $default;
-}
-
-function getXmlBool($xml, $path) {
-    $val = strtolower(trim((string)getXmlVal($xml, $path, '')));
+function getXmlBool($node, $path = null) {
+    if (!$node) return 0;
+    if ($path !== null) {
+        $res = $node->xpath($path);
+        $val = (!empty($res) && isset($res[0])) ? strtolower(trim((string)$res[0])) : '';
+    } else {
+        $val = strtolower(trim((string)$node));
+    }
     return ($val === 'yes' || $val === 'true' || $val === '1') ? 1 : 0;
 }
 
-function getXmlArrayJson($xml, $path) {
-    $res = $xml->xpath($path);
-    $list = [];
+function getXmlArrayJson($node,$xpathExpr) {
+    if (!$node) return json_encode([]);
+    $res =$node->xpath($xpathExpr);$list = [];
     if (!empty($res)) {
-        foreach ($res as $item) {
+        foreach ($res as$item) {
             $val = trim((string)$item);
             if ($val !== '') {
-                $list[] = $val;
+                $list[] =$val;
             }
         }
     }
@@ -78,11 +77,10 @@ $sql = "INSERT OR REPLACE INTO cloud_appids (
     :xml_content
 )";
 
-$stmt = $pdo->prepare($sql);
-$pdo->beginTransaction();
+$stmt =$pdo->prepare($sql);$pdo->beginTransaction();
 
 $imported = 0;
-foreach ($files as $file) {
+foreach ($files as$file) {
     $rawXml = file_get_contents($file);
     if (empty($rawXml)) continue;
 
@@ -90,64 +88,73 @@ foreach ($files as $file) {
     $xml = simplexml_load_string($rawXml);
     if ($xml === false) continue;
 
-    // Entry Tag ermitteln
-    $entry = $xml->entry ?? $xml;
+    // Directen <entry>-Knoten aus /response/result/entry extrahieren
+    $entries = $xml->xpath('//result/entry') ?:$xml->xpath('//entry');
+    if (empty($entries)) continue;
+    $entry =$entries[0];
+
+    // Name direkt aus Attribut `name` auslesen (z.B. "oracle-analytics-clo-base")
     $name = (string)($entry['name'] ?? basename($file, '.xml'));
 
-    // References JSON verarbeiten
+    // References extrahieren aus <references><entry name="...">
     $refs = [];
-    if (isset($entry->reference->member)) {
-        foreach ($entry->reference->member as $ref) {
-            $refs[] = [
-                'name' => (string)$ref,
-                'link' => (string)($ref['link'] ?? '')
-            ];
+    if (isset($entry->references->entry)) {
+        foreach ($entry->references->entry as $refEntry) {$refs[] = [
+            'name' => (string)($refEntry['name'] ?? ''),
+            'link' => (string)($refEntry->link ?? '')
+        ];
         }
     }
 
+    // SaaS-Knoten als Referenz für SaaS-Risiken
+    $saasNode =$entry->saas ?? null;
+
     $stmt->execute([
         ':name' => $name,
-        ':receiving_time' => getXmlVal($xml, '//receiving_time'),
-        ':task_id' => getXmlVal($xml, '//task_id'),
-        ':xml_hashcode' => getXmlVal($xml, '//xml_hashcode'),
+        ':receiving_time' => (string)($xml->receiving_time ?? ''),
+        ':task_id' => (string)($xml->task_id ?? ''),
+        ':xml_hashcode' => (string)($xml->xml_hashcode ?? ''),
 
         ':minver' => (string)($entry['minver'] ?? ''),
         ':ori_country' => (string)($entry['ori_country'] ?? ''),
         ':ori_language' => (string)($entry['ori_language'] ?? ''),
 
-        ':ottawa_name' => getXmlVal($entry, './ottawa-name'),
-        ':category' => getXmlVal($entry, './category'),
-        ':new_category' => getXmlVal($entry, './new-category'),
-        ':subcategory' => getXmlVal($entry, './subcategory'),
-        ':technology' => getXmlVal($entry, './technology'),
-        ':description' => getXmlVal($entry, './description'),
-        ':deny_action' => getXmlVal($entry, './deny-action'),
-        ':source_type' => getXmlVal($entry, './source-type'),
-        ':risk' => (int)getXmlVal($entry, './risk', 0),
-        ':create_date' => getXmlVal($entry, './create-date'),
-        ':last_update_date' => getXmlVal($entry, './last-update-date'),
-        ':application_container' => getXmlVal($entry, './application-container'),
+        ':ottawa_name' => (string)($entry->{'ottawa-name'} ?? ''),
+        ':category' => (string)($entry->category ?? ''),
+        ':new_category' => (string)($entry->{'new-category'} ?? ''),
+        ':subcategory' => (string)($entry->subcategory ?? ''),
+        ':technology' => (string)($entry->technology ?? ''),
+        ':description' => (string)($entry->description ?? ''),
+        ':deny_action' => (string)($entry->{'deny-action'} ?? ''),
+        ':source_type' => (string)($entry->{'source-type'} ?? ''),
+        ':risk' => (int)($entry->risk ?? 0),
+        ':create_date' => (string)($entry->{'create-date'} ?? ''),
+        ':last_update_date' => (string)($entry->{'last-update-date'} ?? ''),
+        ':application_container' => (string)($entry->{'application-container'} ?? ''),
 
-        ':appident' => getXmlBool($entry, './appident'),
-        ':vulnerability_ident' => getXmlBool($entry, './vulnerability-ident'),
-        ':evasive_behavior' => getXmlBool($entry, './evasive-behavior'),
-        ':consume_big_bandwidth' => getXmlBool($entry, './consume-big-bandwidth'),
-        ':used_by_malware' => getXmlBool($entry, './used-by-malware'),
-        ':able_to_transfer_file' => getXmlBool($entry, './able-to-transfer-file'),
-        ':has_known_vulnerability' => getXmlBool($entry, './has-known-vulnerability'),
-        ':tunnel_other_application' => getXmlBool($entry, './tunnel-other-application'),
-        ':prone_to_misuse' => getXmlBool($entry, './prone-to-misuse'),
-        ':pervasive_use' => getXmlBool($entry, './pervasive-use'),
-        ':per_direction_regex' => getXmlBool($entry, './per-direction-regex'),
-        ':cachable' => getXmlBool($entry, './cachable'),
-        ':cloud_move_to_predefined' => getXmlBool($entry, './cloud-move-to-predefined'),
-        ':is_saas' => getXmlBool($entry, './is-saas'),
+        // Bools direct am Entry Node
+        ':appident' => getXmlBool($entry->appident ?? null),
+        ':vulnerability_ident' => getXmlBool($entry->{'vulnerability-ident'} ?? null),
+        ':evasive_behavior' => getXmlBool($entry->{'evasive-behavior'} ?? null),
+        ':consume_big_bandwidth' => getXmlBool($entry->{'consume-big-bandwidth'} ?? null),
+        ':used_by_malware' => getXmlBool($entry->{'used-by-malware'} ?? null),
+        ':able_to_transfer_file' => getXmlBool($entry->{'able-to-transfer-file'} ?? null),
+        ':has_known_vulnerability' => getXmlBool($entry->{'has-known-vulnerability'} ?? null),
+        ':tunnel_other_application' => getXmlBool($entry->{'tunnel-other-application'} ?? null),
+        ':prone_to_misuse' => getXmlBool($entry->{'prone-to-misuse'} ?? null),
+        ':pervasive_use' => getXmlBool($entry->{'pervasive-use'} ?? null),
+        ':per_direction_regex' => getXmlBool($entry->{'per-direction-regex'} ?? null),
+        ':cachable' => getXmlBool($entry->cachable ?? null),
+        ':cloud_move_to_predefined' => getXmlBool($entry->{'cloud-move-to-predefined'} ?? null),
+        ':is_saas' => getXmlBool($entry->{'is-saas'} ?? null),
 
-        ':saas_is_data_breaches' => getXmlBool($entry, './saas-risk/data-breaches'),
-        ':saas_is_ip_based_restrictions' => getXmlBool($entry, './saas-risk/ip-based-restrictions'),
-        ':saas_is_poor_financial_viability' => getXmlBool($entry, './saas-risk/poor-financial-viability'),
-        ':saas_is_poor_terms_of_service' => getXmlBool($entry, './saas-risk/poor-terms-of-service'),
+        // SaaS Subknoten (<saas><is-data-breaches>...</saas>)
+        ':saas_is_data_breaches' => getXmlBool($saasNode->{'is-data-breaches'} ?? null),
+        ':saas_is_ip_based_restrictions' => getXmlBool($saasNode->{'is-ip-based-restrictions'} ?? null),
+        ':saas_is_poor_financial_viability' => getXmlBool($saasNode->{'is-poor-financial-viability'} ?? null),
+        ':saas_is_poor_terms_of_service' => getXmlBool($saasNode->{'is-poor-terms-of-service'} ?? null),
 
+        // JSON Arrays
         ':tags' => getXmlArrayJson($entry, './tag/member'),
         ':references_json' => json_encode($refs, JSON_UNESCAPED_SLASHES | JSON_UNESCAPED_UNICODE),
         ':default_ports' => getXmlArrayJson($entry, './default/port/member'),

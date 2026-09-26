@@ -20,7 +20,7 @@ $supportedArguments['debugapi'] = Array('niceName' => 'DebugAPI', 'shortHelp' =>
 $supportedArguments['help'] = Array('niceName' => 'help', 'shortHelp' => 'this message');
 $supportedArguments['folder'] = Array('niceName' => 'folder', 'shortHelp' => 'specify the folder where offline files should be saved');
 $supportedArguments['force'] = Array('niceName' => 'force', 'shortHelp' => 'force redownload even if file already exists');
-$supportedArguments['newfile'] = Array('niceName' => 'newfile', 'shortHelp' => 'path to the new cloud-appid index file (default: cloud-appid_neu.txt)');
+$supportedArguments['newfile'] = Array('niceName' => 'newfile', 'shortHelp' => 'path to the new cloud-appid index file (default: cloud-appid_new.txt)');
 
 $usageMsg = PH::boldText("USAGE: ") . "php " . basename(__FILE__) . " in=api://192.168.1.1 folder=data\n";
 
@@ -35,7 +35,7 @@ if ($util->configInput['type'] != 'api') {
 }
 
 $oldTxtFile   = 'cloud-appid.txt';
-$newTxtFile   = isset($util->arguments['newfile']) ? $util->arguments['newfile'] : 'cloud-appid_neu.txt';
+$newTxtFile   = isset($util->arguments['newfile']) ? $util->arguments['newfile'] : 'cloud-appid_new.txt';
 $outputFolder = isset($util->arguments['folder']) ? $util->arguments['folder'] : 'data';
 $forceDownload = isset($util->arguments['force']);
 
