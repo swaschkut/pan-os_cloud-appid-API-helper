@@ -1,12 +1,11 @@
 <?php
 ini_set('memory_limit', '-1');
 
-$dbPath     = __DIR__ . '/cloud_appid.db';
-$schemaPath = __DIR__ . '/schema.sql';
-$txtFile    = __DIR__ . '/cloud-appid.txt';
-$xmlDir     = __DIR__ . '/data';
+$dbPath        = __DIR__ . '/cloud_appid.db';
+$schemaPath    = __DIR__ . '/schema.sql';$txtFile       = __DIR__ . '/cloud-appid.txt';
+$xmlDir        = __DIR__ . '/data';$predefinedXml = __DIR__ . '/predefined.xml';
 
-// 1. Verbindung herstellen & Schema aus schema.sql laden
+// 1. Verbindung herstellen & Schema laden
 $pdo = new PDO("sqlite:$dbPath");
 $pdo->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
 
@@ -17,7 +16,7 @@ if (!file_exists($schemaPath)) {
 $schemaSql = file_get_contents($schemaPath);
 $pdo->exec($schemaSql);
 
-// 2. Metadaten & IDs aus cloud-appid.txt vorab einlesen
+// 2. Metadaten aus cloud-appid.txt als Fallback/Ergänzung einlesen
 $metaData = [];
 if (file_exists($txtFile)) {
     $handle = fopen($txtFile, 'r');
@@ -27,13 +26,11 @@ if (file_exists($txtFile)) {
             if (empty($line) || strpos($line, 'Id') === 0 || strpos($line, '---') === 0) {
                 continue;
             }
-            $cols = preg_split('/\s{2,}/', $line);
+            $cols = preg_split('/\s{2,}/',$line);
             if (count($cols) >= 5) {
                 $metaData[trim($cols[1])] = [
-                    'id'             => (int)trim($cols[0]),
-                    'receiving_time' => trim($cols[2]),
-                    'task_id'        => trim($cols[3]),
-                    'xml_hashcode'   => trim($cols[4])
+                    'id'             => (int)trim($cols[0]),                     'receiving_time' => trim($cols[2]),
+                    'task_id'        => trim($cols[3]),                     'xml_hashcode'   => trim($cols[4])
                 ];
             }
         }
@@ -41,23 +38,15 @@ if (file_exists($txtFile)) {
     }
 }
 
-// 3. XML-Dateien suchen
+// 3. Einzelne XML-Dateien suchen
 $files = glob("$xmlDir/*.xml");
-if (empty($files) && file_exists(__DIR__ . '/*.xml')) {
-    $files = glob(__DIR__ . '/*.xml');
-}
-
-echo "Gefundene XML-Dateien: " . count($files) . "\n";
-if (empty($files)) {
-    echo "Keine XML-Dateien zum Importieren gefunden.\n";
-    exit(0);
+if (empty($files) && file_exists(__DIR__ . '/*.xml')) {$files = glob(__DIR__ . '/*.xml');
 }
 
 // Helper-Funktionen für XML Parsing
-function getXmlBool($node, $path = null) {
+function getXmlBool($node,$path = null) {
     if (!$node) return 0;
-    if ($path !== null) {
-        $res = $node->xpath($path);
+    if ($path !== null) {$res = $node->xpath($path);
         $val = (!empty($res) && isset($res[0])) ? strtolower(trim((string)$res[0])) : '';
     } else {
         $val = strtolower(trim((string)$node));
@@ -65,15 +54,14 @@ function getXmlBool($node, $path = null) {
     return ($val === 'yes' || $val === 'true' || $val === '1') ? 1 : 0;
 }
 
-function getXmlArrayJson($node, $xpathExpr) {
+function getXmlArrayJson($node,$xpathExpr) {
     if (!$node) return json_encode([]);
-    $res = $node->xpath($xpathExpr);
-    $list = [];
+    $res =$node->xpath($xpathExpr);$list = [];
     if (!empty($res)) {
-        foreach ($res as $item) {
+        foreach ($res as$item) {
             $val = trim((string)$item);
             if ($val !== '') {
-                $list[] = $val;
+                $list[] =$val;
             }
         }
     }
@@ -105,44 +93,44 @@ $sql = "INSERT OR REPLACE INTO cloud_appids (
     :xml_content
 )";
 
-$stmt = $pdo->prepare($sql);
-$pdo->beginTransaction();
+$stmt =$pdo->prepare($sql);$pdo->beginTransaction();
 
 $imported = 0;
-foreach ($files as $file) {
-    $rawXml = file_get_contents($file);
-    if (empty($rawXml)) continue;
 
-    libxml_use_internal_errors(true);
-    $xml = simplexml_load_string($rawXml);
-    if ($xml === false) continue;
+// Zentrale Verarbeitungsfunktion für einen <entry>-Knoten
+function processEntryNode($entry,$stmt, &$metaData,$rawXml) {
+    $name = (string)($entry['name'] ?? '');
+    if (empty($name)) return false;
 
-    $entries = $xml->xpath('//result/entry') ?: $xml->xpath('//entry');
-    if (empty($entries)) continue;
-    $entry = $entries[0];
+    // 1. ID direkt aus dem XML-Attribut lesen (<entry id="120" ...>)
+    $id = null;
+    if (isset($entry['id']) && (string)$entry['id'] !== '') {
+        $id = (int)$entry['id'];
+    }
 
-    // App-Name ermitteln
-    $name = (string)($entry['name'] ?? basename($file, '.xml'));
-
-    // Metadaten & ID aus cloud-appid.txt zuweisen
+    // 2. Metadaten-Lookup aus cloud-appid.txt
     $meta = $metaData[$name] ?? [];
-    $id = $meta['id'] ?? null;
-    $receivingTime = $meta['receiving_time'] ?? '';
-    $taskId = $meta['task_id'] ?? '';
-    $xmlHashcode = $meta['xml_hashcode'] ?? '';
+
+    // Fallback: Falls keine ID im XML existierte, nimm die aus der Textdatei
+    if ($id === null && isset($meta['id'])) {
+        $id = (int)$meta['id'];
+    }
+
+    $receivingTime =$meta['receiving_time'] ?? '';
+    $taskId        =$meta['task_id'] ?? '';
+    $xmlHashcode   =$meta['xml_hashcode'] ?? '';
 
     // References extrahieren
     $refs = [];
     if (isset($entry->references->entry)) {
-        foreach ($entry->references->entry as $refEntry) {
-            $refs[] = [
-                'name' => (string)($refEntry['name'] ?? ''),
-                'link' => (string)($refEntry->link ?? '')
-            ];
+        foreach ($entry->references->entry as $refEntry) {$refs[] = [
+            'name' => (string)($refEntry['name'] ?? ''),
+            'link' => (string)($refEntry->link ?? '')
+        ];
         }
     }
 
-    $saasNode = $entry->saas ?? null;
+    $saasNode =$entry->saas ?? null;
 
     $stmt->execute([
         ':id' => $id,
@@ -197,8 +185,44 @@ foreach ($files as $file) {
         ':xml_content' => $rawXml
     ]);
 
-    $imported++;
+    return true;
+}
+
+// 4. Einzelne XML-Dateien importieren
+foreach ($files as$file) {
+    if (basename($file) === 'predefined.xml') continue;
+    $rawXml = file_get_contents($file);
+    if (empty($rawXml)) continue;
+
+    libxml_use_internal_errors(true);
+    $xml = simplexml_load_string($rawXml);
+    if ($xml === false) continue;
+
+    $entries = $xml->xpath('//result/entry') ?:$xml->xpath('//entry');
+    if (!empty($entries)) {
+        if (processEntryNode($entries[0], $stmt,$metaData, $rawXml)) {$imported++;
+        }
+    }
+}
+
+// 5. Sammeldatei `predefined.xml` importieren (/predefined/application/entry)
+if (file_exists($predefinedXml)) {
+    echo "Verarbeite predefined.xml...\n";
+    $rawXml = file_get_contents($predefinedXml);
+    if (!empty($rawXml)) {
+        libxml_use_internal_errors(true);
+        $xml = simplexml_load_string($rawXml);
+        if ($xml !== false) {
+            $predefinedEntries =$xml->xpath('/predefined/application/entry') ?: $xml->xpath('//application/entry');$predefinedCount = 0;
+            foreach ($predefinedEntries as$entry) {
+                if (processEntryNode($entry,$stmt, $metaData,$entry->asXML())) {
+                    $imported++;$predefinedCount++;
+                }
+            }
+            echo "Einträge aus predefined.xml importiert: $predefinedCount\n";
+        }
+    }
 }
 
 $pdo->commit();
-echo "Import erfolgreich abgeschlossen! $imported Einträge mit korrekten Objekt-IDs in 'cloud_appids' gespeichert.\n";
+echo "Import erfolgreich abgeschlossen! Insgesamt $imported Einträge in 'cloud_appids' gespeichert.\n";

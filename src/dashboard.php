@@ -15,6 +15,7 @@ $page = isset($_GET['page']) && is_numeric($_GET['page']) ? (int)$_GET['page'] :
 if ($page < 1) $page = 1;
 
 // 2. Process Filter Parameters
+$selectedType      = $_GET['app_type'] ?? '';
 $searchName        = trim($_GET['name'] ?? '');
 $selectedCat       = $_GET['category'] ?? '';
 $selectedNewCat    = $_GET['new_category'] ?? '';
@@ -32,12 +33,20 @@ $subcategories = $pdo->query("SELECT DISTINCT subcategory FROM cloud_appids WHER
 $technologies  = $pdo->query("SELECT DISTINCT technology FROM cloud_appids WHERE technology IS NOT NULL AND technology != '' ORDER BY technology")->fetchAll(PDO::FETCH_COLUMN);
 $containers    = $pdo->query("SELECT DISTINCT application_container FROM cloud_appids WHERE application_container IS NOT NULL AND application_container != '' ORDER BY application_container")->fetchAll(PDO::FETCH_COLUMN);
 
-// Total count of all objects in DB (without filters)
-$totalObjects = $pdo->query("SELECT COUNT(*) FROM cloud_appids")->fetchColumn();
+// Global Statistics (Overall Database Counts)
+$totalObjects     = (int)$pdo->query("SELECT COUNT(*) FROM cloud_appids")->fetchColumn();
+$totalCloudApps   = (int)$pdo->query("SELECT COUNT(*) FROM cloud_appids WHERE CAST(id AS INTEGER) >= 1000000")->fetchColumn();
+$totalPredefined  = (int)$pdo->query("SELECT COUNT(*) FROM cloud_appids WHERE CAST(id AS INTEGER) < 1000000")->fetchColumn();
 
 // 3. Build SQL WHERE Conditions
 $where = [];
 $params = [];
+
+if ($selectedType === 'cloud') {
+    $where[] = "CAST(id AS INTEGER) >= 1000000";
+} elseif ($selectedType === 'predefined') {
+    $where[] = "CAST(id AS INTEGER) < 1000000";
+}
 
 if ($searchName !== '') {
     $where[] = "LOWER(name) LIKE LOWER(:name)";
@@ -132,13 +141,32 @@ function buildUrl($newPage) {
 <body class="bg-light p-4">
 
 <div class="container-fluid">
-    <!-- Header with Counters -->
-    <div class="d-flex justify-content-between align-items-center mb-4">
+    <!-- Header with Statistics and Filter Counter -->
+    <div class="d-flex justify-content-between align-items-center mb-4 flex-wrap gap-2">
         <h1 class="h2 m-0">Cloud App-ID Dashboard</h1>
-        <div class="bg-white border rounded p-2 px-3 shadow-sm">
-            <span class="fw-bold">Filtered:</span>
-            <span class="badge bg-primary fs-6"><?= number_format($filteredObjects, 0, ',', '.') ?></span>
-            <span class="text-muted">out of <?= number_format($totalObjects, 0, ',', '.') ?> total items</span>
+
+        <div class="d-flex gap-2 align-items-center">
+            <!-- Overall Statistics Badges -->
+            <div class="bg-white border rounded p-2 px-3 shadow-sm d-flex gap-3 align-items-center text-small">
+                <div>
+                    <span class="text-muted d-block" style="font-size: 0.75rem;">TOTAL ITEMS</span>
+                    <span class="fw-bold fs-6 text-dark"><?= number_format($totalObjects, 0, ',', '.') ?></span>
+                </div>
+                <div class="border-start ps-3">
+                    <span class="text-muted d-block" style="font-size: 0.75rem;">CLOUD APP-ID (≥1M)</span>
+                    <span class="fw-bold fs-6 text-info"><?= number_format($totalCloudApps, 0, ',', '.') ?></span>
+                </div>
+                <div class="border-start ps-3">
+                    <span class="text-muted d-block" style="font-size: 0.75rem;">PREDEFINED (<1M)</span>
+                    <span class="fw-bold fs-6 text-secondary"><?= number_format($totalPredefined, 0, ',', '.') ?></span>
+                </div>
+            </div>
+
+            <!-- Active Filter Result Counter -->
+            <div class="bg-white border rounded p-2 px-3 shadow-sm">
+                <span class="fw-bold text-small">Filtered:</span>
+                <span class="badge bg-primary fs-6"><?= number_format($filteredObjects, 0, ',', '.') ?></span>
+            </div>
         </div>
     </div>
 
@@ -151,6 +179,7 @@ function buildUrl($newPage) {
                         <thead class="table-dark table-filter-header">
                         <!-- Row 1: Column Titles -->
                         <tr>
+                            <th>Type</th>
                             <th>Name</th>
                             <th>Category</th>
                             <th>New Category</th>
@@ -168,6 +197,14 @@ function buildUrl($newPage) {
                         </tr>
                         <!-- Row 2: Integrated Filter Controls -->
                         <tr class="bg-secondary bg-gradient">
+                            <!-- New Filter: App Type -->
+                            <td>
+                                <select name="app_type" class="form-select" onchange="this.form.submit()">
+                                    <option value="">All Types</option>
+                                    <option value="cloud" <?= $selectedType === 'cloud' ? 'selected' : '' ?>>Cloud App-ID</option>
+                                    <option value="predefined" <?= $selectedType === 'predefined' ? 'selected' : '' ?>>Predefined</option>
+                                </select>
+                            </td>
                             <td>
                                 <input type="text" name="name" class="form-control" placeholder="Search..." value="<?= htmlspecialchars($searchName) ?>">
                             </td>
@@ -244,11 +281,21 @@ function buildUrl($newPage) {
                         <tbody>
                         <?php if (empty($appids)): ?>
                             <tr>
-                                <td colspan="14" class="text-center py-4 text-muted">No records found matching your filter criteria.</td>
+                                <td colspan="15" class="text-center py-4 text-muted">No records found matching your filter criteria.</td>
                             </tr>
                         <?php else: ?>
                             <?php foreach ($appids as $row): ?>
+                                <?php $isCloud = ((int)$row['id'] >= 1000000); ?>
                                 <tr>
+                                    <!-- Type Badge Column -->
+                                    <td>
+                                        <?php if ($isCloud): ?>
+                                            <span class="badge bg-info text-dark" title="ID: <?= $row['id'] ?>">Cloud App-ID</span>
+                                        <?php else: ?>
+                                            <span class="badge bg-secondary" title="ID: <?= $row['id'] ?>">Predefined</span>
+                                        <?php endif; ?>
+                                    </td>
+
                                     <td class="fw-bold text-primary"><?= htmlspecialchars($row['name'] ?? '') ?></td>
                                     <td><?= htmlspecialchars($row['category'] ?? '-') ?></td>
                                     <td><?= htmlspecialchars($row['new_category'] ?? '-') ?></td>
