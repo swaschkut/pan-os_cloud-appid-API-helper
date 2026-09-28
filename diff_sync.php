@@ -39,9 +39,8 @@ $newTxtFile    = isset($util->arguments['newfile']) ? $util->arguments['newfile'
 $outputFolder  = isset($util->arguments['folder']) ? $util->arguments['folder'] : 'data';
 $forceDownload = isset($util->arguments['force']);
 
-// Pfade für predefined.xml (Quelle vs. Ziel)
+// Pfad der Quelldatei im Framework
 $sourcePredefinedXml = dirname(__FILE__) . "/../pan-os-php/lib/object-classes/predefined.xml";
-$targetPredefinedXml = $outputFolder . "/predefined.xml";
 
 if (!is_dir($outputFolder)) {
     if (!mkdir($outputFolder, 0777, true)) {
@@ -128,37 +127,41 @@ EXPECT;
 }
 
 // -------------------------------------------------------------------------
-// Helper: Check and Sync predefined.xml via File Copy
+// Helper: Copy predefined.xml directly via copy()
 // -------------------------------------------------------------------------
-function checkAndCopyPredefinedXml($sourcePath, $targetPath, $force = false) {
-    PH::print_stdout("Prüfe 'predefined.xml' über Datei-Kopie...");
+function checkAndCopyPredefinedXml($sourcePath, $targetFolder, $force = false) {
+    PH::print_stdout("Prüfe und kopiere 'predefined.xml'...");
 
+    $targetFile = $targetFolder . "/predefined.xml";
+
+    // 1. Prüfen, ob Quelldatei existiert
     if (!file_exists($sourcePath)) {
-        PH::print_stdout(" -> WARNUNG: Quell-Datei '$sourcePath' existiert nicht. Kopieren übersprungen.");
+        PH::print_stdout(" -> FEHLER: Quell-Datei '$sourcePath' existiert nicht. Kopieren abgebrochen.");
         return;
     }
 
+    // 2. MD5-Hash Vergleich
     $sourceHash = md5_file($sourcePath);
-    $targetHash = file_exists($targetPath) ? md5_file($targetPath) : null;
+    $targetHash = file_exists($targetFile) ? md5_file($targetFile) : null;
 
     if (!$force && $targetHash !== null && $sourceHash === $targetHash) {
-        PH::print_stdout(" -> 'predefined.xml' ist am Zielort bereits aktuell (MD5: $sourceHash).");
+        PH::print_stdout(" -> 'predefined.xml' im Zielordner '$targetFolder' ist bereits aktuell (MD5: $sourceHash).");
         return;
     }
 
-    PH::print_stdout(" -> Kopiere '$sourcePath' nach '$targetPath'...");
+    PH::print_stdout(" -> Kopiere '$sourcePath' nach '$targetFile'...");
 
-    if (copy($sourcePath, $targetPath)) {
-        PH::print_stdout(" -> SUCCESS: 'predefined.xml' erfolgreich kopiert! (MD5: $sourceHash)");
+    if (copy($sourcePath, $targetFile)) {
+        PH::print_stdout(" -> SUCCESS: 'predefined.xml' erfolgreich in '$targetFolder' kopiert! (MD5: $sourceHash)");
     } else {
-        PH::print_stdout(" -> FEHLER: Kopieren von 'predefined.xml' fehlgeschlagen.");
+        PH::print_stdout(" -> FEHLER: Kopieren von 'predefined.xml' nach '$targetFile' fehlgeschlagen. Bitte Schreibrechte prüfen.");
     }
 }
 
 // -------------------------------------------------------------------------
-// 1. Predefined XML Copy Check
+// 1. Predefined XML Copy Check (Rein lokaler Kopier-Schritt)
 // -------------------------------------------------------------------------
-checkAndCopyPredefinedXml($sourcePredefinedXml, $targetPredefinedXml, $forceDownload);
+checkAndCopyPredefinedXml($sourcePredefinedXml, $outputFolder, $forceDownload);
 
 // -------------------------------------------------------------------------
 // 2. Cloud App Version & Timestamp Validation
