@@ -2,8 +2,10 @@
 ini_set('memory_limit', '-1');
 
 $dbPath        = __DIR__ . '/cloud_appid.db';
-$schemaPath    = __DIR__ . '/schema.sql';$txtFile       = __DIR__ . '/cloud-appid.txt';
-$xmlDir        = __DIR__ . '/data';$predefinedXml = __DIR__ . '/predefined.xml';
+$schemaPath    = __DIR__ . '/schema.sql';
+$txtFile       = __DIR__ . '/cloud-appid.txt';
+$xmlDir        = __DIR__ . '/data';
+$predefinedXml = __DIR__ . '/predefined.xml';
 
 // 1. Verbindung herstellen & Schema laden
 $pdo = new PDO("sqlite:$dbPath");

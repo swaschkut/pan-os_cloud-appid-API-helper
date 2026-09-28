@@ -89,21 +89,25 @@ function getAppsForContainer(PDO $pdo, string $containerName): array {
     return $stmt->fetchAll(PDO::FETCH_ASSOC);
 }
 
-// Render Table
+// Render Table mit fest zugewiesenen Spaltenprozenten
 function renderAppTable(array $apps) {
     if (empty($apps)) {
         echo '<div class="alert alert-light text-muted border-top-0 rounded-0 m-0">Keine verknüpften Applikationen gefunden.</div>';
         return;
     }
-    echo '<div class="table-responsive"><table class="table table-sm table-hover mb-0 bg-white" style="font-size:0.875rem;">';
-    echo '<thead class="table-secondary"><tr>
-            <th>ID</th>
-            <th>Name</th>
-            <th>Kategorie</th>
-            <th>Subkategorie</th>
-            <th>Technologie</th>
-            <th>Risiko</th>
-          </tr></thead><tbody>';
+    echo '<div class="table-responsive">
+            <table class="table table-sm table-hover table-fixed mb-0 bg-white" style="font-size:0.875rem;">
+                <thead class="table-secondary">
+                    <tr>
+                        <th style="width: 10%;">ID</th>
+                        <th style="width: 25%;">Name</th>
+                        <th style="width: 20%;">Kategorie</th>
+                        <th style="width: 20%;">Subkategorie</th>
+                        <th style="width: 15%;">Technologie</th>
+                        <th style="width: 10%;">Risiko</th>
+                    </tr>
+                </thead>
+                <tbody>';
     foreach ($apps as $app) {
         $badgeClass = match((int)$app['risk']) {
             1 => 'bg-success',
@@ -113,12 +117,12 @@ function renderAppTable(array $apps) {
             default => 'bg-secondary'
         };
         echo "<tr>
-                <td class=\"fw-bold\">{$app['id']}</td>
-                <td>{$app['name']}</td>
-                <td>{$app['category']}</td>
-                <td>{$app['subcategory']}</td>
-                <td>{$app['technology']}</td>
-                <td><span class=\"badge {$badgeClass}\">R{$app['risk']}</span></td>
+                <td class=\"fw-bold text-truncate\">" . htmlspecialchars($app['id']) . "</td>
+                <td class=\"text-truncate\" title=\"" . htmlspecialchars($app['name']) . "\">" . htmlspecialchars($app['name']) . "</td>
+                <td class=\"text-truncate\" title=\"" . htmlspecialchars($app['category'] ?? '-') . "\">" . htmlspecialchars($app['category'] ?? '-') . "</td>
+                <td class=\"text-truncate\" title=\"" . htmlspecialchars($app['subcategory'] ?? '-') . "\">" . htmlspecialchars($app['subcategory'] ?? '-') . "</td>
+                <td class=\"text-truncate\" title=\"" . htmlspecialchars($app['technology'] ?? '-') . "\">" . htmlspecialchars($app['technology'] ?? '-') . "</td>
+                <td><span class=\"badge {$badgeClass}\">R" . htmlspecialchars($app['risk'] ?? '0') . "</span></td>
               </tr>";
     }
     echo '</tbody></table></div>';
@@ -165,6 +169,19 @@ function renderPagination(int $currentPage, int $totalPages, string $tabParam, s
         body { background-color: #f4f6f9; }
         .container-card { margin-bottom: 1rem; border-left: 4px solid #0d6efd; }
         .container-card-predefined { margin-bottom: 1rem; border-left: 4px solid #6c757d; }
+
+        /* Verhindert das Verrutschen der Spalten über verschiedene Cards hinweg */
+        .table-fixed {
+            table-layout: fixed;
+            width: 100%;
+        }
+
+        .table-fixed th,
+        .table-fixed td {
+            overflow: hidden;
+            text-overflow: ellipsis;
+            white-space: nowrap;
+        }
     </style>
 </head>
 <body class="py-4">

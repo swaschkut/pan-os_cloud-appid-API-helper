@@ -42,3 +42,17 @@ GUI Dashboard
 http://localhost:8080/dashboard.php
 ```
 
+
+Process description to update the github repository with the latest APP-ID information:
+
+1. as PAN-OS XML API is not working, log into the firewall and request manually:
+    set cli pager off 
+    show cloud-appid cloud-app-data application all
+2. copy output into cloud-appid_new.txt
+3. run script:
+   [pan-os-php must be avaialble]
+    php diff_sync.php in=api://MGMT-IP [of a saas inline licensed firewall]
+4. right now predefined.xml must be copied out manual from pan-os-php
+    docker cp <containerId>:/tool/pan-os-php/lib/object-classes/predefined.xml predefined.xml
+5. generate Docker Container, via Dockerfile
+
