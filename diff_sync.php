@@ -145,7 +145,7 @@ function checkAndCopyPredefinedXml($sourcePath, $targetFolder, $force = false) {
     $targetHash = file_exists($targetFile) ? md5_file($targetFile) : null;
 
     if (!$force && $targetHash !== null && $sourceHash === $targetHash) {
-        PH::print_stdout(" -> 'predefined.xml' im Zielordner '$targetFolder' ist bereits aktuell (MD5: $sourceHash).");
+        PH::print_stdout(" -> 'predefined.xml' im Zielordner ist bereits aktuell (MD5: $sourceHash).");
         return;
     }
 
