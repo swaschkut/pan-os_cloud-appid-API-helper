@@ -1,6 +1,6 @@
 <?php
 /**
- * Differential Sync for Cloud-AppID using pan-os-php Framework
+ * Differential Sync for Cloud-AppID and Predefined Objects Sync using pan-os-php Framework
  */
 
 set_include_path(dirname(__FILE__) . '/utils/' . PATH_SEPARATOR . get_include_path());
@@ -34,10 +34,14 @@ if ($util->configInput['type'] != 'api') {
     derr("This script works ONLY in API mode (e.g. in=api://192.168.1.1)\n");
 }
 
-$oldTxtFile   = 'cloud-appid.txt';
-$newTxtFile   = isset($util->arguments['newfile']) ? $util->arguments['newfile'] : 'cloud-appid_new.txt';
-$outputFolder = isset($util->arguments['folder']) ? $util->arguments['folder'] : 'data';
+$oldTxtFile    = 'cloud-appid.txt';
+$newTxtFile    = isset($util->arguments['newfile']) ? $util->arguments['newfile'] : 'cloud-appid_new.txt';
+$outputFolder  = isset($util->arguments['folder']) ? $util->arguments['folder'] : 'data';
 $forceDownload = isset($util->arguments['force']);
+
+// Pfade für predefined.xml (Quelle vs. Ziel)
+$sourcePredefinedXml = dirname(__FILE__) . "/../pan-os-php/lib/object-classes/predefined.xml";
+$targetPredefinedXml = $outputFolder . "/predefined.xml";
 
 if (!is_dir($outputFolder)) {
     if (!mkdir($outputFolder, 0777, true)) {
@@ -115,7 +119,6 @@ EXPECT;
         return false;
     }
 
-    // Speichere die rohe Ausgabe ohne Modifikationen
     if (file_put_contents($outputFile, $stdout) !== false) {
         PH::print_stdout(" -> Erfolgreich! $outputFile wurde über SSH aktualisiert.");
         return true;
@@ -125,7 +128,40 @@ EXPECT;
 }
 
 // -------------------------------------------------------------------------
-// Cloud App Version & Timestamp Validation
+// Helper: Check and Sync predefined.xml via File Copy
+// -------------------------------------------------------------------------
+function checkAndCopyPredefinedXml($sourcePath, $targetPath, $force = false) {
+    PH::print_stdout("Prüfe 'predefined.xml' über Datei-Kopie...");
+
+    if (!file_exists($sourcePath)) {
+        PH::print_stdout(" -> WARNUNG: Quell-Datei '$sourcePath' existiert nicht. Kopieren übersprungen.");
+        return;
+    }
+
+    $sourceHash = md5_file($sourcePath);
+    $targetHash = file_exists($targetPath) ? md5_file($targetPath) : null;
+
+    if (!$force && $targetHash !== null && $sourceHash === $targetHash) {
+        PH::print_stdout(" -> 'predefined.xml' ist am Zielort bereits aktuell (MD5: $sourceHash).");
+        return;
+    }
+
+    PH::print_stdout(" -> Kopiere '$sourcePath' nach '$targetPath'...");
+
+    if (copy($sourcePath, $targetPath)) {
+        PH::print_stdout(" -> SUCCESS: 'predefined.xml' erfolgreich kopiert! (MD5: $sourceHash)");
+    } else {
+        PH::print_stdout(" -> FEHLER: Kopieren von 'predefined.xml' fehlgeschlagen.");
+    }
+}
+
+// -------------------------------------------------------------------------
+// 1. Predefined XML Copy Check
+// -------------------------------------------------------------------------
+checkAndCopyPredefinedXml($sourcePredefinedXml, $targetPredefinedXml, $forceDownload);
+
+// -------------------------------------------------------------------------
+// 2. Cloud App Version & Timestamp Validation
 // -------------------------------------------------------------------------
 function parseVersionAndTimestamp($xmlContent) {
     if (empty($xmlContent)) return null;
@@ -151,6 +187,7 @@ function parseVersionAndTimestamp($xmlContent) {
     return null;
 }
 
+PH::print_stdout();
 PH::print_stdout("Prüfe Cloud App Version und Timestamp...");
 
 $versionFile = 'cloud-appid-version.xml';
@@ -231,7 +268,6 @@ function parseCloudAppIndex($filePath) {
     foreach ($lines as $line) {
         $trimmed = trim($line);
 
-        // Header, Prompts, Befehle und CLI-Müll gezielt ausfiltern
         if (
             strpos($trimmed, 'show cloud-appid') !== false ||
             strpos($trimmed, 'set cli') !== false ||
@@ -247,7 +283,6 @@ function parseCloudAppIndex($filePath) {
             continue;
         }
 
-        // Suche nach einer numerischen App-ID am Zeilenanfang (auch mit führenden Leerzeichen)
         if (!preg_match('/^\s*(\d+)\s+(.+)$/', $line, $matches)) {
             continue;
         }
@@ -255,7 +290,6 @@ function parseCloudAppIndex($filePath) {
         $id        = (int)$matches[1];
         $restOfLine = trim($matches[2]);
 
-        // Trennung nach mindestens 2 Leerzeichen
         $columns = preg_split('/\s{2,}/', $restOfLine);
 
         if (count($columns) >= 4) {
@@ -266,7 +300,6 @@ function parseCloudAppIndex($filePath) {
                 'xml_hashcode' => trim($columns[3])
             ];
         } else {
-            // Fallback: Von hinten nach vorne parsen
             $parts = preg_split('/\s+/', $restOfLine);
             if (count($parts) >= 4) {
                 $hash   = array_pop($parts);
@@ -292,7 +325,7 @@ $oldIndex = parseCloudAppIndex($oldTxtFile);
 $newIndex = parseCloudAppIndex($newTxtFile);
 
 // -------------------------------------------------------------------------
-// Differenzierte Analyse (Drei Kategorien)
+// Differenzierte Analyse
 // -------------------------------------------------------------------------
 $toDownload   = [];
 $countNew     = 0;
@@ -308,21 +341,18 @@ foreach ($newIndex as $id => $newItem) {
         continue;
     }
 
-    // 1. NEU: Die ID ist in cloud-appid.txt noch gar nicht enthalten
     if (!isset($oldIndex[$id])) {
         $toDownload[$id] = ['item' => $newItem, 'type' => 'NEW'];
         $countNew++;
         continue;
     }
 
-    // 2. FEHLEND: ID stand im alten Index, aber Datei fehlt lokal
     if (!file_exists($filePath)) {
         $toDownload[$id] = ['item' => $newItem, 'type' => 'MISSING'];
         $countMissing++;
         continue;
     }
 
-    // 3. GEÄNDERT: ID existiert, aber xml_hashcode unterscheidet sich
     if ($oldIndex[$id]['xml_hashcode'] !== $newItem['xml_hashcode']) {
         $toDownload[$id] = ['item' => $newItem, 'type' => 'CHANGED'];
         $countChanged++;
