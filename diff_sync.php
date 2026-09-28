@@ -45,30 +45,245 @@ if (!is_dir($outputFolder)) {
     }
 }
 
+// -------------------------------------------------------------------------
+// Helper: Interactive SSH Password Prompt
+// -------------------------------------------------------------------------
+function promptHiddenPassword($prompt = "Geben Sie das SSH-Passwort ein: ") {
+    echo $prompt;
+    system('stty -echo');
+    $password = trim(fgets(STDIN));
+    system('stty echo');
+    echo "\n";
+    return $password;
+}
+
+// -------------------------------------------------------------------------
+// Helper: Fetch SSH output directly via expect (raw output, no filtering)
+// -------------------------------------------------------------------------
+function fetchCloudAppIdViaExpect($host, $user, $password, $outputFile) {
+    PH::print_stdout("Starte SSH-Verbindung via system expect zu $host...");
+
+    $escapedPassword = addcslashes($password, '"$\\`[]');
+
+    $expectScript = <<<EXPECT
+set timeout 600
+match_max 1048576
+
+spawn ssh -o StrictHostKeyChecking=no {$user}@{$host}
+expect {
+    "password:" { send "{$escapedPassword}\r" }
+    "Password:" { send "{$escapedPassword}\r" }
+    timeout { exit 1 }
+}
+expect ">"
+send "set cli pager off\r"
+expect ">"
+send "set cli terminal length 0\r"
+expect ">"
+send "show cloud-appid cloud-app-data application all\r"
+expect ">"
+send "exit\r"
+expect eof
+EXPECT;
+
+    $descriptorspec = [
+        0 => ["pipe", "r"],
+        1 => ["pipe", "w"],
+        2 => ["pipe", "w"]
+    ];
+
+    $process = proc_open("expect", $descriptorspec, $pipes);
+
+    if (!is_resource($process)) {
+        PH::print_stdout(" -> Fehler: Expect-Prozess konnte nicht gestartet werden.");
+        return false;
+    }
+
+    fwrite($pipes[0], $expectScript);
+    fclose($pipes[0]);
+
+    $stdout = stream_get_contents($pipes[1]);
+    fclose($pipes[1]);
+
+    $stderr = stream_get_contents($pipes[2]);
+    fclose($pipes[2]);
+
+    proc_close($process);
+
+    if (empty($stdout)) {
+        PH::print_stdout(" -> SSH/Expect Fehler: Keine Ausgabe empfangen. " . trim($stderr));
+        return false;
+    }
+
+    // Speichere die rohe Ausgabe ohne Modifikationen
+    if (file_put_contents($outputFile, $stdout) !== false) {
+        PH::print_stdout(" -> Erfolgreich! $outputFile wurde über SSH aktualisiert.");
+        return true;
+    }
+
+    return false;
+}
+
+// -------------------------------------------------------------------------
+// Cloud App Version & Timestamp Validation
+// -------------------------------------------------------------------------
+function parseVersionAndTimestamp($xmlContent) {
+    if (empty($xmlContent)) return null;
+
+    $xml = @simplexml_load_string($xmlContent);
+    if ($xml === false || !isset($xml->result)) return null;
+
+    $resultText = (string)$xml->result;
+    $version   = null;
+    $timestamp = null;
+
+    if (preg_match('/Cloud App Version:\s*(\S+)/i', $resultText, $matches)) {
+        $version = $matches[1];
+    }
+    if (preg_match('/Cloud App Timestamp:\s*(\S+)/i', $resultText, $matches)) {
+        $timestamp = $matches[1];
+    }
+
+    if ($version !== null || $timestamp !== null) {
+        return ['version' => $version, 'timestamp' => $timestamp];
+    }
+
+    return null;
+}
+
+PH::print_stdout("Prüfe Cloud App Version und Timestamp...");
+
+$versionFile = 'cloud-appid-version.xml';
+$previousVersionData = null;
+
+if (file_exists($versionFile)) {
+    $previousXml = file_get_contents($versionFile);
+    $previousVersionData = parseVersionAndTimestamp($previousXml);
+}
+
+$apiArgsVersion = [
+    'type' => 'op',
+    'cmd'  => '<show><cloud-appid><version></version></cloud-appid></show>'
+];
+
+try {
+    $response = $pan->connector->sendRequest($apiArgsVersion);
+    $currentXmlString = $response->saveXML($response->documentElement);
+
+    $currentVersionData = parseVersionAndTimestamp($currentXmlString);
+
+    if ($previousVersionData && $currentVersionData) {
+        $versionDiff   = ($previousVersionData['version'] !== $currentVersionData['version']);
+        $timestampDiff = ($previousVersionData['timestamp'] !== $currentVersionData['timestamp']);
+
+        if ($versionDiff || $timestampDiff) {
+            PH::print_stdout();
+            PH::print_stdout("*******************************************************************");
+            PH::print_stdout("WARNUNG: Cloud App Version / Timestamp geändert!");
+            PH::print_stdout("  Vorherige Version : " . ($previousVersionData['version'] ?? 'N/A') . " | Timestamp: " . ($previousVersionData['timestamp'] ?? 'N/A'));
+            PH::print_stdout("  Aktuelle Version  : " . ($currentVersionData['version'] ?? 'N/A') . " | Timestamp: " . ($currentVersionData['timestamp'] ?? 'N/A'));
+            PH::print_stdout("*******************************************************************");
+            PH::print_stdout();
+
+            // Interaktive Passwortabfrage
+            $targetHost = $pan->connector->apihost;
+            $sshUser    = "admin";
+
+            $sshPass = promptHiddenPassword("Bitte SSH-Passwort für '$sshUser@$targetHost' eingeben: ");
+
+            $sshSuccess = fetchCloudAppIdViaExpect($targetHost, $sshUser, $sshPass, $newTxtFile);
+
+            if (!$sshSuccess) {
+                PH::print_stdout(" -> SSH-Update fehlgeschlagen. Abbruch.");
+                exit(1);
+            }
+        }
+        else
+        {
+            PH::print_stdout();
+            PH::print_stdout("*******************************************************************");
+            PH::print_stdout("Keine Abweichung bei Cloud App Version oder Timestamp festgestellt!");
+            PH::print_stdout("*******************************************************************");
+            PH::print_stdout();
+            exit();
+        }
+    }
+
+    file_put_contents($versionFile, $currentXmlString);
+
+} catch (Exception $e) {
+    PH::print_stdout(" -> Fehler beim Abrufen der Cloud App Version: " . $e->getMessage());
+}
+
 if (!file_exists($newTxtFile)) {
     derr("Fehler: Neue Index-Datei '$newTxtFile' nicht gefunden.\n");
 }
 
+// -------------------------------------------------------------------------
+// Robust Parsing Function for Cloud App Index
+// -------------------------------------------------------------------------
 function parseCloudAppIndex($filePath) {
     $indexMap = [];
     if (!file_exists($filePath)) return $indexMap;
 
     $lines = file($filePath, FILE_IGNORE_NEW_LINES | FILE_SKIP_EMPTY_LINES);
-    foreach ($lines as $line) {
-        $line = trim($line);
-        if (strpos($line, 'Id') === 0 || strpos($line, '---') === 0) continue;
 
-        $columns = preg_split('/\s{2,}/', $line);
-        if (count($columns) >= 5) {
-            $id = (int)trim($columns[0]);
+    foreach ($lines as $line) {
+        $trimmed = trim($line);
+
+        // Header, Prompts, Befehle und CLI-Müll gezielt ausfiltern
+        if (
+            strpos($trimmed, 'show cloud-appid') !== false ||
+            strpos($trimmed, 'set cli') !== false ||
+            strpos($trimmed, 'spawn ssh') !== false ||
+            strpos($trimmed, 'Last login:') !== false ||
+            strpos($trimmed, 'Id ') === 0 ||
+            strpos($trimmed, '---') === 0 ||
+            strpos($trimmed, 'total ') === 0 ||
+            strpos($trimmed, 'Current Time:') === 0 ||
+            strpos($trimmed, 'Connection to ') === 0 ||
+            preg_match('/^[\w\.\-]+@[\w\.\-]+.*>/', $trimmed)
+        ) {
+            continue;
+        }
+
+        // Suche nach einer numerischen App-ID am Zeilenanfang (auch mit führenden Leerzeichen)
+        if (!preg_match('/^\s*(\d+)\s+(.+)$/', $line, $matches)) {
+            continue;
+        }
+
+        $id        = (int)$matches[1];
+        $restOfLine = trim($matches[2]);
+
+        // Trennung nach mindestens 2 Leerzeichen
+        $columns = preg_split('/\s{2,}/', $restOfLine);
+
+        if (count($columns) >= 4) {
             $indexMap[$id] = [
-                'name'         => trim($columns[1]),
-                'time'         => trim($columns[2]),
-                'task_id'      => trim($columns[3]),
-                'xml_hashcode' => trim($columns[4])
+                'name'         => trim($columns[0]),
+                'time'         => trim($columns[1]),
+                'task_id'      => trim($columns[2]),
+                'xml_hashcode' => trim($columns[3])
             ];
+        } else {
+            // Fallback: Von hinten nach vorne parsen
+            $parts = preg_split('/\s+/', $restOfLine);
+            if (count($parts) >= 4) {
+                $hash   = array_pop($parts);
+                $taskId = array_pop($parts);
+                $time   = array_pop($parts) . ' ' . array_pop($parts);
+                $name   = implode(' ', $parts);
+
+                $indexMap[$id] = [
+                    'name'         => $name,
+                    'time'         => $time,
+                    'task_id'      => $taskId,
+                    'xml_hashcode' => $hash
+                ];
+            }
         }
     }
+
     return $indexMap;
 }
 
@@ -79,7 +294,7 @@ $newIndex = parseCloudAppIndex($newTxtFile);
 // -------------------------------------------------------------------------
 // Differenzierte Analyse (Drei Kategorien)
 // -------------------------------------------------------------------------
-$toDownload = [];
+$toDownload   = [];
 $countNew     = 0;
 $countChanged = 0;
 $countMissing = 0;
@@ -100,14 +315,14 @@ foreach ($newIndex as $id => $newItem) {
         continue;
     }
 
-    // 2. FEHLEND: ID stand im alten Index, aber die Datei data/<ID>.xml fehlt auf der Festplatte
+    // 2. FEHLEND: ID stand im alten Index, aber Datei fehlt lokal
     if (!file_exists($filePath)) {
         $toDownload[$id] = ['item' => $newItem, 'type' => 'MISSING'];
         $countMissing++;
         continue;
     }
 
-    // 3. GEÄNDERT: ID existiert und Datei ist da, aber der xml_hashcode unterscheidet sich
+    // 3. GEÄNDERT: ID existiert, aber xml_hashcode unterscheidet sich
     if ($oldIndex[$id]['xml_hashcode'] !== $newItem['xml_hashcode']) {
         $toDownload[$id] = ['item' => $newItem, 'type' => 'CHANGED'];
         $countChanged++;
@@ -117,10 +332,11 @@ foreach ($newIndex as $id => $newItem) {
 $totalToDownload = count($toDownload);
 
 // -------------------------------------------------------------------------
-// Neue, detaillierte Konsolenausgabe
+// Konsolenausgabe
 // -------------------------------------------------------------------------
 PH::print_stdout();
 PH::print_stdout("Analyse beendet:");
+PH::print_stdout(" - Gesamt-Einträge in alter Index-Datei: " . count($oldIndex));
 PH::print_stdout(" - Gesamt-Einträge in neuer Index-Datei: " . count($newIndex));
 PH::print_stdout(" - Herunterzuladen (Gesamt)             : " . $totalToDownload);
 PH::print_stdout("   ├─ Neue App-IDs (noch nicht im Index): " . $countNew);
@@ -136,7 +352,7 @@ if ($totalToDownload === 0) {
 }
 
 // -------------------------------------------------------------------------
-// Download-Schleife mit Angabe des Typs
+// Download-Schleife via API
 // -------------------------------------------------------------------------
 $successCount = 0;
 
