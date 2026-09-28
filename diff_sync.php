@@ -132,7 +132,7 @@ EXPECT;
 function checkAndCopyPredefinedXml($sourcePath, $targetFolder, $force = false) {
     PH::print_stdout("Prüfe und kopiere 'predefined.xml'...");
 
-    $targetFile = $targetFolder . "/predefined.xml";
+    $targetFile = "predefined.xml";
 
     // 1. Prüfen, ob Quelldatei existiert
     if (!file_exists($sourcePath)) {
@@ -152,9 +152,9 @@ function checkAndCopyPredefinedXml($sourcePath, $targetFolder, $force = false) {
     PH::print_stdout(" -> Kopiere '$sourcePath' nach '$targetFile'...");
 
     if (copy($sourcePath, $targetFile)) {
-        PH::print_stdout(" -> SUCCESS: 'predefined.xml' erfolgreich in '$targetFolder' kopiert! (MD5: $sourceHash)");
+        PH::print_stdout(" -> SUCCESS: 'predefined.xml' erfolgreich kopiert! (MD5: $sourceHash)");
     } else {
-        PH::print_stdout(" -> FEHLER: Kopieren von 'predefined.xml' nach '$targetFile' fehlgeschlagen. Bitte Schreibrechte prüfen.");
+        PH::print_stdout(" -> FEHLER: Kopieren von 'predefined.xml' fehlgeschlagen. Bitte Schreibrechte prüfen.");
     }
 }
 
